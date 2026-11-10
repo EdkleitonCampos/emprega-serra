@@ -1,0 +1,48 @@
+
+{% extends "base.html" %}
+
+{% block title %}Editar Vaga | Emprega Serra{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-card">
+
+        <h1>Editar vaga</h1>
+
+        <form method="POST">
+
+            <label>Cargo / Nome da vaga</label>
+            <input type="text" name="titulo"
+                   value="{{ vaga.titulo }}" required>
+
+            <label>Descrição</label>
+            <textarea name="descricao" rows="5" required>{{ vaga.descricao }}</textarea>
+
+            <label>Requisitos</label>
+            <textarea name="requisitos" rows="4">{{ vaga.requisitos or '' }}</textarea>
+
+            <label>Cidade</label>
+            <input type="text" name="cidade"
+                   value="{{ vaga.cidade }}" required>
+
+            <label>Salário</label>
+            <input type="text" name="salario"
+                   value="{{ vaga.salario or '' }}">
+
+            <button type="submit" class="btn btn-primary">
+                Salvar alterações
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+            <a href="{{ url_for('painel') }}">Voltar ao painel</a>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

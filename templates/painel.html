@@ -1,0 +1,120 @@
+
+{% extends "base.html" %}
+
+{% block title %}Meu Painel | Emprega Serra{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-card" style="max-width: 1000px; width: 95%;">
+
+        <h1>Olá, {{ nome }}!</h1>
+
+        {% if tipo == "candidato" %}
+
+            <p>Bem-vindo à sua área do candidato.</p>
+
+            <h3>Minha área profissional</h3>
+
+            <p>Encontre oportunidades e acompanhe suas candidaturas.</p>
+
+            <a href="/" class="btn btn-primary">
+                Encontrar vagas
+            </a>
+
+        {% elif tipo == "empresa" %}
+
+            <p>Bem-vindo ao painel empresarial do Emprega Serra.</p>
+
+            <h2>{{ empresa.nome_empresa }}</h2>
+
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin: 25px 0;">
+
+                <div style="background: #202c49; padding: 22px; border-radius: 12px; flex: 1; min-width: 180px;">
+                    <h3 style="color: #75c9ff;">{{ total_vagas }}</h3>
+                    <p>Vagas cadastradas</p>
+                </div>
+
+                <div style="background: #202c49; padding: 22px; border-radius: 12px; flex: 1; min-width: 180px;">
+                    <h3 style="color: #a78bfa;">{{ total_candidaturas }}</h3>
+                    <p>Candidaturas recebidas</p>
+                </div>
+
+            </div>
+
+            <a href="{{ url_for('nova_vaga') }}" class="btn btn-primary">
+                + Publicar nova vaga
+            </a>
+
+            <hr style="margin: 30px 0;">
+
+            <h2>Minhas vagas</h2>
+
+            {% if vagas %}
+
+                {% for vaga in vagas %}
+
+                    <div style="background: #202c49; padding: 20px; border-radius: 12px; margin: 15px 0;">
+
+                        <h3>{{ vaga.titulo }}</h3>
+
+                        <p><strong>Cidade:</strong> {{ vaga.cidade }}</p>
+
+                        <p><strong>Salário:</strong> {{ vaga.salario or "A combinar" }}</p>
+
+                        <p>
+                            <strong>Candidatos:</strong>
+                            {{ vaga.total_candidatos }}
+                        </p>
+
+                        <p>
+                            <strong>Status:</strong>
+                            {% if vaga.status == "aberta" %}
+                                <span style="color: #75c9ff;">Aberta</span>
+                            {% else %}
+                                <span style="color: #fca5a5;">Encerrada</span>
+                            {% endif %}
+                        </p>
+
+                        <a href="{{ url_for('editar_vaga', vaga_id=vaga.id) }}"
+                           class="btn btn-primary">
+                            Editar vaga
+                        </a>
+
+                        {% if vaga.status == "aberta" %}
+
+                            <form method="POST"
+                                  action="{{ url_for('encerrar_vaga', vaga_id=vaga.id) }}"
+                                  style="display: inline;"
+                                  onsubmit="return confirm('Deseja realmente encerrar esta vaga?');">
+
+                                <button type="submit" class="btn btn-secondary">
+                                    Encerrar vaga
+                                </button>
+
+                            </form>
+
+                        {% endif %}
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>Você ainda não publicou nenhuma vaga.</p>
+
+            {% endif %}
+
+        {% endif %}
+
+        <div class="auth-footer">
+            <a href="{{ url_for('sair') }}">Sair da conta</a>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

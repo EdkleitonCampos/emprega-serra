@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+
+{% block title %}Publicar Vaga | Emprega Serra{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-card">
+
+        <h1>Publicar nova vaga</h1>
+
+        <p>Encontre profissionais para sua empresa.</p>
+
+        <form method="POST">
+
+            <label>Cargo / Nome da vaga</label>
+            <input type="text" name="titulo" placeholder="Ex: Vendedor" required>
+
+            <label>Descrição da oportunidade</label>
+            <textarea name="descricao" rows="5" required
+            placeholder="Descreva as atividades da vaga"></textarea>
+
+            <label>Requisitos</label>
+            <textarea name="requisitos" rows="4"
+            placeholder="Ex: Ensino médio completo, experiência..."></textarea>
+
+            <label>Cidade</label>
+            <input type="text" name="cidade" placeholder="Ex: Serra Talhada - PE" required>
+
+            <label>Salário</label>
+            <input type="text" name="salario" placeholder="Ex: R$ 1.800 ou A combinar">
+
+            <button type="submit" class="btn btn-primary">
+                Publicar vaga
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+            <a href="{{ url_for('painel') }}">Voltar ao painel</a>
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

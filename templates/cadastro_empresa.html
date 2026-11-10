@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro de Empresa | Emprega Serra{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+    <div class="auth-card">
+
+        <h1>Cadastre sua empresa</h1>
+
+        <p>
+            Crie sua conta gratuitamente e encontre profissionais
+            para fazer parte da sua equipe.
+        </p>
+
+        {% with mensagens = get_flashed_messages() %}
+            {% if mensagens %}
+                {% for mensagem in mensagens %}
+                    <div class="auth-message">
+                        {{ mensagem }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" class="auth-form">
+
+            <label>
+                Nome do responsável
+                <input type="text" name="nome"
+                       placeholder="Nome completo" required>
+            </label>
+
+            <label>
+                E-mail
+                <input type="email" name="email"
+                       placeholder="empresa@email.com" required>
+            </label>
+
+            <label>
+                Nome da empresa
+                <input type="text" name="nome_empresa"
+                       placeholder="Nome comercial" required>
+            </label>
+
+            <label>
+                CNPJ
+                <input type="text" name="cnpj"
+                       placeholder="Digite o CNPJ">
+            </label>
+
+            <label>
+                Telefone / WhatsApp
+                <input type="tel" name="telefone"
+                       placeholder="(87) 99999-9999">
+            </label>
+
+            <label>
+                Cidade
+                <input type="text" name="cidade"
+                       placeholder="Ex.: Serra Talhada - PE" required>
+            </label>
+
+            <label>
+                Sobre a empresa
+                <textarea name="descricao" rows="4"
+                          placeholder="Conte um pouco sobre sua empresa"></textarea>
+            </label>
+
+            <label>
+                Senha
+                <input type="password" name="senha"
+                       placeholder="Mínimo de 8 caracteres"
+                       minlength="8" required>
+            </label>
+
+            <label>
+                Confirme sua senha
+                <input type="password" name="confirmar_senha"
+                       placeholder="Digite sua senha novamente"
+                       minlength="8" required>
+            </label>
+
+            <button type="submit" class="btn btn-primary">
+                Cadastrar empresa
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+            Já possui uma conta?
+            <a href="{{ url_for('login') }}">Entrar</a>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

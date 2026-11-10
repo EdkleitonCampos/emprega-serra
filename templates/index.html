@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block content %}
+<header class="site-header">
+    <div class="container nav-wrap">
+        <a class="brand" href="{{ url_for('home') }}" aria-label="Emprega Serra - página inicial">
+            <span class="brand-mark">E</span>
+            <span class="brand-name">emprega<span>serra</span><small>SEU TALENTO, SUA OPORTUNIDADE</small></span>
+        </a>
+
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+
+        <nav class="main-nav" id="mainNav">
+            <a href="#inicio">Início</a>
+            <a href="#vagas">Buscar vagas</a>
+            <a href="#empresas">Para empresas</a>
+            <a href="#sobre">Como funciona</a>
+        </nav>
+        <div class="nav-actions">
+            <a class="btn btn-ghost" href="{{ url_for('login') }}">Entrar</a>
+            <a class="btn btn-primary btn-small" href="{{ url_for('cadastro_candidato') }}">Criar conta</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <section class="hero" id="inicio">
+        <div class="hero-glow glow-one"></div>
+        <div class="hero-glow glow-two"></div>
+        <div class="container hero-grid">
+            <div class="hero-copy">
+                <div class="eyebrow"><span class="eyebrow-dot"></span> OPORTUNIDADES PERTO DE VOCÊ</div>
+                <h1>Seu próximo passo começa <span>aqui.</span></h1>
+                <p class="hero-description">Encontre oportunidades, mostre seu talento e conecte-se com empresas de Serra Talhada e região.</p>
+                <form class="search-box" id="jobSearch">
+                    <label class="search-field">
+                        <span class="field-icon">⌕</span>
+                        <input type="search" id="searchInput" placeholder="Cargo, área ou palavra-chave" aria-label="Buscar cargo ou palavra-chave">
+                    </label>
+                    <label class="search-field location-field">
+                        <span class="field-icon">⌖</span>
+                        <input type="text" id="locationInput" value="Serra Talhada - PE" aria-label="Cidade">
+                    </label>
+                    <button class="btn btn-primary search-button" type="submit">Buscar vagas <span>→</span></button>
+                </form>
+                <div class="hero-note"><span class="check-icon">✓</span> Candidatos e empresas se cadastram gratuitamente.</div>
+            </div>
+
+            <div class="hero-visual" aria-label="Resumo ilustrativo de oportunidades">
+                <div class="visual-orbit orbit-a"></div>
+                <div class="visual-orbit orbit-b"></div>
+                <div class="visual-card main-visual-card">
+                    <div class="visual-card-top"><span class="live-dot"></span> OPORTUNIDADES EM DESTAQUE <span class="sparkle">✦</span></div>
+                    <div class="visual-job">
+                        <div class="company-icon icon-purple">V</div>
+                        <div><strong>Vendedor(a)</strong><small>Comércio e varejo</small></div>
+                        <span class="match-tag">Nova</span>
+                    </div>
+                    <div class="visual-job">
+                        <div class="company-icon icon-blue">A</div>
+                        <div><strong>Auxiliar administrativo</strong><small>Administrativo</small></div>
+                        <span class="match-tag">Nova</span>
+                    </div>
+                    <div class="visual-job">
+                        <div class="company-icon icon-cyan">At</div>
+                        <div><strong>Atendente</strong><small>Atendimento</small></div>
+                        <span class="match-tag">Nova</span>
+                    </div>
+                    <div class="visual-card-footer"><span>Descubra novas possibilidades</span><span class="footer-arrow">↗</span></div>
+                </div>
+                <div class="floating-badge badge-top"><span class="badge-icon">✦</span><div><strong>Seu talento importa</strong><small>Mostre o que você sabe fazer</small></div></div>
+                <div class="floating-badge badge-bottom"><span class="badge-icon badge-icon-blue">⌖</span><div><strong>Na sua região</strong><small>Serra Talhada e arredores</small></div></div>
+            </div>
+        </div>
+        <div class="container hero-bottom">
+            <span>UMA PONTE ENTRE</span>
+            <strong>Talentos <i>+</i> Empresas <i>=</i> Oportunidades</strong>
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div class="container stats-grid">
+            <div class="stat-item"><span class="stat-symbol">◎</span><div><strong>Para todos</strong><small>Acesso gratuito para candidatos</small></div></div>
+            <div class="stat-item"><span class="stat-symbol purple-symbol">⌂</span><div><strong>Empresas locais</strong><small>Mais conexão com a região</small></div></div>
+            <div class="stat-item"><span class="stat-symbol cyan-symbol">↗</span><div><strong>Novos caminhos</strong><small>Oportunidades em um só lugar</small></div></div>
+        </div>
+    </section>
+
+    <section class="jobs-section section-padding" id="vagas">
+        <div class="container">
+            <div class="section-heading">
+                <div><div class="eyebrow"><span class="eyebrow-dot"></span> ENCONTRE SEU LUGAR</div><h2>Vagas em <span>destaque</span></h2><p>Confira algumas oportunidades na região.</p></div>
+                <a class="text-link" href="#vagas">Ver todas as vagas <span>→</span></a>
+            </div>
+
+            <div class="jobs-grid" id="jobsGrid">
+                {% for vaga in vagas %}
+                <article class="job-card" data-search="{{ (vaga.cargo ~ ' ' ~ vaga.empresa ~ ' ' ~ vaga.cidade ~ ' ' ~ vaga.categoria)|lower }}">
+                    <div class="job-card-top">
+                        <div class="company-icon {% if loop.index == 1 %}icon-purple{% elif loop.index == 2 %}icon-blue{% else %}icon-cyan{% endif %}">{{ vaga.empresa[0] }}</div>
+                        <span class="job-status">Demonstração</span>
+                    </div>
+                    <h3>{{ vaga.cargo }}</h3>
+                    <p class="company-name">{{ vaga.empresa }}</p>
+                    <div class="job-meta"><span>⌖ {{ vaga.cidade }}</span><span>◷ {{ vaga.tipo }}</span></div>
+                    <div class="job-card-bottom"><strong>{{ vaga.salario }}</strong><a href="#acesso" aria-label="Saiba mais sobre {{ vaga.cargo }}">Ver vaga <span>→</span></a></div>
+                </article>
+                {% endfor %}
+            </div>
+            <p class="empty-state" id="emptyState" hidden>Nenhuma vaga demonstrativa corresponde à sua busca. Tente outra palavra.</p>
+            <div class="demo-notice">As vagas acima são exemplos ilustrativos desta primeira versão. As vagas reais serão cadastradas pelas empresas nas próximas etapas.</div>
+        </div>
+    </section>
+
+    <section class="business-section section-padding" id="empresas">
+        <div class="container business-panel">
+            <div class="business-copy">
+                <div class="eyebrow light-eyebrow"><span class="eyebrow-dot"></span> SUA EMPRESA TAMBÉM FAZ PARTE</div>
+                <h2>Encontrar talentos pode ser <span>mais simples.</span></h2>
+                <p>Cadastre sua empresa gratuitamente, publique oportunidades e conheça profissionais da região. Você escolhe quem deseja entrevistar.</p>
+                <a href="{{ url_for('cadastro_empresa') }}" class="btn btn-light">Cadastrar minha empresa <span>→</span></a>
+            </div>
+            <div class="business-art">
+                <div class="art-circle circle-one"></div><div class="art-circle circle-two"></div>
+                <div class="art-window">
+                    <div class="window-dots"><i></i><i></i><i></i></div>
+                    <div class="art-line line-wide"></div><div class="art-line"></div>
+                    <div class="art-profile"><span></span><div><b></b><i></i></div><em>✓</em></div>
+                    <div class="art-profile"><span></span><div><b></b><i></i></div><em>✓</em></div>
+                    <div class="art-profile"><span></span><div><b></b><i></i></div><em>✓</em></div>
+                </div>
+                <div class="art-label">Talentos que movem a região <span>✦</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-section section-padding" id="sobre">
+        <div class="container">
+            <div class="section-heading centered-heading">
+                <div class="eyebrow"><span class="eyebrow-dot"></span> SIMPLES ASSIM</div>
+                <h2>Como funciona o <span>Emprega Serra?</span></h2>
+                <p>Um caminho mais direto entre quem procura e quem oferece oportunidades.</p>
+            </div>
+            <div class="steps-grid">
+                <article class="step-card"><span class="step-number">01</span><div class="step-icon">♙</div><h3>Crie seu perfil</h3><p>Cadastre suas informações profissionais ou os dados da sua empresa.</p></article>
+                <article class="step-card"><span class="step-number">02</span><div class="step-icon purple-step">⌕</div><h3>Conecte-se</h3><p>Encontre vagas ou receba candidaturas de profissionais interessados.</p></article>
+                <article class="step-card"><span class="step-number">03</span><div class="step-icon cyan-step">↗</div><h3>Dê o próximo passo</h3><p>Empresas convidam candidatos para entrevistas pela plataforma.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="acesso">
+        <div class="container cta-panel">
+            <div><div class="eyebrow light-eyebrow"><span class="eyebrow-dot"></span> OPORTUNIDADES COMEÇAM COM UMA CONEXÃO</div><h2>Seu próximo capítulo pode começar hoje.</h2><p>Faça parte dessa conexão entre talentos e empresas da nossa região.</p></div>
+            <div class="cta-actions"><a class="btn btn-light" href="{{ url_for('cadastro_candidato') }}">Quero participar <span>→</span></a><small>Primeira versão demonstrativa</small></div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-content">
+        <a class="brand footer-brand" href="#inicio"><span class="brand-mark">E</span><span class="brand-name">emprega<span>serra</span><small>SEU TALENTO, SUA OPORTUNIDADE</small></span></a>
+        <p>Conectando talentos a oportunidades em Serra Talhada e região.</p>
+        <span class="copyright">© 2026 Emprega Serra. Projeto em desenvolvimento.</span>
+    </div>
+</footer>
+{% endblock %}

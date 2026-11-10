@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar | Emprega Serra{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+    <div class="auth-card">
+
+        <h1>Bem-vindo de volta!</h1>
+
+        <p>
+            Entre na sua conta para acessar o Emprega Serra
+            e aproveitar as oportunidades.
+        </p>
+
+        {% with mensagens = get_flashed_messages() %}
+            {% if mensagens %}
+                {% for mensagem in mensagens %}
+                    <div class="auth-message">
+                        {{ mensagem }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" class="auth-form">
+
+            <label>
+                E-mail
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Digite seu e-mail"
+                    required
+                >
+            </label>
+
+            <label>
+                Senha
+                <input
+                    type="password"
+                    name="senha"
+                    placeholder="Digite sua senha"
+                    required
+                >
+            </label>
+
+            <button type="submit" class="btn btn-primary">
+                Entrar na minha conta
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+            Ainda não possui cadastro?
+
+            <br><br>
+
+            <a href="{{ url_for('cadastro_candidato') }}">
+                Criar conta de candidato
+            </a>
+
+            <br><br>
+
+            <a href="{{ url_for('cadastro_empresa') }}">
+                Cadastrar minha empresa
+            </a>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
