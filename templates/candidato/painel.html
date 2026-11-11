@@ -1,0 +1,151 @@
+
+{% extends "base.html" %}
+
+{% block title %}Painel do Candidato | Emprega Serra{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/candidato.css') }}">
+
+<header class="candidate-header">
+    <div class="candidate-container header-content">
+
+        <a href="{{ url_for('home') }}" class="brand">
+            <span class="brand-mark">E</span>
+            <span class="brand-name">EMPREGA <span>SERRA</span>
+                <small>SEU TALENTO MERECE UMA OPORTUNIDADE</small>
+            </span>
+        </a>
+
+        <nav class="candidate-nav">
+            <a href="{{ url_for('home') }}">Início</a>
+            <a href="#minhas-vagas">Minhas candidaturas</a>
+            <a href="#meu-perfil">Meu perfil</a>
+            <a href="{{ url_for('sair') }}" class="logout-link">Sair ↗</a>
+        </nav>
+
+    </div>
+</header>
+
+<main class="candidate-main">
+    <div class="candidate-container">
+
+        <section class="welcome-section">
+            <div>
+                <span class="candidate-eyebrow">ÁREA DO CANDIDATO</span>
+
+                <h1>Olá, {{ nome }}!</h1>
+
+                <p>
+                    Seja bem-vindo ao seu espaço de oportunidades.
+                    Acompanhe suas candidaturas e encontre novas vagas.
+                </p>
+            </div>
+
+            <div class="welcome-icon">👋</div>
+        </section>
+
+        <section class="candidate-stats">
+
+            <article class="candidate-stat">
+                <div class="stat-icon blue-icon">📄</div>
+                <div>
+                    <span>Total de candidaturas</span>
+                    <strong>{{ total_candidaturas|default(0) }}</strong>
+                </div>
+            </article>
+
+            <article class="candidate-stat">
+                <div class="stat-icon purple-icon">⏳</div>
+                <div>
+                    <span>Em análise</span>
+                    <strong>{{ em_analise|default(0) }}</strong>
+                </div>
+            </article>
+
+            <article class="candidate-stat">
+                <div class="stat-icon cyan-icon">✓</div>
+                <div>
+                    <span>Aprovadas</span>
+                    <strong>{{ aprovadas|default(0) }}</strong>
+                </div>
+            </article>
+
+        </section>
+
+        <section class="candidate-content" id="minhas-vagas">
+
+            <div class="content-heading">
+                <div>
+                    <span class="candidate-eyebrow">ACOMPANHAMENTO</span>
+                    <h2>Minhas candidaturas</h2>
+                    <p>Acompanhe o andamento dos seus processos seletivos.</p>
+                </div>
+            </div>
+
+            <div class="applications-card">
+
+                {% if candidaturas %}
+
+                    {% for candidatura in candidaturas %}
+
+                        <article class="application-item">
+                            <div class="application-info">
+                                <h3>{{ candidatura.titulo }}</h3>
+                                <p>{{ candidatura.empresa }}</p>
+                                <small>{{ candidatura.criado_em }}</small>
+                            </div>
+
+                            <span class="application-status">
+                                {{ candidatura.status }}
+                            </span>
+                        </article>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="empty-applications">
+                        <span>📋</span>
+                        <h3>Você ainda não possui candidaturas</h3>
+                        <p>
+                            Explore as oportunidades disponíveis e
+                            envie sua primeira candidatura.
+                        </p>
+
+                        <a href="{{ url_for('home') }}" class="candidate-button">
+                            Explorar vagas →
+                        </a>
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+        <section class="profile-card" id="meu-perfil">
+
+            <div>
+                <span class="candidate-eyebrow">SEU CADASTRO</span>
+                <h2>Mantenha seu perfil atualizado</h2>
+                <p>
+                    Um perfil completo ajuda as empresas a conhecerem
+                    melhor suas experiências e habilidades.
+                </p>
+            </div>
+
+            <div class="profile-icon">👤</div>
+
+        </section>
+
+    </div>
+</main>
+
+<footer class="candidate-footer">
+    <div class="candidate-container">
+        <p>© 2026 Emprega Serra — Conectando talentos a oportunidades.</p>
+    </div>
+</footer>
+
+{% endblock %}
