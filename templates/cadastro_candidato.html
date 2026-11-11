@@ -4,8 +4,8 @@
 
 {% block content %}
 
-<section class="auth-section">
-    <div class="auth-card">
+<section class="auth-section auth-section--registration">
+    <div class="auth-card auth-card--registration">
 
         <h1>Crie sua conta</h1>
 
@@ -24,7 +24,7 @@
             {% endif %}
         {% endwith %}
 
-        <form method="POST" class="auth-form">
+        <form method="POST" class="auth-form auth-form--grid">
 
             <label>
                 Nome completo
@@ -64,7 +64,7 @@
                 >
             </label>
 
-            <label>
+            <label class="form-field-wide">
                 Cidade
                 <input
                     type="text"
@@ -76,24 +76,34 @@
 
             <label>
                 Senha
-                <input
-                    type="password"
-                    name="senha"
-                    placeholder="Mínimo de 8 caracteres"
-                    minlength="8"
-                    required
-                >
+                <span class="password-field">
+                    <input
+                        type="password"
+                        name="senha"
+                        placeholder="Mínimo de 8 caracteres"
+                        minlength="8"
+                        required
+                    >
+                    <button class="password-toggle" type="button" aria-label="Mostrar senha enquanto pressionado" aria-pressed="false">
+                        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </span>
             </label>
 
             <label>
                 Confirme sua senha
-                <input
-                    type="password"
-                    name="confirmar_senha"
-                    placeholder="Digite sua senha novamente"
-                    minlength="8"
-                    required
-                >
+                <span class="password-field">
+                    <input
+                        type="password"
+                        name="confirmar_senha"
+                        placeholder="Digite sua senha novamente"
+                        minlength="8"
+                        required
+                    >
+                    <button class="password-toggle" type="button" aria-label="Mostrar senha enquanto pressionado" aria-pressed="false">
+                        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </span>
             </label>
 
             <button type="submit" class="btn btn-primary">

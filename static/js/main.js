@@ -16,6 +16,66 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    const accountTypeDialog = document.getElementById("accountTypeDialog");
+    const openAccountTypeDialog = document.getElementById("openAccountTypeDialog");
+
+    if (accountTypeDialog && openAccountTypeDialog instanceof HTMLButtonElement) {
+        const closeButton = accountTypeDialog.querySelector(".account-type-close");
+
+        openAccountTypeDialog.addEventListener("click", () => {
+            accountTypeDialog.showModal();
+        });
+
+        closeButton?.addEventListener("click", () => {
+            accountTypeDialog.close();
+        });
+
+        accountTypeDialog.addEventListener("click", (event) => {
+            if (event.target === accountTypeDialog) {
+                accountTypeDialog.close();
+            }
+        });
+    }
+
+    document.querySelectorAll(".password-toggle").forEach((toggle) => {
+        if (!(toggle instanceof HTMLButtonElement)) return;
+
+        const passwordField = toggle.closest(".password-field");
+        const passwordInput = passwordField?.querySelector("input");
+        if (!(passwordInput instanceof HTMLInputElement)) return;
+
+        const hidePassword = () => {
+            passwordInput.type = "password";
+            toggle.setAttribute("aria-label", "Mostrar senha enquanto pressionado");
+            toggle.setAttribute("aria-pressed", "false");
+        };
+
+        const showPassword = () => {
+            passwordInput.type = "text";
+            toggle.setAttribute("aria-label", "Senha visível; solte para ocultar");
+            toggle.setAttribute("aria-pressed", "true");
+        };
+
+        toggle.addEventListener("pointerdown", (event) => {
+            event.preventDefault();
+            showPassword();
+        });
+        document.addEventListener("pointerup", hidePassword);
+        document.addEventListener("pointercancel", hidePassword);
+        toggle.addEventListener("blur", hidePassword);
+        toggle.addEventListener("keydown", (event) => {
+            if (event.key === " " || event.key === "Enter") {
+                event.preventDefault();
+                showPassword();
+            }
+        });
+        toggle.addEventListener("keyup", (event) => {
+            if (event.key === " " || event.key === "Enter") {
+                hidePassword();
+            }
+        });
+    });
+
     // Filtro demonstrativo das vagas que aparecem na página inicial.
     const searchForm = document.getElementById("jobSearch");
     const searchInput = document.getElementById("searchInput");
