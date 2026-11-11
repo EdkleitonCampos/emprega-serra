@@ -231,12 +231,72 @@ def painel():
         return redirect(url_for("login"))
 
     # ÁREA DO CANDIDATO
+    
+    # ÁREA DO CANDIDATO
     if session["tipo"] == "candidato":
+
+        conexao = conectar()
+        cursor = conexao.cursor()
+
+        # Buscar cadastro do candidato
+        cursor.execute("""
+            SELECT id
+            FROM candidatos
+            WHERE usuario_id = ?
+        """, (session["usuario_id"],))
+
+        candidato = cursor.fetchone()
+
+        if not candidato:
+            conexao.close()
+            flash("Cadastro do candidato não encontrado.")
+            return redirect(url_for("sair"))
+
+        # Buscar candidaturas e informações das vagas
+        cursor.execute("""
+            SELECT
+                c.status,
+                c.criado_em,
+                v.titulo,
+                e.nome_empresa AS empresa
+            FROM candidaturas c
+            INNER JOIN vagas v ON v.id = c.vaga_id
+            INNER JOIN empresas e ON e.id = v.empresa_id
+            WHERE c.candidato_id = ?
+            ORDER BY c.id DESC
+        """, (candidato["id"],))
+
+        candidaturas = cursor.fetchall()
+
+        conexao.close()
+
+        # Calcular estatísticas
+        total_candidaturas = len(candidaturas)
+
+        em_analise = 0
+        aprovadas = 0
+
+        for candidatura in candidaturas:
+
+            status = (candidatura["status"] or "").lower().strip()
+            status = status.replace(" ", "_").replace("á", "a")
+
+            if status in ("em_analise", "analise"):
+                em_analise += 1
+
+            elif status in ("aprovada", "aprovado"):
+                aprovadas += 1
+
         return render_template(
-            "painel.html",
+            "candidato/painel.html",
             nome=session["nome"],
-            tipo="candidato"
+            tipo="candidato",
+            total_candidaturas=total_candidaturas,
+            em_analise=em_analise,
+            aprovadas=aprovadas,
+            candidaturas=candidaturas
         )
+
 
     # ÁREA DA EMPRESA
     conexao = conectar()
