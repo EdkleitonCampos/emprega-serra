@@ -87,6 +87,34 @@
                           placeholder="Ex: Informática, atendimento, vendas...">{{ candidato['habilidades'] or '' }}</textarea>
             </div>
 
+                        <hr>
+
+            <h3>Informações para o currículo</h3>
+
+            <div class="form-group">
+                <label>Objetivo profissional</label>
+
+                <textarea name="objetivo_profissional"
+                          rows="3"
+                          placeholder="Ex: Busco uma oportunidade para desenvolver minhas habilidades profissionais...">{{ candidato['objetivo_profissional'] or '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Resumo profissional</label>
+
+                <textarea name="resumo_profissional"
+                          rows="4"
+                          placeholder="Faça um resumo sobre sua trajetória profissional...">{{ candidato['resumo_profissional'] or '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Cursos e certificados</label>
+
+                <textarea name="cursos"
+                          rows="4"
+                          placeholder="Informe seus cursos, capacitações e certificados...">{{ candidato['cursos'] or '' }}</textarea>
+            </div>
+
             <button type="submit" class="btn-primary">
                 Salvar meu perfil
             </button>

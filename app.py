@@ -357,6 +357,7 @@ def painel():
     )
 
 
+
 # MEU PERFIL DO CANDIDATO
 @app.route("/meu-perfil", methods=["GET", "POST"])
 def meu_perfil():
@@ -392,13 +393,26 @@ def meu_perfil():
         experiencia = request.form.get("experiencia", "").strip()
         habilidades = request.form.get("habilidades", "").strip()
 
+        objetivo_profissional = request.form.get(
+            "objetivo_profissional", ""
+        ).strip()
+
+        resumo_profissional = request.form.get(
+            "resumo_profissional", ""
+        ).strip()
+
+        cursos = request.form.get("cursos", "").strip()
+
         cursor.execute("""
             UPDATE candidatos
             SET telefone = ?,
                 cidade = ?,
                 escolaridade = ?,
                 experiencia = ?,
-                habilidades = ?
+                habilidades = ?,
+                objetivo_profissional = ?,
+                resumo_profissional = ?,
+                cursos = ?
             WHERE usuario_id = ?
         """, (
             telefone,
@@ -406,6 +420,9 @@ def meu_perfil():
             escolaridade,
             experiencia,
             habilidades,
+            objetivo_profissional,
+            resumo_profissional,
+            cursos,
             session["usuario_id"]
         ))
 
@@ -422,6 +439,43 @@ def meu_perfil():
         nome=session["nome"],
         candidato=candidato
     )
+
+
+
+
+# CURRÍCULO DO CANDIDATO
+@app.route("/curriculo")
+def curriculo():
+
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    if session["tipo"] != "candidato":
+        flash("Acesso permitido somente para candidatos.")
+        return redirect(url_for("painel"))
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM candidatos
+        WHERE usuario_id = ?
+    """, (session["usuario_id"],))
+
+    candidato = cursor.fetchone()
+    conexao.close()
+
+    if not candidato:
+        flash("Cadastro do candidato não encontrado.")
+        return redirect(url_for("painel"))
+
+    return render_template(
+        "candidato/curriculo.html",
+        candidato=candidato,
+        codigo=f"EMP-{candidato['id']:06d}"
+    )
+
 
 
 

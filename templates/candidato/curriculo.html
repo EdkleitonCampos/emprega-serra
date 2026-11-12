@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block title %}Meu Currículo | Emprega Serra{% endblock %}
+
+{% block content %}
+
+<style>
+    .curriculo-container {
+        max-width: 950px;
+        margin: 40px auto;
+        background: #ffffff;
+        color: #263047;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .curriculo-header {
+        background: #101525;
+        color: white;
+        padding: 40px;
+        border-bottom: 5px solid #527bff;
+    }
+
+    .curriculo-header h1 {
+        font-size: 30px;
+        margin: 0 0 10px;
+    }
+
+    .curriculo-header p {
+        color: #b9c8e8;
+        margin: 5px 0;
+    }
+
+    .curriculo-codigo {
+        display: inline-block;
+        background: #202c49;
+        color: #75c9ff;
+        padding: 7px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        margin-top: 12px;
+    }
+
+    .curriculo-conteudo {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+    }
+
+    .curriculo-lateral {
+        background: #f0f3fa;
+        padding: 30px;
+    }
+
+    .curriculo-principal {
+        padding: 35px;
+    }
+
+    .curriculo-secao {
+        margin-bottom: 30px;
+    }
+
+    .curriculo-secao h2 {
+        font-size: 16px;
+        color: #527bff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 2px solid #e3e9f5;
+        padding-bottom: 10px;
+        margin-bottom: 15px;
+    }
+
+    .curriculo-secao p {
+        font-size: 14px;
+        line-height: 1.8;
+        color: #526078;
+        white-space: pre-line;
+    }
+
+    .curriculo-lateral .curriculo-secao h2 {
+        color: #101525;
+    }
+
+    .curriculo-rodape {
+        text-align: center;
+        padding: 20px;
+        background: #101525;
+        color: #aebbd6;
+        font-size: 12px;
+    }
+
+    .curriculo-acoes {
+        text-align: center;
+        margin: 25px auto 40px;
+    }
+
+    .curriculo-acoes button,
+    .curriculo-acoes a {
+        display: inline-block;
+        padding: 12px 22px;
+        margin: 5px;
+        border: none;
+        border-radius: 8px;
+        background: #527bff;
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .curriculo-acoes a {
+        background: #202c49;
+    }
+
+    @media (max-width: 650px) {
+        .curriculo-conteudo {
+            grid-template-columns: 1fr;
+        }
+
+        .curriculo-header,
+        .curriculo-lateral,
+        .curriculo-principal {
+            padding: 25px;
+        }
+    }
+
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        .curriculo-container,
+        .curriculo-container * {
+            visibility: visible;
+        }
+
+        .curriculo-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            box-shadow: none;
+            border-radius: 0;
+        }
+
+        .curriculo-acoes {
+            display: none !important;
+        }
+
+        @page {
+            size: A4;
+            margin: 10mm;
+        }
+    }
+</style>
+
+<div class="curriculo-container">
+
+    <header class="curriculo-header">
+
+        <h1>Currículo Profissional</h1>
+
+        <p>Perfil profissional disponível no Emprega Serra</p>
+
+        <span class="curriculo-codigo">
+            {{ codigo }}
+        </span>
+
+    </header>
+
+    <div class="curriculo-conteudo">
+
+        <aside class="curriculo-lateral">
+
+            <section class="curriculo-secao">
+
+                <h2>Localização</h2>
+
+                <p>
+                    {{ candidato['cidade'] or 'Não informada' }}
+                </p>
+
+            </section>
+
+            <section class="curriculo-secao">
+
+                <h2>Formação</h2>
+
+                <p>
+                    {{ candidato['escolaridade'] or 'Não informada' }}
+                </p>
+
+            </section>
+
+            <section class="curriculo-secao">
+
+                <h2>Habilidades</h2>
+
+                <p>
+                    {{ candidato['habilidades'] or 'Não informadas' }}
+                </p>
+
+            </section>
+
+        </aside>
+
+        <main class="curriculo-principal">
+
+            <section class="curriculo-secao">
+
+                <h2>Objetivo profissional</h2>
+
+                <p>{{ candidato['objetivo_profissional'] or 'Objetivo profissional não informado.' }}</p>
+
+            </section>
+
+            <section class="curriculo-secao">
+
+                <h2>Resumo profissional</h2>
+
+                <p>{{ candidato['resumo_profissional'] or 'Resumo profissional não informado.' }}</p>
+
+            </section>
+
+            <section class="curriculo-secao">
+
+                <h2>Experiência profissional</h2>
+
+                <p>{{ candidato['experiencia'] or 'Nenhuma experiência informada.' }}</p>
+
+            </section>
+
+            <section class="curriculo-secao">
+
+                <h2>Cursos e certificados</h2>
+
+                <p>{{ candidato['cursos'] or 'Nenhum curso ou certificado informado.' }}</p>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <footer class="curriculo-rodape">
+
+        Currículo gerado pela plataforma Emprega Serra
+
+    </footer>
+
+</div>
+
+<div class="curriculo-acoes">
+
+    <button onclick="window.print()">
+        Imprimir / Salvar em PDF
+    </button>
+
+    <a href="{{ url_for('painel') }}">
+        Voltar ao painel
+    </a>
+
+</div>
+
+{% endblock %}

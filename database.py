@@ -40,6 +40,30 @@ def criar_banco():
         )
     """)
 
+
+    # Novos campos para o currículo dos candidatos
+    cursor.execute("PRAGMA table_info(candidatos)")
+    colunas = [coluna["name"] for coluna in cursor.fetchall()]
+
+    if "objetivo_profissional" not in colunas:
+        cursor.execute("""
+            ALTER TABLE candidatos
+            ADD COLUMN objetivo_profissional TEXT
+        """)
+
+    if "resumo_profissional" not in colunas:
+        cursor.execute("""
+            ALTER TABLE candidatos
+            ADD COLUMN resumo_profissional TEXT
+        """)
+
+    if "cursos" not in colunas:
+        cursor.execute("""
+            ALTER TABLE candidatos
+            ADD COLUMN cursos TEXT
+        """)
+
+
     # Dados das empresas
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS empresas (
