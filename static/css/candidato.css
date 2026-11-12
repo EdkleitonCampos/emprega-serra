@@ -407,3 +407,168 @@
         display: none;
     }
 }
+
+/* =====================================
+   BUSCA DE VAGAS
+===================================== */
+
+.search-jobs-card {
+    margin: 25px 0 40px;
+    padding: 25px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #19243d;
+}
+
+.search-jobs-card form {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: end;
+    gap: 15px;
+}
+
+.search-field label {
+    display: block;
+    margin-bottom: 9px;
+    color: #c4cbe0;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.search-field input {
+    width: 100%;
+    height: 45px;
+    padding: 0 13px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    outline: none;
+    color: var(--text);
+    background: #101525;
+    font-size: 12px;
+}
+
+.search-field input:focus {
+    border-color: var(--blue);
+}
+
+.search-field input::placeholder {
+    color: #78849e;
+}
+
+.search-jobs-card button {
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.jobs-results {
+    margin-top: 35px;
+}
+
+.jobs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.candidate-job-card {
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    background: linear-gradient(145deg, #1a2540, #172138);
+    transition: .2s;
+}
+
+.candidate-job-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(117, 201, 255, .4);
+}
+
+.job-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.job-company-icon {
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: rgba(82, 123, 255, .15);
+    font-size: 21px;
+}
+
+.job-open-label {
+    color: #8ee5b0;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.candidate-job-card h3 {
+    margin: 0 0 7px;
+    font: 800 19px var(--heading);
+}
+
+.job-company {
+    margin: 0 0 17px;
+    color: var(--blue-light);
+    font-size: 12px;
+}
+
+.job-information {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 17px;
+    color: #aab5ce;
+    font-size: 11px;
+}
+
+.job-description {
+    display: -webkit-box;
+    overflow: hidden;
+    margin: 0 0 20px;
+    color: #aab5ce;
+    font-size: 12px;
+    line-height: 1.7;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+.candidate-job-card .candidate-button {
+    width: 100%;
+}
+
+.back-to-panel {
+    margin-top: 35px;
+}
+
+.back-to-panel a {
+    color: var(--blue-light);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.back-to-panel a:hover {
+    color: var(--lilac);
+}
+
+/* RESPONSIVIDADE DA BUSCA */
+
+@media (max-width: 760px) {
+
+    .search-jobs-card form {
+        grid-template-columns: 1fr;
+    }
+
+    .jobs-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .search-jobs-card {
+        padding: 19px;
+    }
+}
