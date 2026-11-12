@@ -230,7 +230,6 @@ def painel():
     if "usuario_id" not in session:
         return redirect(url_for("login"))
 
-    # ÁREA DO CANDIDATO
     
     # ÁREA DO CANDIDATO
     if session["tipo"] == "candidato":
@@ -356,6 +355,74 @@ def painel():
         total_vagas=total_vagas,
         total_candidaturas=total_candidaturas
     )
+
+
+# MEU PERFIL DO CANDIDATO
+@app.route("/meu-perfil", methods=["GET", "POST"])
+def meu_perfil():
+
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    if session["tipo"] != "candidato":
+        flash("Acesso permitido somente para candidatos.")
+        return redirect(url_for("painel"))
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM candidatos
+        WHERE usuario_id = ?
+    """, (session["usuario_id"],))
+
+    candidato = cursor.fetchone()
+
+    if not candidato:
+        conexao.close()
+        flash("Cadastro do candidato não encontrado.")
+        return redirect(url_for("painel"))
+
+    if request.method == "POST":
+
+        telefone = request.form.get("telefone", "").strip()
+        cidade = request.form.get("cidade", "").strip()
+        escolaridade = request.form.get("escolaridade", "").strip()
+        experiencia = request.form.get("experiencia", "").strip()
+        habilidades = request.form.get("habilidades", "").strip()
+
+        cursor.execute("""
+            UPDATE candidatos
+            SET telefone = ?,
+                cidade = ?,
+                escolaridade = ?,
+                experiencia = ?,
+                habilidades = ?
+            WHERE usuario_id = ?
+        """, (
+            telefone,
+            cidade,
+            escolaridade,
+            experiencia,
+            habilidades,
+            session["usuario_id"]
+        ))
+
+        conexao.commit()
+        conexao.close()
+
+        flash("Perfil atualizado com sucesso!")
+        return redirect(url_for("meu_perfil"))
+
+    conexao.close()
+
+    return render_template(
+        "candidato/meu_perfil.html",
+        nome=session["nome"],
+        candidato=candidato
+    )
+
 
 
 # CADASTRAR NOVA VAGA

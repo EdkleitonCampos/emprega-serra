@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% block title %}Painel do Candidato | Emprega Serra{% endblock %}
@@ -20,7 +19,7 @@
         <nav class="candidate-nav">
             <a href="{{ url_for('home') }}">Início</a>
             <a href="#minhas-vagas">Minhas candidaturas</a>
-            <a href="#meu-perfil">Meu perfil</a>
+            <a href="{{ url_for('meu_perfil') }}">Meu perfil</a>
             <a href="{{ url_for('sair') }}" class="logout-link">Sair ↗</a>
         </nav>
 
@@ -87,36 +86,36 @@
 
                 {% if candidaturas %}
 
-                    {% for candidatura in candidaturas %}
+                {% for candidatura in candidaturas %}
 
-                        <article class="application-item">
-                            <div class="application-info">
-                                <h3>{{ candidatura.titulo }}</h3>
-                                <p>{{ candidatura.empresa }}</p>
-                                <small>{{ candidatura.criado_em }}</small>
-                            </div>
+                <article class="application-item">
+                    <div class="application-info">
+                        <h3>{{ candidatura.titulo }}</h3>
+                        <p>{{ candidatura.empresa }}</p>
+                        <small>{{ candidatura.criado_em }}</small>
+                    </div>
 
-                            <span class="application-status">
-                                {{ candidatura.status }}
-                            </span>
-                        </article>
+                    <span class="application-status">
+                        {{ candidatura.status }}
+                    </span>
+                </article>
 
-                    {% endfor %}
+                {% endfor %}
 
                 {% else %}
 
-                    <div class="empty-applications">
-                        <span>📋</span>
-                        <h3>Você ainda não possui candidaturas</h3>
-                        <p>
-                            Explore as oportunidades disponíveis e
-                            envie sua primeira candidatura.
-                        </p>
+                <div class="empty-applications">
+                    <span>📋</span>
+                    <h3>Você ainda não possui candidaturas</h3>
+                    <p>
+                        Explore as oportunidades disponíveis e
+                        envie sua primeira candidatura.
+                    </p>
 
-                        <a href="{{ url_for('home') }}" class="candidate-button">
-                            Explorar vagas →
-                        </a>
-                    </div>
+                    <a href="{{ url_for('home') }}" class="candidate-button">
+                        Explorar vagas →
+                    </a>
+                </div>
 
                 {% endif %}
 
@@ -124,20 +123,28 @@
 
         </section>
 
-        <section class="profile-card" id="meu-perfil">
+
+        <section class="profile-card">
 
             <div>
                 <span class="candidate-eyebrow">SEU CADASTRO</span>
+
                 <h2>Mantenha seu perfil atualizado</h2>
+
                 <p>
                     Um perfil completo ajuda as empresas a conhecerem
                     melhor suas experiências e habilidades.
                 </p>
+
+                <a href="{{ url_for('meu_perfil') }}" class="candidate-button">
+                    Editar meu perfil →
+                </a>
             </div>
 
             <div class="profile-icon">👤</div>
 
         </section>
+
 
     </div>
 </main>
