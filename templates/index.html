@@ -4,8 +4,7 @@
 <header class="site-header">
     <div class="container nav-wrap">
         <a class="brand" href="{{ url_for('home') }}" aria-label="Emprega Serra - página inicial">
-            <span class="brand-mark">E</span>
-            <span class="brand-name">emprega<span>serra</span><small>SEU TALENTO, SUA OPORTUNIDADE</small></span>
+            <img class="brand-logo" src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra">
         </a>
 
         <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
@@ -172,7 +171,7 @@
 
 <footer class="site-footer">
     <div class="container footer-content">
-        <a class="brand footer-brand" href="#inicio"><span class="brand-mark">E</span><span class="brand-name">emprega<span>serra</span><small>SEU TALENTO, SUA OPORTUNIDADE</small></span></a>
+        <a class="brand footer-brand" href="#inicio"><img class="brand-logo" src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra"></a>
         <p>Conectando talentos a oportunidades em Serra Talhada e região.</p>
         <span class="copyright">© 2026 Emprega Serra. Projeto em desenvolvimento.</span>
     </div>
