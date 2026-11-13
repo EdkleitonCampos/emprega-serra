@@ -11,7 +11,7 @@
 
         <h1>Editar vaga</h1>
 
-        <form method="POST">
+        <form method="POST" data-edit-vacancy-form data-original-status="{{ 'finalizada' if vaga.status == 'encerrada' else vaga.status }}" data-vacancy-title="{{ vaga.titulo }}">
 
             <label>Cargo / Nome da vaga</label>
             <input type="text" name="titulo"
@@ -31,6 +31,15 @@
             <input type="text" name="salario"
                    value="{{ vaga.salario or '' }}">
 
+            <label for="status">Status da vaga</label>
+            <select id="status" name="status" required>
+                <option value="aberta" {% if vaga.status == "aberta" %}selected{% endif %}>Aberto</option>
+                <option value="finalizada" {% if vaga.status in ["finalizada", "encerrada"] %}selected{% endif %}>Finalizado</option>
+                <option value="cancelada" {% if vaga.status == "cancelada" %}selected{% endif %}>Cancelado</option>
+                <option value="em_analise" {% if vaga.status == "em_analise" %}selected{% endif %}>Em análise</option>
+                <option value="pausada" {% if vaga.status == "pausada" %}selected{% endif %}>Pausada</option>
+            </select>
+
             <button type="submit" class="btn btn-primary">
                 Salvar alterações
             </button>
@@ -38,11 +47,22 @@
         </form>
 
         <div class="auth-footer">
-            <a href="{{ url_for('painel') }}">Voltar ao painel</a>
+            <a href="{{ url_for('painel') }}#minhas-vagas">Voltar ao painel</a>
         </div>
 
     </div>
 
 </section>
+
+<dialog class="dashboard-dialog" id="finalizeConfirmDialog" aria-labelledby="finalizeConfirmTitle">
+    <form method="dialog" class="dashboard-dialog-content">
+        <h2 id="finalizeConfirmTitle">Finalizar vaga?</h2>
+        <p data-finalize-message>Tem certeza que deseja finalizar <strong data-dialog-vacancy-title></strong>?</p>
+        <div class="dashboard-dialog-actions">
+            <button type="submit" class="btn btn-modal-safe">Não</button>
+            <button type="button" class="btn btn-warning" data-confirm-finalize>Sim, finalizar</button>
+        </div>
+    </form>
+</dialog>
 
 {% endblock %}

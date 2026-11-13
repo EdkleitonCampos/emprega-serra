@@ -1,0 +1,134 @@
+
+{% extends "base.html" %}
+
+{% block title %}Meu Perfil | Emprega Serra{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-card">
+
+        <h1>Meu Perfil</h1>
+
+        <p>Complete suas informações profissionais
+        para aumentar suas oportunidades de emprego.</p>
+
+        <form method="POST">
+
+            <h3>Dados pessoais</h3>
+
+            <div class="form-group">
+                <label>Nome completo</label>
+                <input type="text"
+                       value="{{ nome }}"
+                       disabled>
+            </div>
+
+            <div class="form-group">
+                <label>Telefone</label>
+                <input type="text"
+                       name="telefone"
+                       value="{{ candidato['telefone'] or '' }}"
+                       placeholder="Seu telefone">
+            </div>
+
+            <div class="form-group">
+                <label>Cidade</label>
+                <input type="text"
+                       name="cidade"
+                       value="{{ candidato['cidade'] or '' }}"
+                       placeholder="Sua cidade">
+            </div>
+
+            <hr>
+
+            <h3>Formação profissional</h3>
+
+            <div class="form-group">
+                <label>Escolaridade</label>
+
+                <select name="escolaridade">
+                    <option value="">Selecione</option>
+
+                    {% for nivel in [
+                        'Ensino Fundamental',
+                        'Ensino Médio',
+                        'Ensino Técnico',
+                        'Ensino Superior Incompleto',
+                        'Ensino Superior Completo',
+                        'Pós-graduação'
+                    ] %}
+
+                    <option value="{{ nivel }}"
+                    {% if candidato['escolaridade'] == nivel %}
+                        selected
+                    {% endif %}>
+                        {{ nivel }}
+                    </option>
+
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Experiência profissional</label>
+
+                <textarea name="experiencia"
+                          rows="5"
+                          placeholder="Conte sobre suas experiências profissionais...">{{ candidato['experiencia'] or '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Habilidades e competências</label>
+
+                <textarea name="habilidades"
+                          rows="4"
+                          placeholder="Ex: Informática, atendimento, vendas...">{{ candidato['habilidades'] or '' }}</textarea>
+            </div>
+
+                        <hr>
+
+            <h3>Informações para o currículo</h3>
+
+            <div class="form-group">
+                <label>Objetivo profissional</label>
+
+                <textarea name="objetivo_profissional"
+                          rows="3"
+                          placeholder="Ex: Busco uma oportunidade para desenvolver minhas habilidades profissionais...">{{ candidato['objetivo_profissional'] or '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Resumo profissional</label>
+
+                <textarea name="resumo_profissional"
+                          rows="4"
+                          placeholder="Faça um resumo sobre sua trajetória profissional...">{{ candidato['resumo_profissional'] or '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Cursos e certificados</label>
+
+                <textarea name="cursos"
+                          rows="4"
+                          placeholder="Informe seus cursos, capacitações e certificados...">{{ candidato['cursos'] or '' }}</textarea>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                Salvar meu perfil
+            </button>
+
+        </form>
+
+        <p>
+            <a href="{{ url_for('painel') }}">
+                Voltar ao painel
+            </a>
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}

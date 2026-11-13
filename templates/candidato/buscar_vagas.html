@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Buscar Vagas | Emprega Serra{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/candidato.css') }}">
+
+<section class="candidate-main">
+    <div class="candidate-container">
+
+        <!-- CABEÇALHO -->
+        <div class="content-heading">
+            <span class="candidate-eyebrow">OPORTUNIDADES PROFISSIONAIS</span>
+            <h1>Encontre sua próxima oportunidade</h1>
+            <p>Pesquise vagas disponíveis em Serra Talhada e região.</p>
+        </div>
+
+        <!-- PESQUISA -->
+        <div class="search-jobs-card">
+
+            <form method="GET" action="{{ url_for('buscar_vagas') }}">
+
+                <div class="search-field">
+                    <label for="q">Cargo ou palavra-chave</label>
+                    <input
+                        type="text"
+                        id="q"
+                        name="q"
+                        placeholder="Ex.: vendedor, atendente, auxiliar..."
+                        value="{{ pesquisa }}"
+                    >
+                </div>
+
+                <div class="search-field">
+                    <label for="cidade">Cidade</label>
+                    <input
+                        type="text"
+                        id="cidade"
+                        name="cidade"
+                        placeholder="Ex.: Serra Talhada"
+                        value="{{ cidade }}"
+                    >
+                </div>
+
+                <button type="submit" class="candidate-button">
+                    🔎 Buscar vagas
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- RESULTADOS -->
+        <div class="jobs-results">
+
+            <div class="content-heading">
+                <h2>Vagas disponíveis</h2>
+
+                <p>
+                    {{ vagas|length }}
+                    oportunidade(s) encontrada(s).
+                </p>
+            </div>
+
+            {% if vagas %}
+
+                <div class="jobs-grid">
+
+                    {% for vaga in vagas %}
+
+                        <article class="candidate-job-card">
+
+                            <div class="job-card-top">
+                                <span class="job-company-icon">🏢</span>
+
+                                <span class="job-open-label">
+                                    ● Aberta
+                                </span>
+                            </div>
+
+                            <h3>{{ vaga.titulo }}</h3>
+
+                            <p class="job-company">
+                                {{ vaga.nome_empresa }}
+                            </p>
+
+                            <div class="job-information">
+                                <span>📍 {{ vaga.cidade }}</span>
+
+                                <span>
+                                    💰 {{ vaga.salario or "A combinar" }}
+                                </span>
+                            </div>
+
+                            <p class="job-description">
+                                {{ vaga.descricao }}
+                            </p>
+
+                            <a
+                                href="{{ url_for('detalhes_vaga', vaga_id=vaga.id) }}"
+                                class="candidate-button"
+                            >
+                                Ver detalhes da vaga →
+                            </a>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-applications">
+
+                    <span>🔎</span>
+
+                    <h3>Nenhuma vaga encontrada</h3>
+
+                    <p>
+                        Não encontramos oportunidades com esses critérios.
+                        Experimente pesquisar outro cargo ou cidade.
+                    </p>
+
+                    <a
+                        href="{{ url_for('buscar_vagas') }}"
+                        class="candidate-button"
+                    >
+                        Limpar pesquisa
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        <!-- VOLTAR -->
+        <div class="back-to-panel">
+            <a href="{{ url_for('painel') }}">
+                ← Voltar ao painel
+            </a>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
