@@ -994,3 +994,48 @@ button, input { font: inherit; }
     .dashboard-profile { grid-template-columns: 1fr; gap: 14px; }
     .dashboard-profile-description { grid-column: auto; }
 }
+
+/* EMPREGA SERRA - IDENTIDADE VISUAL UNIFICADA */
+:root {
+    --bg: #020f2d;
+    --bg-soft: #071a3d;
+    --surface: #102650;
+    --surface-2: #172f5c;
+    --blue: #087bff;
+    --blue-light: #35c5ff;
+    --purple: #9747ff;
+    --text: #f7f9ff;
+    --muted: #bdc9e6;
+    --line: rgba(150, 183, 255, .20);
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.site-header {
+    background: rgba(2, 15, 45, .97);
+    border-bottom: 1px solid var(--line);
+}
+
+.main-nav a:hover,
+.text-link:hover {
+    color: var(--blue-light);
+}
+
+.btn-primary {
+    background: linear-gradient(110deg, #008cff, #683bff);
+    box-shadow: 0 8px 25px rgba(0, 120, 255, .30);
+}
+
+.hero {
+    background:
+        radial-gradient(ellipse at 76% 40%, rgba(0, 100, 255, .32), transparent 42%),
+        radial-gradient(ellipse at 90% 80%, rgba(112, 42, 255, .20), transparent 35%),
+        linear-gradient(120deg, #020e2b, #041b49 65%, #10104a);
+}
+
+.hero-description {
+    color: #d1dcf7;
+}
