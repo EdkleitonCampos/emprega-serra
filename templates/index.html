@@ -4,8 +4,7 @@
 <header class="site-header">
     <div class="container nav-wrap">
         <a class="brand" href="{{ url_for('home') }}" aria-label="Emprega Serra - página inicial">
-            <span class="brand-mark">E</span>
-            <span class="brand-name">emprega<span>serra</span><small>SEU TALENTO, SUA OPORTUNIDADE</small></span>
+            <img class="brand-logo" src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra">
         </a>
 
         <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
@@ -20,10 +19,21 @@
         </nav>
         <div class="nav-actions">
             <a class="btn btn-ghost" href="{{ url_for('login') }}">Entrar</a>
-            <a class="btn btn-primary btn-small" href="{{ url_for('cadastro_candidato') }}">Criar conta</a>
+            <button class="btn btn-primary btn-small" id="openAccountTypeDialog" type="button" aria-haspopup="dialog">Criar conta</button>
         </div>
     </div>
 </header>
+
+<dialog class="account-type-dialog" id="accountTypeDialog" aria-labelledby="accountTypeTitle">
+    <button class="account-type-close" type="button" aria-label="Fechar">×</button>
+    <div class="eyebrow"><span class="eyebrow-dot"></span> CRIE SUA CONTA</div>
+    <h2 id="accountTypeTitle">Como você quer participar?</h2>
+    <p>Escolha o tipo de cadastro para continuar.</p>
+    <div class="account-type-options">
+        <a class="btn btn-primary" href="{{ url_for('cadastro_empresa') }}">Empregador</a>
+        <a class="btn btn-primary" href="{{ url_for('cadastro_candidato') }}">Colaborador</a>
+    </div>
+</dialog>
 
 <main>
     <section class="hero" id="inicio">
@@ -161,7 +171,7 @@
 
 <footer class="site-footer">
     <div class="container footer-content">
-        <a class="brand footer-brand" href="#inicio"><span class="brand-mark">E</span><span class="brand-name">emprega<span>serra</span><small>SEU TALENTO, SUA OPORTUNIDADE</small></span></a>
+        <a class="brand footer-brand" href="#inicio"><img class="brand-logo" src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra"></a>
         <p>Conectando talentos a oportunidades em Serra Talhada e região.</p>
         <span class="copyright">© 2026 Emprega Serra. Projeto em desenvolvimento.</span>
     </div>

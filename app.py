@@ -1,4 +1,5 @@
 import os
+from datetime import date, datetime
 
 from flask import (
     Flask, render_template, request,
@@ -15,8 +16,23 @@ app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32)
 criar_banco()
 
 
+def reativar_vagas_pausadas():
+    conexao = conectar()
+    cursor = conexao.cursor()
+    cursor.execute("""
+        UPDATE vagas
+        SET status = 'aberta', pausa_ate = NULL
+        WHERE status = 'pausada'
+        AND pausa_ate IS NOT NULL
+        AND pausa_ate <= date('now', 'localtime')
+    """)
+    conexao.commit()
+    conexao.close()
+
+
 @app.route("/")
 def home():
+    reativar_vagas_pausadas()
     conexao = conectar()
     cursor = conexao.cursor()
 
@@ -298,11 +314,12 @@ def painel():
 
 
     # ÁREA DA EMPRESA
+    reativar_vagas_pausadas()
     conexao = conectar()
     cursor = conexao.cursor()
 
     cursor.execute("""
-        SELECT id, nome_empresa
+        SELECT *
         FROM empresas
         WHERE usuario_id = ?
     """, (session["usuario_id"],))
@@ -328,21 +345,50 @@ def painel():
     vagas = cursor.fetchall()
 
     cursor.execute("""
-        SELECT COUNT(*) AS total
+        SELECT
+            COUNT(*) AS total,
+            COALESCE(SUM(CASE WHEN status = 'aberta' THEN 1 ELSE 0 END), 0) AS abertas
         FROM vagas
         WHERE empresa_id = ?
     """, (empresa["id"],))
 
-    total_vagas = cursor.fetchone()["total"]
+    resumo_vagas = cursor.fetchone()
+    total_vagas = resumo_vagas["total"]
+    vagas_abertas = resumo_vagas["abertas"]
 
     cursor.execute("""
-        SELECT COUNT(c.id) AS total
+        SELECT
+            COUNT(c.id) AS total,
+            COALESCE(SUM(CASE WHEN c.status = 'entrevista' THEN 1 ELSE 0 END), 0) AS entrevistas,
+            COALESCE(SUM(CASE WHEN c.status = 'selecao_finalizada' THEN 1 ELSE 0 END), 0) AS selecoes_finalizadas
         FROM candidaturas c
         INNER JOIN vagas v ON v.id = c.vaga_id
         WHERE v.empresa_id = ?
     """, (empresa["id"],))
 
-    total_candidaturas = cursor.fetchone()["total"]
+    resumo_candidaturas = cursor.fetchone()
+    total_candidaturas = resumo_candidaturas["total"]
+    total_entrevistas = resumo_candidaturas["entrevistas"]
+    total_selecoes_finalizadas = resumo_candidaturas["selecoes_finalizadas"]
+
+    cursor.execute("""
+        SELECT
+            candidaturas.id AS candidatura_id,
+            u.nome AS candidato_nome,
+            u.email AS candidato_email,
+            c.telefone AS candidato_telefone,
+            v.titulo AS vaga_titulo,
+            candidaturas.status AS candidatura_status,
+            candidaturas.criado_em AS candidatura_criada_em
+        FROM candidaturas
+        INNER JOIN candidatos c ON c.id = candidaturas.candidato_id
+        INNER JOIN usuarios u ON u.id = c.usuario_id
+        INNER JOIN vagas v ON v.id = candidaturas.vaga_id
+        WHERE v.empresa_id = ?
+        ORDER BY candidaturas.id DESC
+    """, (empresa["id"],))
+
+    candidatos = cursor.fetchall()
 
     conexao.close()
 
@@ -353,7 +399,11 @@ def painel():
         empresa=empresa,
         vagas=vagas,
         total_vagas=total_vagas,
-        total_candidaturas=total_candidaturas
+        vagas_abertas=vagas_abertas,
+        total_candidaturas=total_candidaturas,
+        total_entrevistas=total_entrevistas,
+        total_selecoes_finalizadas=total_selecoes_finalizadas,
+        candidatos=candidatos
     )
 
 
@@ -778,27 +828,35 @@ def editar_vaga(vaga_id):
         requisitos = request.form.get("requisitos", "").strip()
         cidade = request.form.get("cidade", "").strip()
         salario = request.form.get("salario", "").strip()
+        status = request.form.get("status", "")
+        status_permitidos = {"aberta", "finalizada", "cancelada", "em_analise", "pausada"}
 
         if not titulo or not descricao or not cidade:
             conexao.close()
             flash("Preencha o cargo, a descrição e a cidade.")
             return redirect(url_for("editar_vaga", vaga_id=vaga_id))
 
+        if status not in status_permitidos:
+            conexao.close()
+            flash("Selecione um status válido para a vaga.")
+            return redirect(url_for("editar_vaga", vaga_id=vaga_id))
+
         cursor.execute("""
             UPDATE vagas
             SET titulo = ?, descricao = ?, requisitos = ?,
-                cidade = ?, salario = ?
+                cidade = ?, salario = ?, status = ?,
+                pausa_ate = CASE WHEN ? = 'pausada' THEN pausa_ate ELSE NULL END
             WHERE id = ? AND empresa_id = ?
         """, (
             titulo, descricao, requisitos,
-            cidade, salario, vaga_id, empresa["id"]
+            cidade, salario, status, status, vaga_id, empresa["id"]
         ))
 
         conexao.commit()
         conexao.close()
 
-        flash("Vaga atualizada com sucesso!")
-        return redirect(url_for("painel"))
+        flash("Vaga e status atualizados com sucesso!")
+        return redirect(url_for("painel") + "#minhas-vagas")
 
     conexao.close()
 
@@ -813,14 +871,14 @@ def encerrar_vaga(vaga_id):
         return redirect(url_for("login"))
 
     if session["tipo"] != "empresa":
-        return redirect(url_for("painel"))
+        return redirect(url_for("painel") + "#minhas-vagas")
 
     conexao = conectar()
     cursor = conexao.cursor()
 
     cursor.execute("""
         UPDATE vagas
-        SET status = 'encerrada'
+        SET status = 'finalizada', pausa_ate = NULL
         WHERE id = ?
         AND empresa_id = (
             SELECT id FROM empresas WHERE usuario_id = ?
@@ -830,13 +888,143 @@ def encerrar_vaga(vaga_id):
     conexao.commit()
 
     if cursor.rowcount:
-        flash("Vaga encerrada com sucesso!")
+        flash("Vaga finalizada com sucesso!")
     else:
         flash("Não foi possível localizar essa vaga.")
 
     conexao.close()
 
-    return redirect(url_for("painel"))
+    return redirect(url_for("painel") + "#minhas-vagas")
+
+
+# ATUALIZAR STATUS DA VAGA
+@app.route("/empresa/vaga/status/<int:vaga_id>", methods=["POST"])
+def atualizar_status_vaga(vaga_id):
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    if session["tipo"] != "empresa":
+        flash("Acesso permitido somente para empresas.")
+        return redirect(url_for("painel"))
+
+    status = request.form.get("status", "")
+    status_permitidos = {"aberta", "finalizada", "cancelada", "em_analise", "pausada"}
+    if status not in status_permitidos:
+        flash("Status de vaga inválido.")
+        return redirect(url_for("painel"))
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+    cursor.execute("""
+        UPDATE vagas
+        SET status = ?, pausa_ate = CASE WHEN ? = 'pausada' THEN pausa_ate ELSE NULL END
+        WHERE id = ?
+        AND empresa_id = (
+            SELECT id FROM empresas WHERE usuario_id = ?
+        )
+    """, (status, status, vaga_id, session["usuario_id"]))
+    conexao.commit()
+
+    if cursor.rowcount:
+        flash("Status da vaga atualizado com sucesso.")
+    else:
+        flash("Não foi possível localizar essa vaga.")
+
+    conexao.close()
+    return redirect(url_for("painel") + "#minhas-vagas")
+
+
+# PAUSAR VAGA
+@app.route("/empresa/vaga/pausar/<int:vaga_id>", methods=["POST"])
+def pausar_vaga(vaga_id):
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    if session["tipo"] != "empresa":
+        flash("Acesso permitido somente para empresas.")
+        return redirect(url_for("painel") + "#minhas-vagas")
+
+    pausa_ate = request.form.get("pausa_ate", "").strip()
+    if pausa_ate:
+        try:
+            data_reabertura = datetime.strptime(pausa_ate, "%Y-%m-%d").date()
+        except ValueError:
+            flash("Selecione uma data válida para reabrir a vaga.")
+            return redirect(url_for("painel") + "#minhas-vagas")
+
+        if data_reabertura <= date.today():
+            flash("A data de reabertura precisa ser futura.")
+            return redirect(url_for("painel") + "#minhas-vagas")
+    else:
+        data_reabertura = None
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+    cursor.execute("""
+        UPDATE vagas
+        SET status = 'pausada', pausa_ate = ?
+        WHERE id = ?
+        AND status = 'aberta'
+        AND empresa_id = (
+            SELECT id FROM empresas WHERE usuario_id = ?
+        )
+    """, (
+        data_reabertura.isoformat() if data_reabertura else None,
+        vaga_id,
+        session["usuario_id"]
+    ))
+    conexao.commit()
+
+    if cursor.rowcount:
+        if data_reabertura:
+            flash(f"Vaga pausada até {data_reabertura.strftime('%d/%m/%Y')}.")
+        else:
+            flash("Vaga pausada por tempo indeterminado.")
+    else:
+        flash("Não foi possível pausar essa vaga. Verifique se ela ainda está aberta.")
+
+    conexao.close()
+    return redirect(url_for("painel") + "#minhas-vagas")
+
+
+# ATUALIZAR ETAPA DA CANDIDATURA
+@app.route("/empresa/candidatura/status/<int:candidatura_id>", methods=["POST"])
+def atualizar_status_candidatura(candidatura_id):
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    if session["tipo"] != "empresa":
+        flash("Acesso permitido somente para empresas.")
+        return redirect(url_for("painel"))
+
+    status = request.form.get("status", "")
+    status_permitidos = {"enviada", "entrevista", "selecao_finalizada"}
+    if status not in status_permitidos:
+        flash("Etapa de candidatura inválida.")
+        return redirect(url_for("painel"))
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+    cursor.execute("""
+        UPDATE candidaturas
+        SET status = ?
+        WHERE id = ?
+        AND vaga_id IN (
+            SELECT id FROM vagas
+            WHERE empresa_id = (
+                SELECT id FROM empresas WHERE usuario_id = ?
+            )
+        )
+    """, (status, candidatura_id, session["usuario_id"]))
+    conexao.commit()
+
+    if cursor.rowcount:
+        flash("Etapa do candidato atualizada com sucesso.")
+    else:
+        flash("Não foi possível localizar essa candidatura.")
+
+    conexao.close()
+    return redirect(url_for("painel") + "#candidatos")
 
 
 

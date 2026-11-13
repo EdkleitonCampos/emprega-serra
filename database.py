@@ -94,6 +94,11 @@ def criar_banco():
         )
     """)
 
+    cursor.execute("PRAGMA table_info(vagas)")
+    colunas_vagas = {coluna["name"] for coluna in cursor.fetchall()}
+    if "pausa_ate" not in colunas_vagas:
+        cursor.execute("ALTER TABLE vagas ADD COLUMN pausa_ate DATE")
+
     # Candidaturas
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS candidaturas (

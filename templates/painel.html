@@ -1,120 +1,270 @@
-
 {% extends "base.html" %}
 
 {% block title %}Meu Painel | Emprega Serra{% endblock %}
 
 {% block content %}
+{% if tipo == "empresa" %}
+<section class="company-dashboard">
+    <aside class="dashboard-sidebar" aria-label="Menu da conta empresarial">
+        <a class="dashboard-brand" href="{{ url_for('painel') }}">
+            <img class="dashboard-brand-logo" src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra">
+        </a>
 
-<section class="auth-section">
+        <nav class="dashboard-nav">
+            <h2>Menu principal</h2>
+            <a class="dashboard-nav-link is-active" href="#visao-geral"><span aria-hidden="true">⌂</span>Visão geral</a>
+            <a class="dashboard-nav-link" href="#minhas-vagas"><span aria-hidden="true">▤</span>Minhas vagas</a>
+            <a class="dashboard-nav-link" href="#candidatos"><span aria-hidden="true">♙</span>Candidatos</a>
+            <a class="dashboard-nav-link" href="#relatorios"><span aria-hidden="true">▥</span>Relatórios</a>
+            <a class="dashboard-nav-link" href="#perfil-empresa"><span aria-hidden="true">▣</span>Perfil da empresa</a>
 
-    <div class="auth-card" style="max-width: 1000px; width: 95%;">
+            <h2>Conta</h2>
+            <a class="dashboard-nav-link" href="#notificacoes"><span aria-hidden="true">♧</span>Notificações</a>
+            <a class="dashboard-nav-link" href="#configuracoes"><span aria-hidden="true">⚙</span>Configurações</a>
+            <a class="dashboard-nav-link dashboard-logout" href="{{ url_for('sair') }}"><span aria-hidden="true">↪</span>Sair</a>
+        </nav>
 
-        <h1>Olá, {{ nome }}!</h1>
+        <div class="dashboard-account">
+            <span class="dashboard-account-icon" aria-hidden="true">{{ empresa.nome_empresa[0]|upper }}</span>
+            <span><strong>Minha empresa</strong><small>Conta empresarial</small></span>
+        </div>
+    </aside>
 
-        {% if tipo == "candidato" %}
-
-            <p>Bem-vindo à sua área do candidato.</p>
-
-            <h3>Minha área profissional</h3>
-
-            <p>Encontre oportunidades e acompanhe suas candidaturas.</p>
-
-            <a href="/" class="btn btn-primary">
-                Encontrar vagas
-            </a>
-
-        {% elif tipo == "empresa" %}
-
-            <p>Bem-vindo ao painel empresarial do Emprega Serra.</p>
-
-            <h2>{{ empresa.nome_empresa }}</h2>
-
-            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin: 25px 0;">
-
-                <div style="background: #202c49; padding: 22px; border-radius: 12px; flex: 1; min-width: 180px;">
-                    <h3 style="color: #75c9ff;">{{ total_vagas }}</h3>
-                    <p>Vagas cadastradas</p>
+    <main class="dashboard-main">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="dashboard-flashes" role="status">
+                    {% for message in messages %}<p>{{ message }}</p>{% endfor %}
                 </div>
-
-                <div style="background: #202c49; padding: 22px; border-radius: 12px; flex: 1; min-width: 180px;">
-                    <h3 style="color: #a78bfa;">{{ total_candidaturas }}</h3>
-                    <p>Candidaturas recebidas</p>
+            {% endif %}
+        {% endwith %}
+        <section class="dashboard-section" id="visao-geral">
+            <div class="dashboard-heading">
+                <div>
+                    <p class="dashboard-eyebrow">Painel empresarial</p>
+                    <h1>Olá, {{ nome }}!</h1>
+                    <p>Acompanhe suas vagas e candidatos em um só lugar.</p>
                 </div>
-
+                <a href="{{ url_for('nova_vaga') }}" class="btn btn-primary">+ Publicar nova vaga</a>
             </div>
 
-            <a href="{{ url_for('nova_vaga') }}" class="btn btn-primary">
-                + Publicar nova vaga
-            </a>
+            <div class="dashboard-stats">
+                <article class="dashboard-stat">
+                    <span class="dashboard-stat-icon" aria-hidden="true">▤</span>
+                    <div><p>Vagas em aberto</p><strong>{{ vagas_abertas }}</strong></div>
+                </article>
+                <article class="dashboard-stat">
+                    <span class="dashboard-stat-icon dashboard-stat-icon-purple" aria-hidden="true">♙</span>
+                    <div><p>Candidaturas recebidas</p><strong>{{ total_candidaturas }}</strong></div>
+                </article>
+                <article class="dashboard-stat">
+                    <span class="dashboard-stat-icon dashboard-stat-icon-blue" aria-hidden="true">◎</span>
+                    <div><p>Entrevistas</p><strong>{{ total_entrevistas }}</strong></div>
+                </article>
+                <article class="dashboard-stat">
+                    <span class="dashboard-stat-icon dashboard-stat-icon-green" aria-hidden="true">✓</span>
+                    <div><p>Seleções finalizadas</p><strong>{{ total_selecoes_finalizadas }}</strong></div>
+                </article>
+            </div>
+        </section>
 
-            <hr style="margin: 30px 0;">
-
-            <h2>Minhas vagas</h2>
+        <section class="dashboard-section dashboard-content-card" id="minhas-vagas">
+            <div class="dashboard-section-heading">
+                <div><h2>Minhas vagas</h2><p>Gerencie as oportunidades publicadas pela sua empresa.</p></div>
+                <a class="dashboard-text-link" href="{{ url_for('nova_vaga') }}">Publicar vaga <span aria-hidden="true">→</span></a>
+            </div>
 
             {% if vagas %}
-
+            <div class="dashboard-table-wrap">
+            <table class="dashboard-vacancy-table">
+                <thead>
+                    <tr>
+                        <th>Vaga</th>
+                        <th>Local</th>
+                        <th>Salário</th>
+                        <th>Candidatos</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {% for vaga in vagas %}
-
-                    <div style="background: #202c49; padding: 20px; border-radius: 12px; margin: 15px 0;">
-
-                        <h3>{{ vaga.titulo }}</h3>
-
-                        <p><strong>Cidade:</strong> {{ vaga.cidade }}</p>
-
-                        <p><strong>Salário:</strong> {{ vaga.salario or "A combinar" }}</p>
-
-                        <p>
-                            <strong>Candidatos:</strong>
-                            {{ vaga.total_candidatos }}
-                        </p>
-
-                        <p>
-                            <strong>Status:</strong>
-                            {% if vaga.status == "aberta" %}
-                                <span style="color: #75c9ff;">Aberta</span>
-                            {% else %}
-                                <span style="color: #fca5a5;">Encerrada</span>
-                            {% endif %}
-                        </p>
-
-                        <a href="{{ url_for('editar_vaga', vaga_id=vaga.id) }}"
-                           class="btn btn-primary">
-                            Editar vaga
-                        </a>
-
-                        {% if vaga.status == "aberta" %}
-
-                            <form method="POST"
-                                  action="{{ url_for('encerrar_vaga', vaga_id=vaga.id) }}"
-                                  style="display: inline;"
-                                  onsubmit="return confirm('Deseja realmente encerrar esta vaga?');">
-
-                                <button type="submit" class="btn btn-secondary">
-                                    Encerrar vaga
-                                </button>
-
-                            </form>
-
+                {% set status_vaga = {"encerrada": "finalizada"}.get(vaga.status, vaga.status) %}
+                {% set status_vaga = status_vaga if status_vaga in ["aberta", "finalizada", "cancelada", "em_analise", "pausada"] else "em_analise" %}
+                <tr>
+                    <td data-label="Vaga"><strong>{{ vaga.titulo }}</strong></td>
+                    <td data-label="Local">{{ vaga.cidade }}</td>
+                    <td data-label="Salário">{{ vaga.salario or "A combinar" }}</td>
+                    <td data-label="Candidatos">{{ vaga.total_candidatos }}</td>
+                    <td data-label="Status">
+                        <span class="dashboard-status status-{{ status_vaga }}">
+                            {{ {"aberta": "Aberto", "finalizada": "Finalizado", "cancelada": "Cancelado", "em_analise": "Em análise", "pausada": "Pausada"}[status_vaga] }}
+                        </span>
+                        {% if status_vaga == "pausada" and vaga.pausa_ate %}
+                        <small class="dashboard-pause-date">Reabre em {{ vaga.pausa_ate }}</small>
+                        {% elif status_vaga == "pausada" %}
+                        <small class="dashboard-pause-date">Prazo indeterminado</small>
                         {% endif %}
-
-                    </div>
-
+                    </td>
+                    <td data-label="Ações">
+                        <div class="dashboard-vacancy-actions">
+                            <a class="btn btn-ghost btn-small" href="{{ url_for('editar_vaga', vaga_id=vaga.id) }}">Editar</a>
+                            {% if status_vaga == "aberta" %}
+                            <button type="button" class="btn btn-warning btn-small"
+                                    data-pause-url="{{ url_for('pausar_vaga', vaga_id=vaga.id) }}"
+                                    data-vacancy-title="{{ vaga.titulo }}">Pausar</button>
+                            <form method="POST" action="{{ url_for('encerrar_vaga', vaga_id=vaga.id) }}"
+                                  data-finalize-form data-vacancy-title="{{ vaga.titulo }}">
+                                <button type="submit" class="btn btn-danger btn-small">Finalizar</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
                 {% endfor %}
-
+                </tbody>
+            </table>
+            </div>
             {% else %}
-
+            <div class="dashboard-empty">
+                <span aria-hidden="true">▤</span>
                 <p>Você ainda não publicou nenhuma vaga.</p>
-
+                <a class="btn btn-primary btn-small" href="{{ url_for('nova_vaga') }}">Publicar primeira vaga</a>
+            </div>
             {% endif %}
+        </section>
 
-        {% endif %}
+        <section class="dashboard-section dashboard-content-card" id="candidatos">
+            <div class="dashboard-section-heading">
+                <div><h2>Candidatos</h2><p>Profissionais que se candidataram às suas vagas.</p></div>
+                <span class="dashboard-count">{{ candidatos|length }}</span>
+            </div>
+            {% if candidatos %}
+            <div class="dashboard-candidates">
+                {% for candidato in candidatos %}
+                <article class="dashboard-candidate">
+                    <span class="dashboard-candidate-avatar" aria-hidden="true">{{ candidato.candidato_nome[0]|upper }}</span>
+                    <div class="dashboard-candidate-info">
+                        <h3>{{ candidato.candidato_nome }}</h3>
+                        <p>{{ candidato.vaga_titulo }}</p>
+                    </div>
+                    <div class="dashboard-candidate-contact">
+                        <a href="mailto:{{ candidato.candidato_email }}">{{ candidato.candidato_email }}</a>
+                        {% if candidato.candidato_telefone %}<span>{{ candidato.candidato_telefone }}</span>{% endif %}
+                    </div>
+                    <form method="POST" action="{{ url_for('atualizar_status_candidatura', candidatura_id=candidato.candidatura_id) }}" class="dashboard-candidate-stage">
+                        <label class="sr-only" for="status-candidatura-{{ candidato.candidatura_id }}">Etapa de {{ candidato.candidato_nome }}</label>
+                        <select id="status-candidatura-{{ candidato.candidatura_id }}" name="status">
+                            <option value="enviada" {% if candidato.candidatura_status == "enviada" %}selected{% endif %}>Recebida</option>
+                            <option value="entrevista" {% if candidato.candidatura_status == "entrevista" %}selected{% endif %}>Entrevista</option>
+                            <option value="selecao_finalizada" {% if candidato.candidatura_status == "selecao_finalizada" %}selected{% endif %}>Seleção finalizada</option>
+                        </select>
+                        <button type="submit" class="btn btn-ghost btn-small">Atualizar</button>
+                    </form>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="dashboard-empty"><p>Ainda não há candidaturas para suas vagas.</p></div>
+            {% endif %}
+        </section>
 
-        <div class="auth-footer">
-            <a href="{{ url_for('sair') }}">Sair da conta</a>
+        <section class="dashboard-section dashboard-content-card" id="relatorios">
+            <div class="dashboard-section-heading">
+                <div><h2>Relatórios</h2><p>Resumo da atividade da sua conta empresarial.</p></div>
+            </div>
+            <div class="dashboard-report-grid">
+                <div><span>Vagas publicadas</span><strong>{{ total_vagas }}</strong></div>
+                <div><span>Candidaturas recebidas</span><strong>{{ total_candidaturas }}</strong></div>
+                <div><span>Vagas abertas</span><strong>{{ vagas_abertas }}</strong></div>
+            </div>
+        </section>
+
+        <section class="dashboard-section dashboard-content-card" id="perfil-empresa">
+            <div class="dashboard-section-heading">
+                <div><h2>Perfil da empresa</h2><p>Informações cadastradas para sua empresa.</p></div>
+            </div>
+            <dl class="dashboard-profile">
+                <div><dt>Empresa</dt><dd>{{ empresa.nome_empresa }}</dd></div>
+                <div><dt>Cidade</dt><dd>{{ empresa.cidade or "Não informada" }}</dd></div>
+                <div><dt>Telefone</dt><dd>{{ empresa.telefone or "Não informado" }}</dd></div>
+                <div><dt>CNPJ</dt><dd>{{ empresa.cnpj or "Não informado" }}</dd></div>
+                {% if empresa.descricao %}<div class="dashboard-profile-description"><dt>Sobre</dt><dd>{{ empresa.descricao }}</dd></div>{% endif %}
+            </dl>
+        </section>
+
+        <section class="dashboard-section dashboard-content-card" id="notificacoes">
+            <div class="dashboard-section-heading">
+                <div><h2>Notificações</h2><p>Avisos e novidades da sua conta.</p></div>
+            </div>
+            <div class="dashboard-empty"><p>Você não tem notificações no momento.</p></div>
+        </section>
+
+        <section class="dashboard-section dashboard-content-card" id="configuracoes">
+            <div class="dashboard-section-heading">
+                <div><h2>Configurações</h2><p>Preferências da conta empresarial.</p></div>
+            </div>
+            <div class="dashboard-empty"><p>As configurações da conta ainda não estão disponíveis.</p></div>
+        </section>
+    </main>
+
+    <dialog class="dashboard-dialog" id="pauseConfirmDialog" aria-labelledby="pauseConfirmTitle">
+        <form method="dialog" class="dashboard-dialog-content">
+            <h2 id="pauseConfirmTitle">Pausar vaga?</h2>
+            <p>Tem certeza que deseja pausar <strong data-dialog-vacancy-title></strong>?</p>
+            <div class="dashboard-dialog-actions">
+                <button type="submit" class="btn btn-modal-safe">Não</button>
+                <button type="button" class="btn btn-warning" data-confirm-pause>Sim</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog class="dashboard-dialog" id="pauseTypeDialog" aria-labelledby="pauseTypeTitle">
+        <div class="dashboard-dialog-content">
+            <h2 id="pauseTypeTitle">Como deseja pausar?</h2>
+            <p>Escolha quando a vaga deverá ser reaberta.</p>
+            <div class="dashboard-dialog-actions dashboard-dialog-actions-stacked">
+                <button type="button" class="btn btn-warning" data-schedule-pause>Pausa programada</button>
+                <button type="button" class="btn btn-warning" data-pause-indefinitely>Pausar por tempo indeterminado</button>
+                <button type="button" class="btn btn-modal-safe" data-close-dialog>Cancelar</button>
+            </div>
         </div>
+    </dialog>
 
-    </div>
+    <dialog class="dashboard-dialog" id="pauseScheduleDialog" aria-labelledby="pauseScheduleTitle">
+        <form method="POST" class="dashboard-dialog-content" id="pauseScheduleForm">
+            <h2 id="pauseScheduleTitle">Programar reabertura</h2>
+            <p>Escolha a data em que a vaga será reaberta automaticamente.</p>
+            <label class="dashboard-date-label" for="pauseUntil">Data de reabertura</label>
+            <input id="pauseUntil" name="pausa_ate" type="date" required>
+            <div class="dashboard-dialog-actions">
+                <button type="button" class="btn btn-modal-safe" data-close-dialog>Cancelar</button>
+                <button type="submit" class="btn btn-warning">Programar pausa</button>
+            </div>
+        </form>
+    </dialog>
 
+    <dialog class="dashboard-dialog" id="finalizeConfirmDialog" aria-labelledby="finalizeConfirmTitle">
+        <form method="dialog" class="dashboard-dialog-content">
+            <h2 id="finalizeConfirmTitle">Finalizar vaga?</h2>
+            <p data-finalize-message>Tem certeza que deseja finalizar <strong data-dialog-vacancy-title></strong>? Ela deixará de aparecer entre as vagas abertas.</p>
+            <div class="dashboard-dialog-actions">
+                <button type="submit" class="btn btn-modal-safe">Não</button>
+                <button type="button" class="btn btn-warning" data-confirm-finalize>Sim, finalizar</button>
+            </div>
+        </form>
+    </dialog>
 </section>
-
+{% else %}
+<section class="auth-section">
+    <div class="auth-card dashboard-candidate-home">
+        <h1>Olá, {{ nome }}!</h1>
+        <p>Bem-vindo à sua área do candidato.</p>
+        <h3>Minha área profissional</h3>
+        <p>Encontre oportunidades e acompanhe suas candidaturas.</p>
+        <a href="{{ url_for('home') }}" class="btn btn-primary">Encontrar vagas</a>
+        <div class="auth-footer"><a href="{{ url_for('sair') }}">Sair da conta</a></div>
+    </div>
+</section>
+{% endif %}
 {% endblock %}
