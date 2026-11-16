@@ -231,7 +231,7 @@ def login():
             session["nome"] = usuario["nome"]
             session["tipo"] = usuario["tipo"]
 
-            return redirect(url_for("painel"))
+            return redirect(url_for("painel_empresarial"))
 
         flash("E-mail ou senha incorretos.")
 
@@ -240,8 +240,8 @@ def login():
 
 
 # PAINEL PRINCIPAL
-@app.route("/painel")
-def painel():
+@app.route("/painel_empresarial")
+def painel_empresarial():
 
     if "usuario_id" not in session:
         return redirect(url_for("login"))
@@ -249,7 +249,7 @@ def painel():
     # ÁREA DO CANDIDATO
     if session["tipo"] == "candidato":
         return render_template(
-            "painel.html",
+            "painel_empresarial.html",
             nome=session["nome"],
             tipo="candidato"
         )
@@ -334,7 +334,7 @@ def painel():
     conexao.close()
 
     return render_template(
-        "painel.html",
+        "painel_empresarial.html",
         nome=session["nome"],
         tipo="empresa",
         empresa=empresa,
@@ -357,7 +357,7 @@ def nova_vaga():
 
     if session["tipo"] != "empresa":
         flash("Acesso permitido somente para empresas.")
-        return redirect(url_for("painel"))
+        return redirect(url_for("painel_empresarial"))
 
     conexao = conectar()
     cursor = conexao.cursor()
@@ -372,7 +372,7 @@ def nova_vaga():
     if not empresa:
         conexao.close()
         flash("Empresa não encontrada.")
-        return redirect(url_for("painel"))
+        return redirect(url_for("painel_empresarial"))
 
     if request.method == "POST":
 
@@ -404,7 +404,7 @@ def nova_vaga():
         conexao.close()
 
         flash("Vaga publicada com sucesso!")
-        return redirect(url_for("painel"))
+        return redirect(url_for("painel_empresarial"))
 
     conexao.close()
 
@@ -419,7 +419,7 @@ def editar_vaga(vaga_id):
         return redirect(url_for("login"))
 
     if session["tipo"] != "empresa":
-        return redirect(url_for("painel"))
+        return redirect(url_for("painel_empresarial"))
 
     conexao = conectar()
     cursor = conexao.cursor()
@@ -433,7 +433,7 @@ def editar_vaga(vaga_id):
 
     if not empresa:
         conexao.close()
-        return redirect(url_for("painel"))
+        return redirect(url_for("painel_empresarial"))
 
     cursor.execute("""
         SELECT * FROM vagas
@@ -445,7 +445,7 @@ def editar_vaga(vaga_id):
     if not vaga:
         conexao.close()
         flash("Vaga não encontrada.")
-        return redirect(url_for("painel"))
+        return redirect(url_for("painel_empresarial"))
 
     if request.method == "POST":
 
@@ -482,7 +482,7 @@ def editar_vaga(vaga_id):
         conexao.close()
 
         flash("Vaga e status atualizados com sucesso!")
-        return redirect(url_for("painel") + "#minhas-vagas")
+        return redirect(url_for("painel_empresarial") + "#minhas-vagas")
 
     conexao.close()
 
@@ -497,7 +497,7 @@ def encerrar_vaga(vaga_id):
         return redirect(url_for("login"))
 
     if session["tipo"] != "empresa":
-        return redirect(url_for("painel") + "#minhas-vagas")
+        return redirect(url_for("painel_empresarial") + "#minhas-vagas")
 
     conexao = conectar()
     cursor = conexao.cursor()
@@ -520,7 +520,7 @@ def encerrar_vaga(vaga_id):
 
     conexao.close()
 
-    return redirect(url_for("painel") + "#minhas-vagas")
+    return redirect(url_for("painel_empresarial") + "#minhas-vagas")
 
 
 # ATUALIZAR STATUS DA VAGA
@@ -531,13 +531,13 @@ def atualizar_status_vaga(vaga_id):
 
     if session["tipo"] != "empresa":
         flash("Acesso permitido somente para empresas.")
-        return redirect(url_for("painel"))
+        return redirect(url_for("painel_empresarial"))
 
     status = request.form.get("status", "")
     status_permitidos = {"aberta", "finalizada", "cancelada", "em_analise", "pausada"}
     if status not in status_permitidos:
         flash("Status de vaga inválido.")
-        return redirect(url_for("painel"))
+        return redirect(url_for("painel_empresarial"))
 
     conexao = conectar()
     cursor = conexao.cursor()
@@ -557,7 +557,7 @@ def atualizar_status_vaga(vaga_id):
         flash("Não foi possível localizar essa vaga.")
 
     conexao.close()
-    return redirect(url_for("painel") + "#minhas-vagas")
+    return redirect(url_for("painel_empresarial") + "#minhas-vagas")
 
 
 # PAUSAR VAGA
@@ -568,7 +568,7 @@ def pausar_vaga(vaga_id):
 
     if session["tipo"] != "empresa":
         flash("Acesso permitido somente para empresas.")
-        return redirect(url_for("painel") + "#minhas-vagas")
+        return redirect(url_for("painel_empresarial") + "#minhas-vagas")
 
     pausa_ate = request.form.get("pausa_ate", "").strip()
     if pausa_ate:
@@ -576,11 +576,11 @@ def pausar_vaga(vaga_id):
             data_reabertura = datetime.strptime(pausa_ate, "%Y-%m-%d").date()
         except ValueError:
             flash("Selecione uma data válida para reabrir a vaga.")
-            return redirect(url_for("painel") + "#minhas-vagas")
+            return redirect(url_for("painel_empresarial") + "#minhas-vagas")
 
         if data_reabertura <= date.today():
             flash("A data de reabertura precisa ser futura.")
-            return redirect(url_for("painel") + "#minhas-vagas")
+            return redirect(url_for("painel_empresarial") + "#minhas-vagas")
     else:
         data_reabertura = None
 
@@ -610,7 +610,7 @@ def pausar_vaga(vaga_id):
         flash("Não foi possível pausar essa vaga. Verifique se ela ainda está aberta.")
 
     conexao.close()
-    return redirect(url_for("painel") + "#minhas-vagas")
+    return redirect(url_for("painel_empresarial") + "#minhas-vagas")
 
 
 # ATUALIZAR ETAPA DA CANDIDATURA
@@ -621,13 +621,13 @@ def atualizar_status_candidatura(candidatura_id):
 
     if session["tipo"] != "empresa":
         flash("Acesso permitido somente para empresas.")
-        return redirect(url_for("painel"))
+        return redirect(url_for("painel_empresarial"))
 
     status = request.form.get("status", "")
     status_permitidos = {"enviada", "entrevista", "selecao_finalizada"}
     if status not in status_permitidos:
         flash("Etapa de candidatura inválida.")
-        return redirect(url_for("painel"))
+        return redirect(url_for("painel_empresarial"))
 
     conexao = conectar()
     cursor = conexao.cursor()
@@ -650,7 +650,7 @@ def atualizar_status_candidatura(candidatura_id):
         flash("Não foi possível localizar essa candidatura.")
 
     conexao.close()
-    return redirect(url_for("painel") + "#candidatos")
+    return redirect(url_for("painel_empresarial") + "#candidatos")
 
 
 
