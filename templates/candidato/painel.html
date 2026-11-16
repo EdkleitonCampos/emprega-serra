@@ -82,6 +82,18 @@
                 </div>
             </div>
 
+            <div style="display:flex; justify-content:flex-end; margin-bottom:18px;">
+                <a href="{{ url_for('buscar_vagas') }}" class="candidate-button">
+                    + Explorar mais vagas ?
+                </a>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; margin-bottom:18px;">
+                <a href="{{ url_for('buscar_vagas') }}" class="candidate-button">
+                    + Explorar mais vagas ?
+                </a>
+            </div>
+
             <div class="applications-card">
 
                 {% if candidaturas %}
@@ -112,7 +124,7 @@
                         envie sua primeira candidatura.
                     </p>
 
-                    <a href="{{ url_for('home') }}" class="candidate-button">
+                    <a href="{{ url_for('buscar_vagas') }}" class="candidate-button">
                         Explorar vagas →
                     </a>
                 </div>
