@@ -246,13 +246,72 @@ def painel_empresarial():
     if "usuario_id" not in session:
         return redirect(url_for("login"))
 
+    
     # ÁREA DO CANDIDATO
     if session["tipo"] == "candidato":
+
+        conexao = conectar()
+        cursor = conexao.cursor()
+
+        # Buscar cadastro do candidato
+        cursor.execute("""
+            SELECT id
+            FROM candidatos
+            WHERE usuario_id = ?
+        """, (session["usuario_id"],))
+
+        candidato = cursor.fetchone()
+
+        if not candidato:
+            conexao.close()
+            flash("Cadastro do candidato não encontrado.")
+            return redirect(url_for("sair"))
+
+        # Buscar candidaturas e informações das vagas
+        cursor.execute("""
+            SELECT
+                c.status,
+                c.criado_em,
+                v.titulo,
+                e.nome_empresa AS empresa
+            FROM candidaturas c
+            INNER JOIN vagas v ON v.id = c.vaga_id
+            INNER JOIN empresas e ON e.id = v.empresa_id
+            WHERE c.candidato_id = ?
+            ORDER BY c.id DESC
+        """, (candidato["id"],))
+
+        candidaturas = cursor.fetchall()
+
+        conexao.close()
+
+        # Calcular estatísticas
+        total_candidaturas = len(candidaturas)
+
+        em_analise = 0
+        aprovadas = 0
+
+        for candidatura in candidaturas:
+
+            status = (candidatura["status"] or "").lower().strip()
+            status = status.replace(" ", "_").replace("á", "a")
+
+            if status in ("em_analise", "analise"):
+                em_analise += 1
+
+            elif status in ("aprovada", "aprovado"):
+                aprovadas += 1
+
         return render_template(
-            "painel_empresarial.html",
+            "candidato/painel.html",
             nome=session["nome"],
-            tipo="candidato"
+            tipo="candidato",
+            total_candidaturas=total_candidaturas,
+            em_analise=em_analise,
+            aprovadas=aprovadas,
+            candidaturas=candidaturas
         )
+
 
     # ÁREA DA EMPRESA
     reativar_vagas_pausadas()
@@ -346,6 +405,321 @@ def painel_empresarial():
         total_selecoes_finalizadas=total_selecoes_finalizadas,
         candidatos=candidatos
     )
+
+
+
+# MEU PERFIL DO CANDIDATO
+@app.route("/meu-perfil", methods=["GET", "POST"])
+def meu_perfil():
+
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    if session["tipo"] != "candidato":
+        flash("Acesso permitido somente para candidatos.")
+        return redirect(url_for("painel"))
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM candidatos
+        WHERE usuario_id = ?
+    """, (session["usuario_id"],))
+
+    candidato = cursor.fetchone()
+
+    if not candidato:
+        conexao.close()
+        flash("Cadastro do candidato não encontrado.")
+        return redirect(url_for("painel"))
+
+    if request.method == "POST":
+
+        telefone = request.form.get("telefone", "").strip()
+        cidade = request.form.get("cidade", "").strip()
+        escolaridade = request.form.get("escolaridade", "").strip()
+        experiencia = request.form.get("experiencia", "").strip()
+        habilidades = request.form.get("habilidades", "").strip()
+
+        objetivo_profissional = request.form.get(
+            "objetivo_profissional", ""
+        ).strip()
+
+        resumo_profissional = request.form.get(
+            "resumo_profissional", ""
+        ).strip()
+
+        cursos = request.form.get("cursos", "").strip()
+
+        cursor.execute("""
+            UPDATE candidatos
+            SET telefone = ?,
+                cidade = ?,
+                escolaridade = ?,
+                experiencia = ?,
+                habilidades = ?,
+                objetivo_profissional = ?,
+                resumo_profissional = ?,
+                cursos = ?
+            WHERE usuario_id = ?
+        """, (
+            telefone,
+            cidade,
+            escolaridade,
+            experiencia,
+            habilidades,
+            objetivo_profissional,
+            resumo_profissional,
+            cursos,
+            session["usuario_id"]
+        ))
+
+        conexao.commit()
+        conexao.close()
+
+        flash("Perfil atualizado com sucesso!")
+        return redirect(url_for("meu_perfil"))
+
+    conexao.close()
+
+    return render_template(
+        "candidato/meu_perfil.html",
+        nome=session["nome"],
+        candidato=candidato
+    )
+
+
+
+
+# CURRÍCULO DO CANDIDATO
+@app.route("/curriculo")
+def curriculo():
+
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    if session["tipo"] != "candidato":
+        flash("Acesso permitido somente para candidatos.")
+        return redirect(url_for("painel"))
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM candidatos
+        WHERE usuario_id = ?
+    """, (session["usuario_id"],))
+
+    candidato = cursor.fetchone()
+    conexao.close()
+
+    if not candidato:
+        flash("Cadastro do candidato não encontrado.")
+        return redirect(url_for("painel"))
+
+    return render_template(
+        "candidato/curriculo.html",
+        candidato=candidato,
+        codigo=f"EMP-{candidato['id']:06d}"
+    )
+
+# ==========================================
+# ÁREA DO CANDIDATO — BUSCAR VAGAS
+# ==========================================
+
+@app.route("/buscar-vagas")
+def buscar_vagas():
+
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    if session["tipo"] != "candidato":
+        flash("Acesso permitido somente para candidatos.")
+        return redirect(url_for("painel"))
+
+    pesquisa = request.args.get("q", "").strip()
+    cidade = request.args.get("cidade", "").strip()
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    sql = """
+        SELECT
+            v.id,
+            v.titulo,
+            v.descricao,
+            v.requisitos,
+            v.cidade,
+            v.salario,
+            v.criado_em,
+            e.nome_empresa
+        FROM vagas v
+        INNER JOIN empresas e ON e.id = v.empresa_id
+        WHERE v.status = 'aberta'
+    """
+
+    parametros = []
+
+    if pesquisa:
+        sql += """
+            AND (
+                v.titulo LIKE ?
+                OR v.descricao LIKE ?
+                OR v.requisitos LIKE ?
+            )
+        """
+
+        termo = f"%{pesquisa}%"
+
+        parametros.extend([termo, termo, termo])
+
+    if cidade:
+        sql += " AND v.cidade LIKE ?"
+        parametros.append(f"%{cidade}%")
+
+    sql += " ORDER BY v.id DESC"
+
+    cursor.execute(sql, parametros)
+
+    vagas = cursor.fetchall()
+
+    conexao.close()
+
+    return render_template(
+        "candidato/buscar_vagas.html",
+        nome=session["nome"],
+        vagas=vagas,
+        pesquisa=pesquisa,
+        cidade=cidade
+    )
+
+
+# ==========================================
+# DETALHES DA VAGA
+# ==========================================
+
+@app.route("/vaga/<int:vaga_id>")
+def detalhes_vaga(vaga_id):
+
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    if session["tipo"] != "candidato":
+        flash("Acesso permitido somente para candidatos.")
+        return redirect(url_for("painel"))
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT
+            v.*,
+            e.nome_empresa,
+            e.cidade AS cidade_empresa,
+            e.descricao AS descricao_empresa
+        FROM vagas v
+        INNER JOIN empresas e ON e.id = v.empresa_id
+        WHERE v.id = ? AND v.status = 'aberta'
+    """, (vaga_id,))
+
+    vaga = cursor.fetchone()
+
+    if not vaga:
+        conexao.close()
+        flash("Esta vaga não está mais disponível.")
+        return redirect(url_for("buscar_vagas"))
+
+    cursor.execute("""
+        SELECT c.id
+        FROM candidaturas c
+        INNER JOIN candidatos ca ON ca.id = c.candidato_id
+        WHERE c.vaga_id = ?
+        AND ca.usuario_id = ?
+    """, (vaga_id, session["usuario_id"]))
+
+    candidatura = cursor.fetchone()
+
+    conexao.close()
+
+    return render_template(
+        "candidato/detalhes_vaga.html",
+        nome=session["nome"],
+        vaga=vaga,
+        candidatura=candidatura
+    )
+
+
+# ==========================================
+# CANDIDATAR-SE A UMA VAGA
+# ==========================================
+
+@app.route("/candidatar/<int:vaga_id>", methods=["POST"])
+def candidatar_vaga(vaga_id):
+
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    if session["tipo"] != "candidato":
+        flash("Acesso permitido somente para candidatos.")
+        return redirect(url_for("painel"))
+
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT id
+        FROM candidatos
+        WHERE usuario_id = ?
+    """, (session["usuario_id"],))
+
+    candidato = cursor.fetchone()
+
+    if not candidato:
+        conexao.close()
+        flash("Cadastro do candidato não encontrado.")
+        return redirect(url_for("painel"))
+
+    cursor.execute("""
+        SELECT id
+        FROM vagas
+        WHERE id = ? AND status = 'aberta'
+    """, (vaga_id,))
+
+    vaga = cursor.fetchone()
+
+    if not vaga:
+        conexao.close()
+        flash("Esta vaga não está mais disponível.")
+        return redirect(url_for("buscar_vagas"))
+
+    cursor.execute("""
+        SELECT id
+        FROM candidaturas
+        WHERE vaga_id = ? AND candidato_id = ?
+    """, (vaga_id, candidato["id"]))
+
+    candidatura_existente = cursor.fetchone()
+
+    if candidatura_existente:
+        conexao.close()
+        flash("Você já se candidatou a esta vaga.")
+        return redirect(url_for("detalhes_vaga", vaga_id=vaga_id))
+
+    cursor.execute("""
+        INSERT INTO candidaturas (vaga_id, candidato_id)
+        VALUES (?, ?)
+    """, (vaga_id, candidato["id"]))
+
+    conexao.commit()
+    conexao.close()
+
+    flash("Sua candidatura foi enviada com sucesso!")
+
+    return redirect(url_for("painel"))
+
 
 
 # CADASTRAR NOVA VAGA
