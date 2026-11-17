@@ -8,12 +8,15 @@ from flask import (
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from database import criar_banco, conectar
+from admin import admin_bp, garantir_admin_inicial
 
 app = Flask(__name__)
 
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32)
 
 criar_banco()
+app.register_blueprint(admin_bp)
+garantir_admin_inicial()
 
 
 def reativar_vagas_pausadas():
@@ -52,9 +55,20 @@ def home():
     """)
 
     vagas = cursor.fetchall()
+
+    cursor.execute("""
+        SELECT id, titulo, descricao, imagem_url, link_url
+        FROM anuncios
+        WHERE status = 'ativo'
+          AND (inicio IS NULL OR inicio <= date('now', 'localtime'))
+          AND (fim IS NULL OR fim >= date('now', 'localtime'))
+        ORDER BY CASE posicao WHEN 'destaque' THEN 0 ELSE 1 END, id DESC
+        LIMIT 6
+    """)
+    anuncios = cursor.fetchall()
     conexao.close()
 
-    return render_template("index.html", vagas=vagas)
+    return render_template("index.html", vagas=vagas, anuncios=anuncios)
 
 
 # CADASTRO DE CANDIDATO
@@ -199,6 +213,8 @@ def login():
             session["nome"] = usuario["nome"]
             session["tipo"] = usuario["tipo"]
 
+            if usuario["tipo"] == "admin":
+                return redirect(url_for("admin.dashboard"))
             if usuario["tipo"] == "candidato":
                 return redirect(url_for("painel"))
 
