@@ -13,6 +13,12 @@ from admin import admin_bp, garantir_admin_inicial
 app = Flask(__name__)
 
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32)
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=os.environ.get("COOKIE_SECURE", "0") == "1",
+    MAX_CONTENT_LENGTH=5 * 1024 * 1024,
+)
 
 criar_banco()
 app.register_blueprint(admin_bp)
@@ -234,7 +240,9 @@ def painel_empresarial():
     if "usuario_id" not in session:
         return redirect(url_for("login"))
 
-    
+    if session.get("tipo") == "admin":
+        return redirect(url_for("admin.dashboard"))
+
     # ÁREA DO CANDIDATO
     if session["tipo"] == "candidato":
 
@@ -1023,4 +1031,5 @@ def sair():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    modo_debug = os.environ.get("FLASK_DEBUG", "0") == "1"
+    app.run(debug=modo_debug)
