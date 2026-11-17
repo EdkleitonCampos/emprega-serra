@@ -131,6 +131,23 @@
         </div>
     </section>
 
+    {% if anuncios %}
+    <section class="jobs-section section-padding" aria-label="Publicidade e parceiros">
+      <div class="container">
+        <div class="section-heading"><div><div class="eyebrow"><span class="eyebrow-dot"></span> PARCEIROS LOCAIS</div><h2>Quem apoia nossa <span>região</span></h2><p>Conheça empresas que apoiam o Emprega Serra.</p></div></div>
+        <div class="jobs-grid">
+        {% for anuncio in anuncios %}
+          <article class="job-card ad-card">
+            {% if anuncio.imagem_url %}<img src="{{ anuncio.imagem_url }}" alt="{{ anuncio.titulo }}" loading="lazy" style="width:100%;max-height:170px;object-fit:cover;border-radius:10px">{% endif %}
+            <span class="job-status">Parceiro</span><h3>{{ anuncio.titulo }}</h3><p class="company-name">{{ anuncio.descricao or 'Apoie os negócios da nossa região.' }}</p>
+            {% if anuncio.link_url %}<div class="job-card-bottom"><strong>Conheça</strong><a href="{{ anuncio.link_url }}" target="_blank" rel="noopener noreferrer">Acessar <span>→</span></a></div>{% endif %}
+          </article>
+        {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
     <section class="business-section section-padding" id="empresas">
         <div class="container business-panel">
             <div class="business-copy">
