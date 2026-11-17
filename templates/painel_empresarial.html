@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Meu Painel | Emprega Serra{% endblock %}
+{% block title %}Meu Painel Empresarial | Emprega Serra{% endblock %}
 
 {% block content %}
 {% if tipo == "empresa" %}
 <section class="company-dashboard">
     <aside class="dashboard-sidebar" aria-label="Menu da conta empresarial">
-        <a class="dashboard-brand" href="{{ url_for('painel') }}">
+        <a class="dashboard-brand" href="{{ url_for('painel_empresarial') }}">
             <img class="dashboard-brand-logo" src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra">
         </a>
 
@@ -26,7 +26,10 @@
 
         <div class="dashboard-account">
             <span class="dashboard-account-icon" aria-hidden="true">{{ empresa.nome_empresa[0]|upper }}</span>
-            <span><strong>Minha empresa</strong><small>Conta empresarial</small></span>
+            <span class="dashboard-account-info">
+                <strong>{{ empresa.nome_empresa }}</strong>
+                <small>{{ empresa.cnpj or "CNPJ não informado" }}</small>
+            </span>
         </div>
     </aside>
 
@@ -157,7 +160,9 @@
                         <select id="status-candidatura-{{ candidato.candidatura_id }}" name="status">
                             <option value="enviada" {% if candidato.candidatura_status == "enviada" %}selected{% endif %}>Recebida</option>
                             <option value="entrevista" {% if candidato.candidatura_status == "entrevista" %}selected{% endif %}>Entrevista</option>
-                            <option value="selecao_finalizada" {% if candidato.candidatura_status == "selecao_finalizada" %}selected{% endif %}>Seleção finalizada</option>
+                            <option value="aprovada" {% if candidato.candidatura_status == "aprovada" %}selected{% endif %}>Aprovado</option>
+                            <option value="reprovada" {% if candidato.candidatura_status == "reprovada" %}selected{% endif %}>Não selecionado</option>
+                            <option value="selecao_finalizada" {% if candidato.candidatura_status == "selecao_finalizada" %}selected{% endif %}>Seleção finalizada (legado)</option>
                         </select>
                         <button type="submit" class="btn btn-ghost btn-small">Atualizar</button>
                     </form>

@@ -9,11 +9,8 @@
 <header class="candidate-header">
     <div class="candidate-container header-content">
 
-        <a href="{{ url_for('home') }}" class="brand">
-            <span class="brand-mark">E</span>
-            <span class="brand-name">EMPREGA <span>SERRA</span>
-                <small>SEU TALENTO MERECE UMA OPORTUNIDADE</small>
-            </span>
+        <a href="{{ url_for('home') }}" class="brand" aria-label="Emprega Serra - página inicial">
+            <img class="brand-logo" src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra">
         </a>
 
         <nav class="candidate-nav">
@@ -57,7 +54,7 @@
             <article class="candidate-stat">
                 <div class="stat-icon purple-icon">⏳</div>
                 <div>
-                    <span>Em análise</span>
+                    <span>Em andamento</span>
                     <strong>{{ em_analise|default(0) }}</strong>
                 </div>
             </article>
@@ -88,12 +85,6 @@
                 </a>
             </div>
 
-            <div style="display:flex; justify-content:flex-end; margin-bottom:18px;">
-                <a href="{{ url_for('buscar_vagas') }}" class="candidate-button">
-                    + Explorar mais vagas ?
-                </a>
-            </div>
-
             <div class="applications-card">
 
                 {% if candidaturas %}
@@ -108,7 +99,7 @@
                     </div>
 
                     <span class="application-status">
-                        {{ candidatura.status }}
+                        {{ {"enviada": "Recebida", "entrevista": "Em entrevista", "em_analise": "Em análise", "aprovada": "Aprovada", "aprovado": "Aprovado", "reprovada": "Não selecionado", "selecao_finalizada": "Seleção finalizada"}.get(candidatura.status, candidatura.status|replace("_", " ")|title) }}
                     </span>
                 </article>
 

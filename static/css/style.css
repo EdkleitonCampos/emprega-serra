@@ -602,8 +602,10 @@ button, input { font: inherit; }
 }
 
 .dashboard-sidebar {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    width: 258px;
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -684,10 +686,12 @@ button, input { font: inherit; }
 }
 .dashboard-account strong,
 .dashboard-account small { display: block; }
-.dashboard-account strong { font-size: 11px; }
+.dashboard-account-info { min-width: 0; }
+.dashboard-account strong { overflow-wrap: anywhere; font-size: 11px; }
 .dashboard-account small { margin-top: 3px; color: var(--muted); font-size: 10px; }
 
 .dashboard-main {
+    grid-column: 2;
     width: min(1120px, 100%);
     margin: 0 auto;
     padding: 38px clamp(22px, 4vw, 56px) 70px;
@@ -941,7 +945,7 @@ button, input { font: inherit; }
 
 @media (max-width: 900px) {
     .company-dashboard { grid-template-columns: 220px minmax(0, 1fr); }
-    .dashboard-sidebar { padding-right: 12px; padding-left: 12px; }
+    .dashboard-sidebar { width: 220px; padding-right: 12px; padding-left: 12px; }
     .dashboard-main { padding-right: 22px; padding-left: 22px; }
     .dashboard-candidate { flex-wrap: wrap; }
     .dashboard-candidate-contact { margin-left: 51px; }
@@ -949,7 +953,7 @@ button, input { font: inherit; }
 
 @media (max-width: 680px) {
     .company-dashboard { display: block; }
-    .dashboard-sidebar { position: static; height: auto; padding: 16px; border-right: 0; border-bottom: 1px solid var(--line); }
+    .dashboard-sidebar { position: static; width: auto; height: auto; padding: 16px; border-right: 0; border-bottom: 1px solid var(--line); }
     .dashboard-brand { padding: 0 4px 14px; }
     .dashboard-brand-logo { width: 185px; max-height: 45px; }
     .dashboard-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
@@ -957,7 +961,7 @@ button, input { font: inherit; }
     .dashboard-nav h2:first-child { margin-top: 0; }
     .dashboard-nav-link { min-height: 38px; gap: 8px; padding: 0 7px; font-size: 10px; }
     .dashboard-account { display: none; }
-    .dashboard-main { padding: 26px 16px 45px; }
+    .dashboard-main { grid-column: auto; padding: 26px 16px 45px; }
     .dashboard-heading { align-items: flex-start; flex-direction: column; }
     .dashboard-heading .btn { width: 100%; }
     .dashboard-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
@@ -1039,3 +1043,7 @@ body {
 .hero-description {
     color: #d1dcf7;
 }
+
+
+/* Mensagem de lista vazia na página inicial */
+.jobs-empty-state { grid-column: 1 / -1; }

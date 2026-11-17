@@ -1,11 +1,16 @@
+import os
 import sqlite3
 
-DATABASE = "emprega_serra.db"
+DATABASE = os.environ.get(
+    "DATABASE_PATH",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "emprega_serra.db")
+)
 
 
 def conectar():
     conexao = sqlite3.connect(DATABASE)
     conexao.row_factory = sqlite3.Row
+    conexao.execute("PRAGMA foreign_keys = ON")
     return conexao
 
 

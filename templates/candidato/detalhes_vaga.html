@@ -141,7 +141,7 @@
 <section class="job-detail-page">
     <div class="job-detail-container">
 
-        <a href="{{ url_for('buscar_vagas') }}" class="job-detail-back">
+        <a href="{{ url_for('buscar_vagas') if session.get('tipo') == 'candidato' else url_for('home') }}#vagas" class="job-detail-back">
             ← Voltar para as vagas
         </a>
 
@@ -202,29 +202,20 @@
 
             <div class="job-detail-action">
 
-                {% if candidatura %}
-
-                    <div class="job-already-applied">
-                        ✓ Você já se candidatou a esta oportunidade!
-                    </div>
-
-                {% else %}
-
+                {% if not session.get("usuario_id") %}
                     <h2>Gostou desta oportunidade?</h2>
-
-                    <p style="color:#cbd5e1; margin:12px 0 22px;">
-                        Envie sua candidatura e dê mais um passo na sua carreira.
-                    </p>
-
-                    <form method="POST"
-                          action="{{ url_for('candidatar_vaga', vaga_id=vaga.id) }}">
-
-                        <button type="submit" class="job-apply-button">
-                            Enviar minha candidatura →
-                        </button>
-
+                    <p style="color:#cbd5e1; margin:12px 0 22px;">Entre na sua conta de candidato para enviar uma candidatura.</p>
+                    <a class="job-apply-button" href="{{ url_for('login') }}">Entrar para se candidatar →</a>
+                {% elif session.get("tipo") != "candidato" %}
+                    <p class="job-already-applied">Somente contas de candidato podem enviar candidaturas.</p>
+                {% elif candidatura %}
+                    <div class="job-already-applied">✓ Você já se candidatou a esta oportunidade!</div>
+                {% else %}
+                    <h2>Gostou desta oportunidade?</h2>
+                    <p style="color:#cbd5e1; margin:12px 0 22px;">Envie sua candidatura e dê mais um passo na sua carreira.</p>
+                    <form method="POST" action="{{ url_for('candidatar_vaga', vaga_id=vaga.id) }}">
+                        <button type="submit" class="job-apply-button">Enviar minha candidatura →</button>
                     </form>
-
                 {% endif %}
 
             </div>

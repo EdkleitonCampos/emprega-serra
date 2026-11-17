@@ -1,0 +1,29 @@
+EMPREGA SERRA - ARQUIVOS REVISADOS
+
+COMO APLICAR
+1. Feche o servidor Flask no terminal com CTRL+C.
+2. Extraia esta pasta 'emprega_serra' sobre a pasta atual do projeto, permitindo substituir os arquivos existentes.
+3. NAO apague nem substitua o arquivo emprega_serra.db (banco de dados local).
+4. NAO apague os arquivos app.backup_*.py nem templates/candidato/painel.backup.*.html.
+5. No PowerShell, dentro da pasta do projeto, execute:
+
+   python -m py_compile app.py database.py
+   python app.py
+
+6. Abra http://127.0.0.1:5000 e teste login de candidato, login de empresa, publicação de vaga, candidatura e atualização do status.
+
+GIT - SOMENTE DEPOIS DOS TESTES
+O merge iniciado anteriormente continua sendo finalizado na pasta local. Depois de testar o site, execute:
+
+   git add app.py database.py static/css/style.css static/js/main.js templates/index.html templates/candidato/painel_candidato.html templates/candidato/detalhes_vaga.html templates/painel_empresarial.html
+   git diff --cached --check
+   git status --short
+
+Se estiver tudo certo, conclua o merge com:
+
+   git commit -m "Conclui integracao dos paineis e vagas reais"
+
+Nao faça git push até revisar o commit e decidir publicar no GitHub.
+
+O ZIP NAO CONTEM: banco de dados, backups, pasta .git ou ambiente virtual.
+Esses itens permanecem no computador do projeto e nao devem ser substituidos.
