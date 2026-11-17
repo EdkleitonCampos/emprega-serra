@@ -118,6 +118,36 @@ def criar_banco():
         )
     """)
 
+    # Anunciantes e campanhas publicitárias gerenciadas pela administração
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS anunciantes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            contato TEXT,
+            telefone TEXT,
+            email TEXT,
+            ativo INTEGER NOT NULL DEFAULT 1,
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS anuncios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            anunciante_id INTEGER,
+            titulo TEXT NOT NULL,
+            descricao TEXT,
+            imagem_url TEXT,
+            link_url TEXT,
+            posicao TEXT NOT NULL DEFAULT 'lateral',
+            status TEXT NOT NULL DEFAULT 'pausado',
+            inicio DATE,
+            fim DATE,
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (anunciante_id) REFERENCES anunciantes(id)
+        )
+    """)
+
     conexao.commit()
     conexao.close()
 
