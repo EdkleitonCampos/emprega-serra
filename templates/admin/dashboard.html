@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Administração | Emprega Serra{% endblock %}
+{% block content %}
+<div class="admin-shell">
+  <aside class="admin-sidebar">
+    <a class="admin-brand" href="{{ url_for('home') }}">EMPREGA <span>SERRA</span></a>
+    <p>PAINEL ADMINISTRATIVO</p>
+    <a class="active" href="{{ url_for('admin.dashboard') }}">Visão geral</a>
+    <a href="{{ url_for('admin.anunciantes') }}">Anunciantes</a>
+    <a href="{{ url_for('admin.anuncios') }}">Publicidade</a>
+    <a href="{{ url_for('sair') }}">Sair</a>
+  </aside>
+  <main class="admin-main">
+    <div class="admin-heading"><div><span>CONTROLE DA PLATAFORMA</span><h1>Visão geral</h1><p>Indicadores e atividade do Emprega Serra.</p></div><a class="admin-button" href="{{ url_for('admin.anuncios') }}">Gerenciar anúncios</a></div>
+    <section class="admin-stats">
+      <article><small>Usuários</small><strong>{{ total_usuarios }}</strong></article>
+      <article><small>Candidatos</small><strong>{{ total_candidatos }}</strong></article>
+      <article><small>Empresas</small><strong>{{ total_empresas }}</strong></article>
+      <article><small>Vagas</small><strong>{{ total_vagas }}</strong></article>
+      <article><small>Candidaturas</small><strong>{{ total_candidaturas }}</strong></article>
+      <article><small>Anúncios ativos</small><strong>{{ anuncios_ativos }}</strong></article>
+    </section>
+    <section class="admin-panel"><h2>Contas recentes</h2><div class="admin-table-wrap"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Tipo</th><th>Cadastro</th></tr></thead><tbody>
+    {% for u in usuarios %}<tr><td>{{ u.nome }}</td><td>{{ u.email }}</td><td>{{ u.tipo }}</td><td>{{ u.criado_em }}</td></tr>{% else %}<tr><td colspan="4">Nenhuma conta cadastrada.</td></tr>{% endfor %}
+    </tbody></table></div></section>
+    <section class="admin-panel"><h2>Campanhas recentes</h2><div class="admin-table-wrap"><table><thead><tr><th>Anúncio</th><th>Anunciante</th><th>Posição</th><th>Status</th></tr></thead><tbody>
+    {% for a in anuncios %}<tr><td>{{ a.titulo }}</td><td>{{ a.anunciante }}</td><td>{{ a.posicao }}</td><td>{{ a.status }}</td></tr>{% else %}<tr><td colspan="4">Nenhuma campanha cadastrada.</td></tr>{% endfor %}
+    </tbody></table></div></section>
+  </main>
+</div>
+{% endblock %}
