@@ -18,8 +18,13 @@
             <a href="#sobre">Como funciona</a>
         </nav>
         <div class="nav-actions">
-            <a class="btn btn-ghost" href="{{ url_for('login') }}">Entrar</a>
-            <button class="btn btn-primary btn-small" id="openAccountTypeDialog" type="button" aria-haspopup="dialog">Criar conta</button>
+            {% if session.get('usuario_id') %}
+                <a class="btn btn-ghost" href="{{ url_for('painel') if session.get('tipo') == 'candidato' else url_for('painel_empresarial') }}">Meu painel</a>
+                <a class="btn btn-primary btn-small" href="{{ url_for('sair') }}">Sair</a>
+            {% else %}
+                <a class="btn btn-ghost" href="{{ url_for('login') }}">Entrar</a>
+                <button class="btn btn-primary btn-small" id="openAccountTypeDialog" type="button" aria-haspopup="dialog">Criar conta</button>
+            {% endif %}
         </div>
     </div>
 </header>
@@ -51,7 +56,7 @@
                     </label>
                     <label class="search-field location-field">
                         <span class="field-icon">⌖</span>
-                        <input type="text" id="locationInput" value="Serra Talhada - PE" aria-label="Cidade">
+                        <input type="text" id="locationInput" placeholder="Cidade" aria-label="Cidade">
                     </label>
                     <button class="btn btn-primary search-button" type="submit">Buscar vagas <span>→</span></button>
                 </form>
@@ -59,6 +64,7 @@
             </div>
 
             <div class="hero-visual" aria-label="Resumo ilustrativo de oportunidades">
+                <img class="hero-woman" src="{{ url_for('static', filename='img/mulher-hero.png') }}" alt="" aria-hidden="true" fetchpriority="high">
                 <div class="visual-orbit orbit-a"></div>
                 <div class="visual-orbit orbit-b"></div>
                 <div class="visual-card main-visual-card">
@@ -80,8 +86,10 @@
                     </div>
                     <div class="visual-card-footer"><span>Descubra novas possibilidades</span><span class="footer-arrow">↗</span></div>
                 </div>
-                <div class="floating-badge badge-top"><span class="badge-icon">✦</span><div><strong>Seu talento importa</strong><small>Mostre o que você sabe fazer</small></div></div>
-                <div class="floating-badge badge-bottom"><span class="badge-icon badge-icon-blue">⌖</span><div><strong>Na sua região</strong><small>Serra Talhada e arredores</small></div></div>
+                <div class="hero-badges">
+                    <div class="floating-badge badge-top"><span class="badge-icon">✦</span><div><strong>Seu talento importa</strong><small>Mostre o que você sabe fazer</small></div></div>
+                    <div class="floating-badge badge-bottom"><span class="badge-icon badge-icon-blue">⌖</span><div><strong>Na sua região</strong><small>Serra Talhada e arredores</small></div></div>
+                </div>
             </div>
         </div>
         <div class="container hero-bottom">
@@ -107,22 +115,41 @@
 
             <div class="jobs-grid" id="jobsGrid">
                 {% for vaga in vagas %}
-                <article class="job-card" data-search="{{ (vaga.cargo ~ ' ' ~ vaga.empresa ~ ' ' ~ vaga.cidade ~ ' ' ~ vaga.categoria)|lower }}">
+                <article class="job-card" data-search="{{ (vaga.cargo ~ ' ' ~ vaga.empresa ~ ' ' ~ vaga.cidade ~ ' ' ~ vaga.descricao)|lower }}">
                     <div class="job-card-top">
-                        <div class="company-icon {% if loop.index == 1 %}icon-purple{% elif loop.index == 2 %}icon-blue{% else %}icon-cyan{% endif %}">{{ vaga.empresa[0] }}</div>
-                        <span class="job-status">Demonstração</span>
+                        <div class="company-icon {% if loop.index == 1 %}icon-purple{% elif loop.index == 2 %}icon-blue{% else %}icon-cyan{% endif %}">{{ vaga.empresa[0]|upper }}</div>
+                        <span class="job-status">Vaga aberta</span>
                     </div>
                     <h3>{{ vaga.cargo }}</h3>
                     <p class="company-name">{{ vaga.empresa }}</p>
-                    <div class="job-meta"><span>⌖ {{ vaga.cidade }}</span><span>◷ {{ vaga.tipo }}</span></div>
-                    <div class="job-card-bottom"><strong>{{ vaga.salario }}</strong><a href="#acesso" aria-label="Saiba mais sobre {{ vaga.cargo }}">Ver vaga <span>→</span></a></div>
+                    <div class="job-meta"><span>⌖ {{ vaga.cidade }}</span><span>💰 {{ vaga.salario or 'A combinar' }}</span></div>
+                    <div class="job-card-bottom"><strong>{{ vaga.salario or 'A combinar' }}</strong><a href="{{ url_for('detalhes_vaga', vaga_id=vaga.id) }}" aria-label="Ver detalhes de {{ vaga.cargo }}">Ver vaga <span>→</span></a></div>
                 </article>
                 {% endfor %}
+                {% if not vagas %}
+                <div class="empty-state jobs-empty-state">Ainda não há vagas publicadas. Volte em breve para conferir novas oportunidades.</div>
+                {% endif %}
             </div>
-            <p class="empty-state" id="emptyState" hidden>Nenhuma vaga demonstrativa corresponde à sua busca. Tente outra palavra.</p>
-            <div class="demo-notice">As vagas acima são exemplos ilustrativos desta primeira versão. As vagas reais serão cadastradas pelas empresas nas próximas etapas.</div>
+            <p class="empty-state" id="emptyState" hidden>Nenhuma vaga corresponde à sua busca. Tente outro cargo ou cidade.</p>
         </div>
     </section>
+
+    {% if anuncios %}
+    <section class="jobs-section section-padding" aria-label="Publicidade e parceiros">
+      <div class="container">
+        <div class="section-heading"><div><div class="eyebrow"><span class="eyebrow-dot"></span> PARCEIROS LOCAIS</div><h2>Quem apoia nossa <span>região</span></h2><p>Conheça empresas que apoiam o Emprega Serra.</p></div></div>
+        <div class="jobs-grid">
+        {% for anuncio in anuncios %}
+          <article class="job-card ad-card">
+            {% if anuncio.imagem_url %}<img src="{{ anuncio.imagem_url }}" alt="{{ anuncio.titulo }}" loading="lazy" style="width:100%;max-height:170px;object-fit:cover;border-radius:10px">{% endif %}
+            <span class="job-status">Parceiro</span><h3>{{ anuncio.titulo }}</h3><p class="company-name">{{ anuncio.descricao or 'Apoie os negócios da nossa região.' }}</p>
+            {% if anuncio.link_url %}<div class="job-card-bottom"><strong>Conheça</strong><a href="{{ anuncio.link_url }}" target="_blank" rel="noopener noreferrer">Acessar <span>→</span></a></div>{% endif %}
+          </article>
+        {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
 
     <section class="business-section section-padding" id="empresas">
         <div class="container business-panel">

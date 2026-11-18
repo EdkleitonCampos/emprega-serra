@@ -572,3 +572,25 @@
         padding: 19px;
     }
 }
+
+
+/* LOGO OFICIAL NO CABECALHO DO CANDIDATO */
+.candidate-header .brand {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+}
+.candidate-header .brand-logo {
+    display: block;
+    width: 250px;
+    max-width: 34vw;
+    max-height: 60px;
+    height: auto;
+    object-fit: contain;
+}
+@media (max-width: 680px) {
+    .candidate-header .brand-logo {
+        width: 190px;
+        max-width: 42vw;
+    }
+}

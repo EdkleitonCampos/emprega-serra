@@ -1,0 +1,41 @@
+<aside class="dashboard-sidebar admin-sidebar" aria-label="Menu administrativo">
+    <a class="dashboard-brand admin-dashboard-brand" href="{{ url_for('admin.dashboard') }}"
+       style="display: flex; flex-direction: column; align-items: center; text-decoration: none;">
+
+        <img class="dashboard-brand-logo"
+             src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}"
+             alt="Emprega Serra">
+
+        <span style="
+            display: block;
+            margin-top: -8px;
+            text-align: center;
+            color: #3979d8;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;">
+            ADMIN
+        </span>
+    </a>
+
+    <nav class="dashboard-nav">
+        <h2>Menu principal</h2>
+        <a class="dashboard-nav-link{% if request.endpoint == 'admin.dashboard' %} is-active{% endif %}" href="{{ url_for('admin.dashboard') }}"><span aria-hidden="true">⌂</span>Visão geral</a>
+        <a class="dashboard-nav-link{% if request.endpoint == 'admin.empresas_cadastradas' %} is-active{% endif %}" href="{{ url_for('admin.empresas_cadastradas') }}"><span aria-hidden="true">▣</span>Empresas cadastradas</a>
+        <a class="dashboard-nav-link{% if request.endpoint == 'admin.candidatos_cadastrados' %} is-active{% endif %}" href="{{ url_for('admin.candidatos_cadastrados') }}"><span aria-hidden="true">♙</span>Candidatos cadastrados</a>
+        <a class="dashboard-nav-link{% if request.endpoint == 'admin.anunciantes' %} is-active{% endif %}" href="{{ url_for('admin.anunciantes') }}"><span aria-hidden="true">♙</span>Anunciantes</a>
+        <a class="dashboard-nav-link{% if request.endpoint == 'admin.anuncios' %} is-active{% endif %}" href="{{ url_for('admin.anuncios') }}"><span aria-hidden="true">▣</span>Publicidade</a>
+        <a class="dashboard-nav-link" href="{{ url_for('admin.dashboard') }}#relatorios"><span aria-hidden="true">▥</span>Relatórios</a>
+
+        <h2>Conta</h2>
+        <a class="dashboard-nav-link dashboard-logout" href="{{ url_for('sair') }}"><span aria-hidden="true">↪</span>Sair</a>
+    </nav>
+
+    <div class="dashboard-account">
+        <span class="dashboard-account-icon" aria-hidden="true">AD</span>
+        <span class="dashboard-account-info">
+            <strong>{{ session.get("nome", "Administrador") }}</strong>
+            <small>Administrador</small>
+        </span>
+    </div>
+</aside>

@@ -160,7 +160,9 @@
                         <select id="status-candidatura-{{ candidato.candidatura_id }}" name="status">
                             <option value="enviada" {% if candidato.candidatura_status == "enviada" %}selected{% endif %}>Recebida</option>
                             <option value="entrevista" {% if candidato.candidatura_status == "entrevista" %}selected{% endif %}>Entrevista</option>
-                            <option value="selecao_finalizada" {% if candidato.candidatura_status == "selecao_finalizada" %}selected{% endif %}>Seleção finalizada</option>
+                            <option value="aprovada" {% if candidato.candidatura_status == "aprovada" %}selected{% endif %}>Aprovado</option>
+                            <option value="reprovada" {% if candidato.candidatura_status == "reprovada" %}selected{% endif %}>Não selecionado</option>
+                            <option value="selecao_finalizada" {% if candidato.candidatura_status == "selecao_finalizada" %}selected{% endif %}>Seleção finalizada (legado)</option>
                         </select>
                         <button type="submit" class="btn btn-ghost btn-small">Atualizar</button>
                     </form>

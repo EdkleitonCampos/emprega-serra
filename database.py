@@ -1,11 +1,16 @@
+import os
 import sqlite3
 
-DATABASE = "emprega_serra.db"
+DATABASE = os.environ.get(
+    "DATABASE_PATH",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "emprega_serra.db")
+)
 
 
 def conectar():
     conexao = sqlite3.connect(DATABASE)
     conexao.row_factory = sqlite3.Row
+    conexao.execute("PRAGMA foreign_keys = ON")
     return conexao
 
 
@@ -110,6 +115,36 @@ def criar_banco():
             FOREIGN KEY (vaga_id) REFERENCES vagas(id),
             FOREIGN KEY (candidato_id) REFERENCES candidatos(id),
             UNIQUE(vaga_id, candidato_id)
+        )
+    """)
+
+    # Anunciantes e campanhas publicitárias gerenciadas pela administração
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS anunciantes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            contato TEXT,
+            telefone TEXT,
+            email TEXT,
+            ativo INTEGER NOT NULL DEFAULT 1,
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS anuncios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            anunciante_id INTEGER,
+            titulo TEXT NOT NULL,
+            descricao TEXT,
+            imagem_url TEXT,
+            link_url TEXT,
+            posicao TEXT NOT NULL DEFAULT 'lateral',
+            status TEXT NOT NULL DEFAULT 'pausado',
+            inicio DATE,
+            fim DATE,
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (anunciante_id) REFERENCES anunciantes(id)
         )
     """)
 

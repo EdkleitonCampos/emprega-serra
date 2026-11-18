@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Anunciantes | Emprega Serra{% endblock %}
+{% block content %}
+<div class="admin-shell company-dashboard">{% include "admin/_sidebar.html" %}
+<main class="admin-main dashboard-main"><div class="admin-heading"><div><span>COMERCIAL</span><h1>Anunciantes</h1><p>Cadastre empresas e contatos interessados em divulgar seus negócios.</p></div><a class="admin-button secondary" href="{{ url_for('admin.dashboard') }}">Voltar ao painel</a></div>
+<section class="admin-panel"><h2>Novo anunciante</h2><form class="admin-form" method="post"><label>Nome / empresa<input name="nome" required maxlength="140"></label><label>Contato<input name="contato" maxlength="120"></label><label>Telefone<input name="telefone" maxlength="40"></label><label>E-mail<input name="email" type="email" maxlength="160"></label><button class="admin-button">Cadastrar anunciante</button></form></section>
+<section class="admin-panel"><h2>Cadastros</h2><div class="admin-table-wrap"><table><thead><tr><th>Nome</th><th>Contato</th><th>Telefone</th><th>E-mail</th></tr></thead><tbody>{% for a in anunciantes %}<tr><td>{{ a.nome }}</td><td>{{ a.contato or '—' }}</td><td>{{ a.telefone or '—' }}</td><td>{{ a.email or '—' }}</td></tr>{% else %}<tr><td colspan="4">Nenhum anunciante cadastrado.</td></tr>{% endfor %}</tbody></table></div></section></main></div>
+{% endblock %}

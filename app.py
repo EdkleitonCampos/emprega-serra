@@ -1,12 +1,16 @@
 import os
+import sqlite3
 from datetime import date, datetime
 
+import click
 from flask import (
     Flask, render_template, request,
     redirect, url_for, session, flash
 )
 
 from werkzeug.security import generate_password_hash, check_password_hash
+from admin import admin_bp
+from admin_database import buscar_admin_por_email, criar_admin, criar_banco_admin
 from database import criar_banco, conectar
 
 app = Flask(__name__)
@@ -14,6 +18,25 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32)
 
 criar_banco()
+criar_banco_admin()
+app.register_blueprint(admin_bp)
+
+
+@app.cli.command("create-admin")
+@click.argument("email")
+def create_admin_command(email):
+    senha = click.prompt(
+        "Senha temporária do administrador",
+        hide_input=True,
+        confirmation_prompt=True
+    )
+    try:
+        criar_admin(email, senha)
+    except ValueError as erro:
+        raise click.ClickException(str(erro)) from erro
+    except sqlite3.IntegrityError as erro:
+        raise click.ClickException("Já existe um administrador com esse e-mail.") from erro
+    click.echo("Administrador criado. A senha deverá ser trocada no primeiro acesso.")
 
 
 def reativar_vagas_pausadas():
@@ -37,7 +60,7 @@ def home():
     cursor = conexao.cursor()
 
     cursor.execute("""
-        SELECT titulo AS cargo, cidade, salario, descricao
+        SELECT id, titulo AS cargo, cidade, salario, descricao
         FROM vagas
         WHERE status = 'aberta'
         ORDER BY id DESC
@@ -50,6 +73,7 @@ def home():
 
     for vaga in vagas_banco:
         vagas.append({
+            "id": vaga["id"],
             "cargo": vaga["cargo"],
             "empresa": "Empresa cadastrada",
             "cidade": vaga["cidade"],
@@ -215,6 +239,24 @@ def login():
         email = request.form["email"].strip().lower()
         senha = request.form["senha"]
 
+        admin = buscar_admin_por_email(email)
+        if admin:
+            if check_password_hash(admin["senha_hash"], senha):
+                session.clear()
+                session["admin_id"] = admin["id"]
+                session["nome"] = admin["email"]
+                session["tipo"] = "admin"
+                session["admin_trocar_senha"] = bool(admin["trocar_senha"])
+                destino = (
+                    "admin.trocar_senha"
+                    if admin["trocar_senha"]
+                    else "admin.dashboard"
+                )
+                return redirect(url_for(destino))
+
+            flash("E-mail ou senha incorretos.")
+            return render_template("login.html")
+
         conexao = conectar()
         cursor = conexao.cursor()
 
@@ -226,7 +268,12 @@ def login():
         usuario = cursor.fetchone()
         conexao.close()
 
-        if usuario and check_password_hash(usuario["senha"], senha):
+        if (
+            usuario
+            and usuario["tipo"] in {"candidato", "empresa"}
+            and check_password_hash(usuario["senha"], senha)
+        ):
+            session.clear()
             session["usuario_id"] = usuario["id"]
             session["nome"] = usuario["nome"]
             session["tipo"] = usuario["tipo"]
@@ -303,7 +350,7 @@ def painel_empresarial():
                 aprovadas += 1
 
         return render_template(
-            "candidato/painel.html",
+            "candidato/painel_candidato.html",
             nome=session["nome"],
             tipo="candidato",
             total_candidaturas=total_candidaturas,
@@ -998,7 +1045,14 @@ def atualizar_status_candidatura(candidatura_id):
         return redirect(url_for("painel_empresarial"))
 
     status = request.form.get("status", "")
-    status_permitidos = {"enviada", "entrevista", "selecao_finalizada"}
+    status_permitidos = {
+        "enviada",
+        "entrevista",
+        "aprovada",
+        "aprovado",
+        "reprovada",
+        "selecao_finalizada",
+    }
     if status not in status_permitidos:
         flash("Etapa de candidatura inválida.")
         return redirect(url_for("painel_empresarial"))

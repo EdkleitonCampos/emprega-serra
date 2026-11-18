@@ -231,33 +231,31 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Filtro demonstrativo das vagas que aparecem na página inicial.
+    // Filtro das vagas reais exibidas na página inicial.
     const searchForm = document.getElementById("jobSearch");
     const searchInput = document.getElementById("searchInput");
     const locationInput = document.getElementById("locationInput");
     const jobCards = Array.from(document.querySelectorAll(".job-card"));
     const emptyState = document.getElementById("emptyState");
 
-    if (searchForm) {
+    if (searchForm && searchInput && locationInput) {
         searchForm.addEventListener("submit", (event) => {
             event.preventDefault();
-            const term = (searchInput.value + " " + locationInput.value)
-                .trim()
-                .toLocaleLowerCase("pt-BR");
-
+            const keyword = searchInput.value.trim().toLocaleLowerCase("pt-BR");
+            const city = locationInput.value.trim().toLocaleLowerCase("pt-BR");
             let visibleCount = 0;
+
             jobCards.forEach((card) => {
-                const content = card.dataset.search || "";
-                // Como os exemplos são todos da cidade informada, a busca considera
-                // o texto digitado no campo de cargo/área.
-                const keyword = searchInput.value.trim().toLocaleLowerCase("pt-BR");
-                const matches = !keyword || content.includes(keyword);
+                const content = (card.dataset.search || "").toLocaleLowerCase("pt-BR");
+                const matchesKeyword = !keyword || content.includes(keyword);
+                const matchesCity = !city || content.includes(city);
+                const matches = matchesKeyword && matchesCity;
                 card.hidden = !matches;
                 if (matches) visibleCount += 1;
             });
 
-            if (emptyState) emptyState.hidden = visibleCount !== 0;
-            document.getElementById("vagas").scrollIntoView({ behavior: "smooth" });
+            if (emptyState) emptyState.hidden = jobCards.length === 0 || visibleCount !== 0;
+            document.getElementById("vagas")?.scrollIntoView({ behavior: "smooth" });
         });
     }
 });

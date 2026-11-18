@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Administração | Emprega Serra{% endblock %}
+{% block content %}
+<div class="admin-shell company-dashboard">
+  {% include "admin/_sidebar.html" %}
+  <main class="admin-main dashboard-main">
+    <div class="admin-heading"><div><span>CONTROLE DA PLATAFORMA</span><h1>Visão geral</h1><p>Indicadores e atividade do Emprega Serra.</p></div><a class="admin-button" href="{{ url_for('admin.anuncios') }}">Gerenciar anúncios</a></div>
+    <section class="admin-stats">
+      <article><small>Usuários</small><strong>{{ total_usuarios }}</strong></article>
+      <article><small>Candidatos</small><strong>{{ total_candidatos }}</strong></article>
+      <article><small>Empresas</small><strong>{{ total_empresas }}</strong></article>
+      <article><small>Vagas</small><strong>{{ total_vagas }}</strong></article>
+      <article><small>Candidaturas</small><strong>{{ total_candidaturas }}</strong></article>
+      <article><small>Anúncios ativos</small><strong>{{ anuncios_ativos }}</strong></article>
+    </section>
+    <section class="admin-panel">
+      <div class="admin-heading">
+        <div><h2>Empresas cadastradas recentemente</h2><p>As últimas empresas que criaram conta na plataforma.</p></div>
+        <a class="admin-button secondary" href="{{ url_for('admin.empresas_cadastradas') }}">Ver todas</a>
+      </div>
+      <div class="admin-table-wrap"><table>
+        <thead><tr><th>Empresa</th><th>Responsável</th><th>E-mail</th><th>Cidade</th><th>Cadastro</th></tr></thead>
+        <tbody>
+          {% for empresa in empresas_recentes %}
+          <tr><td>{{ empresa.nome_empresa }}</td><td>{{ empresa.responsavel }}</td><td>{{ empresa.email }}</td><td>{{ empresa.cidade or '—' }}</td><td>{{ empresa.criado_em }}</td></tr>
+          {% else %}
+          <tr><td colspan="5">Nenhuma empresa cadastrada.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table></div>
+    </section>
+    <section class="admin-panel" id="relatorios">
+      <h2>Relatórios em PDF</h2>
+      <p class="admin-hint">Baixe as vagas abertas, empresas cadastradas ou relações de candidatos.</p>
+      <div class="admin-report-actions">
+        <a class="admin-button" href="{{ url_for('admin.exportar_vagas_pdf') }}">Exportar vagas disponíveis</a>
+        <a class="admin-button secondary" href="{{ url_for('admin.exportar_empresas_pdf') }}">Exportar empresas cadastradas</a>
+        <a class="admin-button secondary" href="{{ url_for('admin.exportar_candidatos_pdf') }}">Exportar candidatos</a>
+        <a class="admin-button secondary" href="{{ url_for('admin.exportar_candidatos_aprovados_pdf') }}">Exportar candidatos aprovados</a>
+      </div>
+    </section>
+    <section class="admin-panel"><h2>Contas recentes</h2><div class="admin-table-wrap"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Tipo</th><th>Cadastro</th></tr></thead><tbody>
+    {% for u in usuarios %}<tr><td>{{ u.nome }}</td><td>{{ u.email }}</td><td>{{ u.tipo }}</td><td>{{ u.criado_em }}</td></tr>{% else %}<tr><td colspan="4">Nenhuma conta cadastrada.</td></tr>{% endfor %}
+    </tbody></table></div></section>
+    <section class="admin-panel"><h2>Campanhas recentes</h2><div class="admin-table-wrap"><table><thead><tr><th>Anúncio</th><th>Anunciante</th><th>Posição</th><th>Status</th></tr></thead><tbody>
+    {% for a in anuncios %}<tr><td>{{ a.titulo }}</td><td>{{ a.anunciante }}</td><td>{{ a.posicao }}</td><td>{{ a.status }}</td></tr>{% else %}<tr><td colspan="4">Nenhuma campanha cadastrada.</td></tr>{% endfor %}
+    </tbody></table></div></section>
+  </main>
+</div>
+{% endblock %}
