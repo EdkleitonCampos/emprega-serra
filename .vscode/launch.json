@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Flask: Emprega Serra",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "flask",
+            "args": [
+                "--app",
+                "app",
+                "run",
+                "--debug"
+            ],
+            "console": "internalConsole",
+            "jinja": true
+        }
+    ]
+}
