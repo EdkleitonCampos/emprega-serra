@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Usuários | Emprega Serra{% endblock %}
+{% block content %}
+<div class="admin-shell company-dashboard">{% include "admin/_sidebar.html" %}
+<main class="admin-main dashboard-main">
+  <div class="admin-heading"><div><span>ADMINISTRAÇÃO</span><h1>Gerenciar usuários</h1><p>Consulte, filtre, edite e exclua contas de candidatos e empresas.</p></div>
+  <a class="admin-button secondary" href="{{ url_for('admin.exportar_usuarios_csv', q=q, tipo=tipo) }}">Exportar CSV</a></div>
+  <section class="admin-panel">
+    <form method="get" class="admin-form filter-form">
+<label>Buscar por nome ou e-mail<input name="q" value="{{ q }}" maxlength="120" placeholder="Digite para pesquisar"></label>
+      <label>Tipo<select name="tipo"><option value="">Todos</option><option value="candidato" {% if tipo == 'candidato' %}selected{% endif %}>Candidato</option><option value="empresa" {% if tipo == 'empresa' %}selected{% endif %}>Empresa</option></select></label>
+      <button class="admin-button" type="submit">Filtrar</button>
+      <a class="admin-button secondary" href="{{ url_for('admin.usuarios') }}">Limpar</a>
+    </form>
+    <div class="admin-table-wrap"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Tipo</th><th>Cadastro</th><th>Ações</th></tr></thead><tbody>
+    {% for u in usuarios %}<tr><td>{{ u.nome }}</td><td>{{ u.email }}</td><td>{{ u.tipo }}</td><td>{{ u.criado_em }}</td><td class="admin-actions"><a class="admin-button secondary" href="{{ url_for('admin.editar_usuario', usuario_id=u.id) }}">Editar</a><form method="post" action="{{ url_for('admin.excluir_usuario', usuario_id=u.id) }}" data-confirm="Excluir esta conta e todos os registros relacionados? Esta ação não pode ser desfeita."><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="admin-button danger" type="submit">Excluir</button></form></td></tr>
+    {% else %}<tr><td colspan="5">Nenhum usuário encontrado.</td></tr>{% endfor %}
+    </tbody></table></div>
+    <p class="admin-hint">Exclusões removem também o perfil, as vagas e as candidaturas vinculadas à conta, conforme o tipo de usuário.</p>
+  </section>
+</main></div>
+{% endblock %}

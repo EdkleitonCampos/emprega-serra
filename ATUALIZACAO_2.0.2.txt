@@ -1,0 +1,24 @@
+EMPREGA SERRA 2.0.2 - PACOTE COMPLETO DE DEMONSTRACAO
+
+1. Inclui a correcao 2.0.1 do fluxo de convite de entrevista: a empresa envia o convite, o candidato aceita ou recusa e a resposta aparece no painel empresarial.
+2. O botao empresarial de atualizacao de etapa agora tem texto, icone, contraste e comportamento responsivo.
+3. Inclui banco SQLite de demonstracao com 10 empresas, 25 candidatos, 20 vagas e 50 candidaturas ficticias.
+4. Todas as contas demonstrativas de empresas e candidatos usam a senha 1234567890.
+5. Os e-mails das contas foram montados a partir dos nomes, sem espacos ou acentos, seguidos de @gmail.com.
+6. Inclui 4 anunciantes e 4 campanhas publicitarias ativas, ja registradas no painel administrativo e visiveis na pagina inicial.
+7. Na primeira inicializacao, cria um administrador temporario se ainda nao existir administrador. A troca de senha e obrigatoria no primeiro acesso.
+8. O script popular_dados_demo.py e idempotente: pode ser executado novamente sem duplicar a carga demonstrativa.
+
+INSTALACAO
+- Extraia a pasta EmpregaSerra_2.0.2 para um novo local. Nao precisa substituir arquivos de uma instalacao anterior.
+- Execute iniciar_emprega_serra.bat.
+- O arquivo emprega_serra.db ja acompanha o pacote com os dados demonstrativos. O script de carga confere o marcador e nao duplica os dados.
+- Aguarde a instalacao das dependencias e abra http://127.0.0.1:5000.
+- Consulte CONTAS_DEMONSTRACAO.txt para os logins.
+
+NOTA
+Os dados sao inteiramente ficticios. Os links publicitarios usam example.com.
+O pacote foi validado por compilacao Python, integridade SQLite, contagem de dados,
+verificacao de idempotencia e verificacao estrutural do ZIP. O ambiente de montagem
+nao tinha Flask/Flask-Limiter instalados e sem acesso a internet, portanto nao foi
+possivel executar o servidor Flask nem fazer teste completo pelo navegador nesta sessao.

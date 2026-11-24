@@ -1,0 +1,229 @@
+/* EMPREGA SERRA 3.0.2 — acabamento visual Sertão contemporâneo */
+:root {
+  --ink: #243129;
+  --ink-2: #35483b;
+  --paper: #f6f0e3;
+  --paper-2: #fffdf7;
+  --sand: #e9ddc4;
+  --green: #2f6b45;
+  --green-dark: #183f2b;
+  --green-light: #e3ecdf;
+  --terra: #a95737;
+  --sun: #d9a441;
+  --muted: #667268;
+  --line: #ded5c4;
+  --header-height: 80px;
+}
+
+html { scroll-padding-top: calc(var(--header-height) + 18px); }
+body {
+  background: var(--paper) !important;
+  color: var(--ink) !important;
+  font-family: 'DM Sans', sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+body:before {
+  opacity: .045 !important;
+  background-image: radial-gradient(#8c7957 .55px, transparent .55px) !important;
+  background-size: 9px 9px !important;
+}
+::selection { background: #d9e6d8; color: var(--green-dark); }
+:focus-visible { outline: 3px solid var(--sun) !important; outline-offset: 3px; }
+
+.site-header, .candidate-header, .simple-topbar {
+  background: rgba(24, 63, 43, .97) !important;
+  border-bottom: 1px solid rgba(255,255,255,.12) !important;
+  box-shadow: 0 8px 26px rgba(24,63,43,.13) !important;
+}
+.site-header .nav-wrap { min-height: var(--header-height); }
+.site-header .main-nav a, .candidate-header .candidate-nav a,
+.simple-topbar nav a { color: #f7f2e7 !important; font-weight: 700; }
+.site-header .main-nav a:hover, .candidate-header .candidate-nav a:hover,
+.simple-topbar nav a:hover { color: #f2c66e !important; }
+.site-header .btn-ghost, .candidate-header .btn-ghost {
+  border-color: rgba(255,255,255,.42) !important; color: #fff !important;
+}
+.site-header .btn-primary, .site-header #openAccountTypeDialog {
+  background: var(--sun) !important; color: var(--green-dark) !important;
+  box-shadow: 0 7px 18px rgba(0,0,0,.13) !important;
+}
+.site-header .brand-logo, .candidate-header .brand-logo,
+.simple-topbar .brand-logo {
+  max-width: min(210px, 42vw); max-height: 54px;
+  padding: 5px 8px; border-radius: 8px;
+  background: var(--green-dark) !important;
+}
+.site-header .menu-toggle span { background: #fff !important; }
+
+.hero {
+  min-height: 570px !important;
+  padding: 76px 0 30px !important;
+  background-image: linear-gradient(100deg, rgba(16,48,31,.91), rgba(24,63,43,.76) 57%, rgba(24,63,43,.46)),
+    url('../img/serra-talhada-vista.jpg') !important;
+  background-position: center 52% !important;
+  background-size: cover !important;
+  color: #fff !important;
+}
+.hero:after { opacity: .075 !important; }
+.hero-copy { max-width: 650px; }
+.hero .eyebrow { color: #f2d99e !important; letter-spacing: 1.65px; }
+.hero h1 {
+  max-width: 690px; color: #fff !important;
+  font-size: clamp(42px, 5.2vw, 68px) !important;
+  line-height: 1.045 !important; letter-spacing: -.045em !important;
+}
+.hero h1 span {
+  color: #f2c66e !important; text-decoration-color: #f2c66e !important;
+  text-decoration-thickness: 4px !important; text-underline-offset: 8px;
+}
+.hero-description { max-width: 56ch; color: #f0eee5 !important; font-size: clamp(16px,1.55vw,19px) !important; line-height: 1.7 !important; }
+.hero .search-box {
+  max-width: 690px; padding: 10px !important; gap: 8px !important;
+  border: 1px solid rgba(255,255,255,.45) !important;
+  border-radius: 16px !important; background: var(--paper-2) !important;
+  box-shadow: 0 18px 42px rgba(0,0,0,.2) !important;
+}
+.hero .search-field input { min-height: 48px; }
+.hero .search-button, .btn-primary, .candidate-button,
+.dashboard-primary-button, .admin-button:not(.secondary) {
+  background: var(--green) !important; color: #fff !important;
+  border: 0 !important; box-shadow: 0 8px 18px rgba(24,63,43,.16) !important;
+}
+.hero .search-button { min-height: 48px; white-space: nowrap; }
+.hero .search-button:hover, .btn-primary:hover, .admin-button:hover { filter: brightness(1.07); transform: translateY(-1px); }
+.hero-note { color: #f0eee5 !important; }
+.hero-note .check-icon { color: var(--green-dark) !important; background: #e4efdf !important; }
+.hero-quick-links a { color: #fff0c9 !important; }
+.hero-quick-links a:hover { color: #fff !important; text-decoration: underline; text-underline-offset: 3px; }
+.hero-bottom { border-top-color: rgba(255,255,255,.25) !important; }
+.hero-bottom > span { color: #eadfc8 !important; }
+.hero-bottom strong { color: #fff !important; }
+.hero-bottom strong i { color: #f2c66e !important; }
+
+.portal-cards-section { background: var(--paper) !important; padding-bottom: 46px !important; }
+.portal-card {
+  min-height: 248px; border: 1px solid var(--line) !important;
+  border-radius: 19px !important; background: var(--paper-2) !important;
+  box-shadow: 0 10px 28px rgba(40,52,36,.055) !important;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.portal-card:nth-child(even) { background: #f0e6d2 !important; }
+.portal-card:hover { transform: translateY(-4px); border-color: #b8c8b5 !important; box-shadow: 0 16px 34px rgba(40,52,36,.1) !important; }
+.portal-card-kicker { color: var(--green) !important; }
+.portal-card h2 { color: var(--ink) !important; }
+.portal-card-link { color: var(--green-dark) !important; }
+.stats-section { background: #e9e5d6 !important; border-color: var(--line) !important; }
+.stat-item strong { color: var(--green-dark) !important; }
+.stat-item small { color: var(--muted) !important; }
+
+.section-heading h2, .business-copy h2, .cta-panel h2 { color: var(--ink) !important; }
+.section-heading h2 span { color: var(--green) !important; }
+.section-heading p { color: var(--muted) !important; }
+.job-card, .visual-card, .dashboard-content-card, .candidate-content,
+.applications-card, .candidate-stat, .dashboard-stat,
+.dashboard-vacancy-card, .form-card, .auth-card, .admin-card,
+.feature-panel, .map-panel, .service-card, .course-card, .city-card {
+  background: var(--paper-2) !important; border: 1px solid var(--line) !important;
+  border-radius: 18px !important; box-shadow: 0 10px 28px rgba(40,52,36,.055) !important;
+  color: var(--ink) !important;
+}
+.job-card:hover, .service-card:hover, .course-card:hover, .city-card:hover {
+  border-color: #b7c9b4 !important; box-shadow: 0 16px 34px rgba(40,52,36,.095) !important;
+}
+.job-card h3, .visual-job strong, .dashboard-content-card h2,
+.candidate-content h2, .application-item h3 { color: var(--ink) !important; }
+.job-status, .match-tag, .service-category { background: var(--green-light) !important; color: var(--green-dark) !important; }
+
+.business-section { background: var(--paper) !important; color: var(--ink) !important; }
+.business-section .business-panel {
+  border: 1px solid var(--line) !important; border-radius: 26px !important;
+  background: linear-gradient(118deg, #e5ecdf, #f1e4ce) !important;
+  box-shadow: 0 16px 42px rgba(24,55,37,.07) !important;
+}
+.business-copy .eyebrow { color: var(--green-dark) !important; }
+.business-copy h2, .business-copy h2 span { color: var(--ink) !important; }
+.business-copy p { color: #536257 !important; line-height: 1.8; }
+.business-copy .btn-light { background: var(--green-dark) !important; color: #fff !important; }
+.how-section { background: #efe7d7 !important; }
+.how-section .step-card { background: var(--paper-2) !important; border: 1px solid var(--line) !important; border-radius: 20px !important; }
+.how-section .step-card h3, .how-section .section-heading h2 { color: var(--ink) !important; }
+.how-section .step-card p, .how-section .section-heading p { color: var(--muted) !important; }
+.how-section .step-number { color: var(--terra) !important; }
+.how-section .step-icon { background: var(--green-light) !important; color: var(--green-dark) !important; }
+.cta-panel { background: linear-gradient(115deg, var(--green-dark), #2f6b45) !important; border-radius: 24px !important; }
+.cta-panel h2, .cta-panel p { color: #fff !important; }
+.cta-actions .btn-light { background: var(--sun) !important; color: var(--green-dark) !important; }
+
+.feature-page { padding-top: 40px !important; }
+.feature-hero { border-radius: 24px !important; background: linear-gradient(120deg, var(--green-dark), #2f6b45) !important; box-shadow: 0 16px 36px rgba(24,63,43,.12); }
+.feature-hero .feature-kicker { color: #f2d99e !important; }
+.feature-hero h1 { color: #fff !important; }
+.feature-hero h1 em { color: #f2c66e !important; }
+.feature-hero p { color: #f0eee5 !important; }
+.feature-kicker { color: var(--terra) !important; }
+.feature-panel h2, .feature-section-heading h2 { color: var(--ink) !important; }
+.feature-hint, .feature-callout p { color: var(--muted) !important; }
+.feature-callout, .feature-empty { background: #e8eddf !important; }
+
+input, select, textarea {
+  background: #fffdf8 !important; color: var(--ink) !important;
+  border: 1px solid #d8d5c8 !important; border-radius: 10px !important;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--green) !important; outline: 3px solid rgba(47,107,69,.13) !important; }
+label { color: var(--ink-2); }
+.dashboard-sidebar, .candidate-sidebar, .admin-sidebar {
+  background: linear-gradient(180deg, #1b4b32, #123a28) !important;
+}
+.dashboard-sidebar a, .candidate-sidebar a, .admin-sidebar a { color: #f0f3e9 !important; }
+.dashboard-main, .candidate-main, .admin-main, .admin-shell { background: var(--paper) !important; }
+.welcome-section { background: linear-gradient(120deg, #1b4b32, #2f6b45) !important; border-radius: 22px !important; }
+.welcome-section h1, .welcome-section p { color: #fff !important; }
+.dashboard-stat strong, .candidate-stat strong, .admin-stats strong { color: var(--green-dark) !important; }
+.admin-panel, .admin-card, .admin-stats article { background: var(--paper-2) !important; border-color: var(--line) !important; color: var(--ink) !important; }
+.admin-heading h1, .admin-heading h2, .admin-panel h2 { color: var(--ink) !important; }
+.admin-heading p, .admin-hint { color: var(--muted) !important; }
+.admin-button.secondary { background: var(--sand) !important; color: var(--green-dark) !important; }
+th { background: #e8e5d7 !important; color: var(--green-dark) !important; }
+td, th { border-color: var(--line) !important; }
+tr:hover td { background: #f4f0e6 !important; }
+
+.site-footer { background: #183f2b !important; color: #f5f0e4 !important; }
+.site-footer .footer-content { padding-top: 38px; padding-bottom: 30px; }
+.site-footer .footer-links a, .site-footer .photo-credit a { color: #f2d99e !important; }
+.site-footer .copyright, .site-footer .photo-credit { color: #e2e8dc !important; }
+.site-footer .brand-logo { background: #183f2b !important; }
+
+@media (max-width: 900px) {
+  .hero { min-height: 0 !important; padding-top: 54px !important; }
+  .portal-cards-grid { grid-template-columns: repeat(2, minmax(0,1fr)) !important; }
+}
+@media (max-width: 760px) {
+  .hero { background-position: 58% center !important; padding-bottom: 24px !important; }
+  .hero-grid { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .hero-copy { max-width: none; }
+  .hero h1 { font-size: clamp(39px, 10.5vw, 55px) !important; }
+  .hero .search-box { display: grid !important; grid-template-columns: 1fr !important; }
+  .hero .search-field input, .hero .search-button { width: 100%; }
+  .hero-visual { min-height: 290px !important; }
+  .hero-bottom { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .portal-cards-grid { grid-template-columns: 1fr !important; }
+  .portal-card { min-height: 0; padding: 22px; }
+  .stats-grid { grid-template-columns: 1fr !important; }
+  .section-heading { align-items: flex-start; flex-direction: column; }
+  .feature-columns { grid-template-columns: 1fr !important; }
+  .service-grid, .course-grid, .city-grid { grid-template-columns: 1fr !important; }
+  .site-footer .footer-content { grid-template-columns: 1fr !important; }
+  .site-footer .photo-credit, .site-footer .copyright { grid-column: auto !important; }
+  .simple-topbar { align-items: flex-start; flex-direction: column; gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+/* O símbolo verde e o lettering dourado preservam o desenho original da marca. */
+.site-header .brand-logo, .candidate-header .brand-logo, .simple-topbar .brand-logo,
+.auth-card .brand-logo, .dashboard-brand-logo {
+  background: linear-gradient(90deg, #fffdf7 0 28%, #183f2b 28% 76%, #fffdf7 76% 100%) !important;
+  border-radius: 7px;
+}
+.site-footer .brand-logo { background: linear-gradient(90deg, #fffdf7 0 28%, #183f2b 28% 76%, #fffdf7 76% 100%) !important; }

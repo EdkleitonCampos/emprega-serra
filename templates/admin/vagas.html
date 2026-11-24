@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Vagas | Emprega Serra{% endblock %}
+{% block content %}
+<div class="admin-shell company-dashboard">{% include "admin/_sidebar.html" %}
+<main class="admin-main dashboard-main">
+  <div class="admin-heading"><div><span>ADMINISTRAÇÃO</span><h1>Gerenciar vagas</h1><p>Consulte e filtre as oportunidades publicadas.</p></div>
+  <a class="admin-button secondary" href="{{ url_for('admin.exportar_vagas_csv', q=q, status=status) }}">Exportar CSV</a></div>
+  <section class="admin-panel">
+    <form method="get" class="admin-form filter-form">
+<label>Buscar vaga, empresa ou cidade<input name="q" value="{{ q }}" maxlength="120"></label>
+      <label>Status<select name="status"><option value="">Todos</option>{% for s in ['aberta','pausada','finalizada','cancelada','em_analise'] %}<option value="{{ s }}" {% if status == s %}selected{% endif %}>{{ s|replace('_',' ')|title }}</option>{% endfor %}</select></label>
+      <button class="admin-button" type="submit">Filtrar</button><a class="admin-button secondary" href="{{ url_for('admin.vagas_gerenciar') }}">Limpar</a>
+    </form>
+    <div class="admin-table-wrap"><table><thead><tr><th>Vaga</th><th>Empresa</th><th>Cidade</th><th>Status</th><th>Publicação</th><th>Ação</th></tr></thead><tbody>
+    {% for v in vagas %}<tr><td>{{ v.titulo }}</td><td>{{ v.nome_empresa }}</td><td>{{ v.cidade }}</td><td>{{ v.status }}</td><td>{{ v.criado_em }}</td><td><form method="post" action="{{ url_for('admin.excluir_vaga_admin', vaga_id=v.id) }}" data-confirm="Excluir esta vaga e todas as candidaturas relacionadas?"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="admin-button danger" type="submit">Excluir</button></form></td></tr>
+    {% else %}<tr><td colspan="6">Nenhuma vaga encontrada.</td></tr>{% endfor %}
+    </tbody></table></div>
+  </section>
+</main></div>
+{% endblock %}

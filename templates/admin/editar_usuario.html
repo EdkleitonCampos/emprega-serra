@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Editar usuário | Emprega Serra{% endblock %}
+{% block content %}
+<div class="admin-shell company-dashboard">{% include "admin/_sidebar.html" %}
+<main class="admin-main dashboard-main">
+  <div class="admin-heading"><div><span>ADMINISTRAÇÃO</span><h1>Editar usuário</h1><p>Atualize os dados básicos da conta.</p></div></div>
+  <section class="admin-panel"><form method="post" class="admin-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Nome<input name="nome" value="{{ usuario.nome }}" required maxlength="120"></label>
+    <label>E-mail<input name="email" type="email" value="{{ usuario.email }}" required maxlength="160"></label>
+    <label>Tipo de conta<input value="{{ usuario.tipo }}" disabled></label>
+    <div><button class="admin-button" type="submit">Salvar alterações</button> <a class="admin-button secondary" href="{{ url_for('admin.usuarios') }}">Cancelar</a></div>
+  </form></section>
+</main></div>
+{% endblock %}

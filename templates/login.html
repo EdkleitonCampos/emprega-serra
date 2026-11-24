@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Entrar | Emprega Serra{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+    <div class="auth-card">
+
+        <a class="registration-brand" href="{{ url_for('home') }}" aria-label="Voltar para a página inicial do Emprega Serra">
+            <img class="brand-logo" src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra">
+        </a>
+        <h1>Bem-vindo de volta!</h1>
+
+        <p>
+            Entre na sua conta para acessar o Emprega Serra
+            e aproveitar as oportunidades.
+        </p>
+
+        {% with mensagens = get_flashed_messages() %}
+            {% if mensagens %}
+                {% for mensagem in mensagens %}
+                    <div class="auth-message">
+                        {{ mensagem }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" class="auth-form">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <label>
+                E-mail
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Digite seu e-mail"
+                    required
+                >
+            </label>
+
+            <label>
+                Senha
+                <span class="password-field">
+                    <input
+                        type="password"
+                        name="senha"
+                        placeholder="Digite sua senha"
+                        required
+                    >
+                    <button class="password-toggle" type="button" aria-label="Mostrar senha enquanto pressionado" aria-pressed="false">
+                        <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </span>
+            </label>
+
+            <button type="submit" class="btn btn-primary">
+                Entrar na minha conta
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+            Ainda não possui cadastro?
+
+            <br><br>
+
+            <a href="{{ url_for('cadastro_candidato') }}">
+                Criar conta de candidato
+            </a>
+
+            <br><br>
+
+            <a href="{{ url_for('cadastro_empresa') }}">
+                Cadastrar minha empresa
+            </a>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

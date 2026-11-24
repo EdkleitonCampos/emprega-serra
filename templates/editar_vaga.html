@@ -1,0 +1,70 @@
+
+{% extends "base.html" %}
+
+{% block title %}Editar Vaga | Emprega Serra{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+
+    <div class="auth-card">
+
+        <h1>Editar vaga</h1>
+
+        <form method="POST" data-edit-vacancy-form data-original-status="{{ 'finalizada' if vaga.status == 'encerrada' else vaga.status }}" data-vacancy-title="{{ vaga.titulo }}">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <label>Cargo / Nome da vaga</label>
+            <input type="text" name="titulo"
+                   value="{{ vaga.titulo }}" required>
+
+            <label>Descrição</label>
+            <textarea name="descricao" rows="5" required>{{ vaga.descricao }}</textarea>
+
+            <label>Requisitos</label>
+            <textarea name="requisitos" rows="4">{{ vaga.requisitos or '' }}</textarea>
+
+            <label>Cidade</label>
+            <input type="text" name="cidade"
+                   value="{{ vaga.cidade }}" required>
+
+            <label>Salário</label>
+            <input type="text" name="salario"
+                   value="{{ vaga.salario or '' }}">
+
+            <label for="status">Status da vaga</label>
+            <select id="status" name="status" required>
+                <option value="aberta" {% if vaga.status == "aberta" %}selected{% endif %}>Aberto</option>
+                <option value="finalizada" {% if vaga.status in ["finalizada", "encerrada"] %}selected{% endif %}>Finalizado</option>
+                <option value="cancelada" {% if vaga.status == "cancelada" %}selected{% endif %}>Cancelado</option>
+                <option value="em_analise" {% if vaga.status == "em_analise" %}selected{% endif %}>Em análise</option>
+                <option value="pausada" {% if vaga.status == "pausada" %}selected{% endif %}>Pausada</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary">
+                Salvar alterações
+            </button>
+
+        </form>
+
+        <div class="auth-footer">
+            <a href="{{ url_for('painel_empresarial') }}#minhas-vagas">Voltar ao painel</a>
+        </div>
+
+    </div>
+
+</section>
+
+<dialog class="dashboard-dialog" id="finalizeConfirmDialog" aria-labelledby="finalizeConfirmTitle">
+    <form method="dialog" class="dashboard-dialog-content">
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <h2 id="finalizeConfirmTitle">Finalizar vaga?</h2>
+        <p data-finalize-message>Tem certeza que deseja finalizar <strong data-dialog-vacancy-title></strong>?</p>
+        <div class="dashboard-dialog-actions">
+            <button type="submit" class="btn btn-modal-safe">Não</button>
+            <button type="button" class="btn btn-warning" data-confirm-finalize>Sim, finalizar</button>
+        </div>
+    </form>
+</dialog>
+
+{% endblock %}

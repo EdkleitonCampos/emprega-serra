@@ -1,0 +1,39 @@
+EMPREGA SERRA 3.0.0 — INSTALAÇÃO
+
+1. Extraia a pasta EmpregaSerra_3.0.0 para um local novo. Não substitua sua instalação anterior.
+2. Execute iniciar_emprega_serra.bat.
+3. Na primeira execução, o script cria o ambiente virtual, instala as dependências e prepara os dados demonstrativos. É necessária internet na primeira instalação.
+4. Abra http://127.0.0.1:5000.
+5. Consulte CONTAS_DEMONSTRACAO.txt para as contas de teste.
+6. Para encerrar, pressione CTRL+C no terminal.
+
+NOVOS RECURSOS
+- Identidade visual Sertão Tecnológico, responsiva.
+- Diretório de serviços para empresas e profissionais autônomos, com contato por WhatsApp.
+- Catálogo de plataformas de cursos gratuitos.
+- Mapa regional e resumo de vagas por cidade.
+- Notificações internas de convites e respostas.
+- Publicidade administrada no painel administrativo.
+- Nenhuma cobrança por cadastro, vaga, candidatura, convite, aceite ou contratação.
+
+ACESSO PELO CELULAR NA MESMA REDE WI-FI
+1. Conecte computador e celular ao mesmo Wi-Fi.
+2. Execute iniciar_rede_local.bat.
+3. Use no celular o endereço http://IP-DO-COMPUTADOR:5000 exibido no terminal.
+4. Se necessário, use liberar_firewall_rede_privada.ps1 no PowerShell como Administrador.
+Este acesso é somente para rede local, não para internet pública.
+
+DADOS DE DEMONSTRAÇÃO
+- O banco emprega_serra.db acompanha o pacote com dados fictícios de empresas, candidatos, vagas, candidaturas e campanhas.
+- Todas as contas de empresas e candidatos usam a senha 1234567890.
+- O administrador inicial exige troca de senha no primeiro acesso.
+- Troque credenciais e segredos antes de publicar o sistema.
+
+BANCO DE DADOS E SEGURANÇA
+- O banco principal está em emprega_serra.db.
+- Execute backup_emprega_serra.bat para gerar uma cópia consistente.
+- Consulte SECURITY.md antes de publicar.
+- Para acesso externo, use hospedagem com HTTPS e armazenamento persistente.
+- Nunca exponha diretamente a porta 5000 do computador na internet.
+
+Consulte README.md e REQUISITOS_ATENDIDOS.md para mais detalhes.

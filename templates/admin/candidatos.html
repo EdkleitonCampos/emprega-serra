@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Candidatos cadastrados | Emprega Serra{% endblock %}
+{% block content %}
+<div class="admin-shell company-dashboard">
+  {% include "admin/_sidebar.html" %}
+  <main class="admin-main dashboard-main">
+    <div class="admin-heading">
+      <div><span>CADASTROS DA PLATAFORMA</span><h1>Candidatos cadastrados</h1><p>Consulte os candidatos que criaram perfil no Emprega Serra.</p></div>
+    </div>
+    <section class="admin-panel">
+      <div class="admin-table-wrap"><table>
+        <thead><tr><th>Nome</th><th>E-mail</th><th>Telefone</th><th>Cidade</th><th>Escolaridade</th><th>Cadastro</th></tr></thead>
+        <tbody>
+          {% for candidato in candidatos %}
+          <tr><td>{{ candidato.nome }}</td><td>{{ candidato.email }}</td><td>{{ candidato.telefone or '—' }}</td><td>{{ candidato.cidade or '—' }}</td><td>{{ candidato.escolaridade or '—' }}</td><td>{{ candidato.criado_em }}</td></tr>
+          {% else %}
+          <tr><td colspan="6">Nenhum candidato cadastrado.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table></div>
+    </section>
+  </main>
+</div>
+{% endblock %}

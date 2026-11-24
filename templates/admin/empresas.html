@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Empresas cadastradas | Emprega Serra{% endblock %}
+{% block content %}
+<div class="admin-shell company-dashboard">
+  {% include "admin/_sidebar.html" %}
+  <main class="admin-main dashboard-main">
+    <div class="admin-heading">
+      <div><span>CADASTROS DA PLATAFORMA</span><h1>Empresas cadastradas</h1><p>Consulte as empresas que criaram conta no Emprega Serra.</p></div>
+      <a class="admin-button" href="{{ url_for('admin.exportar_empresas_pdf') }}">Exportar empresas em PDF</a>
+    </div>
+    <section class="admin-panel">
+      <div class="admin-table-wrap"><table>
+        <thead><tr><th>Empresa</th><th>Responsável</th><th>E-mail</th><th>Telefone</th><th>Cidade</th><th>Cadastro</th></tr></thead>
+        <tbody>
+          {% for empresa in empresas %}
+          <tr><td>{{ empresa.nome_empresa }}</td><td>{{ empresa.responsavel }}</td><td>{{ empresa.email }}</td><td>{{ empresa.telefone or '—' }}</td><td>{{ empresa.cidade or '—' }}</td><td>{{ empresa.criado_em }}</td></tr>
+          {% else %}
+          <tr><td colspan="6">Nenhuma empresa cadastrada.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table></div>
+    </section>
+  </main>
+</div>
+{% endblock %}

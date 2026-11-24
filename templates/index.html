@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Kaushan+Script&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home-v4.css') }}">
+{% endblock %}
+{% block body_class %}home-v4{% endblock %}
+
+{% block content %}
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3 17.8V21h3.2l6.3-6.3a4 4 0 0 0 5.2-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></symbol>
+    <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5zM6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5M22 9v6"/></symbol>
+    <symbol id="i-building" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2M10 21v-3h4v3"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 .3 1.3 1 2 2 2-.5-3 .5-5 1-8z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5M16 15c3 0 5 1.5 5 4"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
+    <symbol id="i-growth" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
+    <symbol id="i-megaphone" viewBox="0 0 24 24"><path d="M3 10v4h3l8 5V5L6 10zM18 9a4 4 0 0 1 0 6"/></symbol>
+  </defs>
+</svg>
+
+<header class="hv-header">
+    <div class="hv-wrap hv-header-row">
+        <a class="hv-brand" href="{{ url_for('home') }}" aria-label="Emprega Serra - página inicial">
+            <img src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra">
+        </a>
+
+        <button class="hv-menu-toggle menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-controls="mainNav" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+
+        <nav class="hv-nav" id="mainNav" aria-label="Navegação principal">
+            <a href="#inicio" class="is-active" aria-current="page"><svg class="hv-ico"><use href="#i-home"/></svg>Início</a>
+            <a href="#vagas"><svg class="hv-ico"><use href="#i-briefcase"/></svg>Vagas</a>
+            <a href="{{ url_for('servicos') }}"><svg class="hv-ico"><use href="#i-wrench"/></svg>Serviços</a>
+            <a href="{{ url_for('cursos') }}"><svg class="hv-ico"><use href="#i-cap"/></svg>Cursos</a>
+            <a href="#empresas"><svg class="hv-ico"><use href="#i-building"/></svg>Empresas</a>
+            <a href="{{ url_for('mapa_regional') }}"><svg class="hv-ico"><use href="#i-pin"/></svg>Mapa Regional</a>
+            <a href="#sobre"><svg class="hv-ico"><use href="#i-info"/></svg>Sobre</a>
+            <div class="hv-nav-actions-mobile">
+                {% if session.get('usuario_id') %}
+                    <a href="{{ url_for('admin.dashboard') if session.get('tipo') == 'admin' else url_for('painel_empresarial') }}">Meu painel</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Entrar</a>
+                    <a href="{{ url_for('cadastro_candidato') }}">Cadastrar</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div class="hv-actions">
+            {% if session.get('usuario_id') %}
+                <a class="hv-btn hv-btn-outline" href="{{ url_for('admin.dashboard') if session.get('tipo') == 'admin' else url_for('painel_empresarial') }}"><svg class="hv-ico"><use href="#i-user"/></svg>Meu painel</a>
+                <form method="post" action="{{ url_for('sair') }}" class="inline-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="hv-btn hv-btn-green" type="submit">Sair</button></form>
+            {% else %}
+                <a class="hv-btn hv-btn-outline" href="{{ url_for('login') }}"><svg class="hv-ico"><use href="#i-user"/></svg>Entrar</a>
+                <button class="hv-btn hv-btn-green" id="openAccountTypeDialog" type="button" aria-haspopup="dialog">Cadastrar</button>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<dialog class="account-type-dialog" id="accountTypeDialog" aria-labelledby="accountTypeTitle">
+    <button class="account-type-close" type="button" aria-label="Fechar">×</button>
+    <h2 id="accountTypeTitle">Como você quer participar?</h2>
+    <p>Escolha o tipo de cadastro para continuar.</p>
+    <div class="account-type-options">
+        <a class="hv-btn hv-btn-green" href="{{ url_for('cadastro_empresa') }}">Empregador</a>
+        <a class="hv-btn hv-btn-green" href="{{ url_for('cadastro_candidato') }}">Colaborador</a>
+    </div>
+</dialog>
+
+<main>
+    <section class="hv-hero" id="inicio">
+        <div class="hv-wrap hv-hero-inner">
+            <div class="hv-hero-copy">
+                <div class="hv-headline">
+                <h1 class="hv-title"><span class="hv-title-1">O seu próximo passo</span><span class="hv-title-2">começa aqui!</span></h1>
+                <p class="hv-lead">Conectando pessoas, empresas e oportunidades para um Sertão mais forte e cheio de possibilidades.</p>
+                </div>
+
+                <form class="hv-search" id="jobSearch" role="search">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <label class="hv-search-field">
+                        <svg class="hv-ico" aria-hidden="true"><use href="#i-search"/></svg>
+                        <input type="search" id="searchInput" placeholder="Pesquise por vagas, serviços, cursos..." aria-label="Buscar vagas, serviços ou cursos">
+                    </label>
+                    <label class="hv-search-field hv-search-city">
+                        <svg class="hv-ico" aria-hidden="true"><use href="#i-pin"/></svg>
+                        <input type="text" id="locationInput" placeholder="Cidade" aria-label="Cidade">
+                    </label>
+                    <button class="hv-search-btn" type="submit">Buscar <svg class="hv-ico" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+                </form>
+
+                <div class="hv-popular">
+                    <span class="hv-popular-label"><svg class="hv-ico" aria-hidden="true"><use href="#i-flame"/></svg>Buscas populares:</span>
+                    <a href="#vagas">Emprego</a>
+                    <a href="{{ url_for('cursos') }}">Cursos</a>
+                    <a href="{{ url_for('servicos') }}">Serviços</a>
+                    <a href="{{ url_for('cadastro_candidato') }}">Primeiro Emprego</a>
+                </div>
+            </div>
+            <p class="hv-slogan" aria-hidden="true">Serra Talhada<br>é a nossa força!</p>
+        </div>
+    </section>
+
+    <section class="hv-shortcuts" aria-label="Acesse os serviços do Emprega Serra">
+        <div class="hv-wrap hv-shortcuts-grid">
+            <a class="hv-card hv-card-green card-hover-amarelo" href="{{ url_for('buscar_vagas') if session.get('tipo') == 'candidato' else url_for('cadastro_candidato') }}">
+                <svg class="hv-card-icon" aria-hidden="true"><use href="#i-briefcase"/></svg>
+                <span class="hv-card-text"><strong>Encontrar Vagas</strong><small>Conquiste sua carreira</small></span>
+                <span class="hv-card-go" aria-hidden="true"><svg class="hv-ico"><use href="#i-arrow"/></svg></span>
+            </a>
+            <a class="hv-card hv-card-cream" href="{{ url_for('cursos') }}">
+                <svg class="hv-card-icon" aria-hidden="true"><use href="#i-cap"/></svg>
+                <span class="hv-card-text"><strong>Aprender e Crescer</strong><small>Cursos e qualificação</small></span>
+                <span class="hv-card-go" aria-hidden="true"><svg class="hv-ico"><use href="#i-arrow"/></svg></span>
+            </a>
+            <a class="hv-card hv-card-green card-hover-amarelo" href="{{ url_for('cadastro_empresa') }}">
+                <svg class="hv-card-icon" aria-hidden="true"><use href="#i-building"/></svg>
+                <span class="hv-card-text"><strong>Para Empresas</strong><small>Publique vagas e encontre talentos</small></span>
+                <span class="hv-card-go" aria-hidden="true"><svg class="hv-ico"><use href="#i-arrow"/></svg></span>
+            </a>
+            <a class="hv-card hv-card-cream" href="{{ url_for('mapa_regional') }}">
+                <svg class="hv-card-icon" aria-hidden="true"><use href="#i-pin"/></svg>
+                <span class="hv-card-text"><strong>Mapa Regional</strong><small>Oportunidades em toda a nossa região</small></span>
+                <span class="hv-card-go" aria-hidden="true"><svg class="hv-ico"><use href="#i-arrow"/></svg></span>
+            </a>
+        </div>
+    </section>
+
+    <section class="hv-stats" aria-label="Por que o Emprega Serra">
+        <div class="hv-wrap hv-stats-grid">
+            <div class="hv-stat"><svg class="hv-stat-icon" aria-hidden="true"><use href="#i-people"/></svg><p><strong>Milhares</strong>de oportunidades</p></div>
+            <div class="hv-stat"><svg class="hv-stat-icon" aria-hidden="true"><use href="#i-shield"/></svg><p><strong>Empresas</strong>confiando na plataforma</p></div>
+            <div class="hv-stat"><svg class="hv-stat-icon" aria-hidden="true"><use href="#i-cap"/></svg><p><strong>Qualificação</strong>para um futuro melhor</p></div>
+            <div class="hv-stat"><svg class="hv-stat-icon" aria-hidden="true"><use href="#i-growth"/></svg><p><strong>Desenvolvendo</strong>Serra Talhada e região</p></div>
+        </div>
+    </section>
+
+    {% if anuncios %}
+    <section class="jobs-section section-padding sponsored-section" aria-label="Anúncios locais">
+      <div class="container">
+        <div class="section-heading"><div><div class="eyebrow"><span class="eyebrow-dot"></span> PUBLICIDADE LOCAL</div><h2>Negócios da <span>nossa região</span></h2><p>Anúncios publicados e administrados pela plataforma.</p></div></div>
+        <div class="partner-marquee" aria-label="Anúncios locais">
+          <button class="partner-marquee-toggle" type="button" aria-pressed="false">Pausar movimento</button>
+          <div class="partner-marquee-track">
+            {% for repeticao in range(2) %}
+              {% for anuncio in anuncios %}
+                <article class="partner-card" {% if repeticao == 1 %}aria-hidden="true"{% endif %}>
+                  {% if anuncio.imagem_url %}<img src="{{ anuncio.imagem_url }}" alt="{% if repeticao == 0 %}{{ anuncio.titulo }}{% else %}{% endif %}" loading="lazy">{% endif %}
+                  <div class="partner-card-copy"><span>ANÚNCIO</span><strong>{{ anuncio.titulo }}</strong><small>{{ anuncio.descricao or 'Conheça este anúncio local.' }}</small>
+                  {% if anuncio.link_url %}<a href="{{ anuncio.link_url }}" target="_blank" rel="noopener noreferrer" {% if repeticao == 1 %}tabindex="-1"{% endif %}>Saiba mais ↗</a>{% endif %}</div>
+                </article>
+              {% endfor %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+
+    <section class="jobs-section section-padding" id="vagas">
+        <div class="container">
+            <div class="section-heading">
+                <div><div class="eyebrow"><span class="eyebrow-dot"></span> ENCONTRE SEU LUGAR</div><h2>Vagas em <span>destaque</span></h2><p>Confira algumas oportunidades na região.</p></div>
+                {% if session.get('tipo') == 'candidato' %}
+                    <a class="text-link" href="{{ url_for('buscar_vagas') }}">Buscar mais vagas <span>→</span></a>
+                {% elif session.get('usuario_id') %}
+                    <a class="text-link" href="#vagas">Ver vagas em destaque <span>→</span></a>
+                {% else %}
+                    <a class="text-link" href="{{ url_for('login') }}">Entre para buscar vagas <span>→</span></a>
+                {% endif %}
+            </div>
+
+            <div class="jobs-grid" id="jobsGrid">
+                {% for vaga in vagas %}
+                <article class="job-card" data-search="{{ (vaga.cargo ~ ' ' ~ vaga.empresa ~ ' ' ~ vaga.cidade ~ ' ' ~ vaga.descricao)|lower }}">
+                    <div class="job-card-top">
+                        <div class="company-icon {% if loop.index == 1 %}icon-purple{% elif loop.index == 2 %}icon-blue{% else %}icon-cyan{% endif %}">{{ vaga.empresa[0]|upper }}</div>
+                        <span class="job-status">Vaga aberta</span>
+                    </div>
+                    <h3>{{ vaga.cargo }}</h3>
+                    <p class="company-name">{{ vaga.empresa }}</p>
+                    <div class="job-meta"><span>⌖ {{ vaga.cidade }}</span><span>💰 {{ vaga.salario or 'A combinar' }}</span></div>
+                    <div class="job-card-bottom"><strong>{{ vaga.salario or 'A combinar' }}</strong><a href="{{ url_for('detalhes_vaga', vaga_id=vaga.id) }}" aria-label="Ver detalhes de {{ vaga.cargo }}">Ver vaga <span>→</span></a></div>
+                    {% if vaga.whatsapp %}<a class="job-whatsapp" target="_blank" rel="noopener noreferrer" href="https://wa.me/{{ vaga.whatsapp if vaga.whatsapp.startswith('55') else '55' ~ vaga.whatsapp }}">WhatsApp da empresa ↗</a>{% endif %}
+                </article>
+                {% endfor %}
+                {% if not vagas %}
+                <div class="empty-state jobs-empty-state">Ainda não há vagas publicadas. Volte em breve para conferir novas oportunidades.</div>
+                {% endif %}
+            </div>
+            <p class="empty-state" id="emptyState" hidden>Nenhuma vaga corresponde à sua busca. Tente outro cargo ou cidade.</p>
+        </div>
+    </section>
+
+    <section class="business-section section-padding" id="empresas" aria-labelledby="businessTitle">
+        <div class="container business-panel">
+            <div class="business-copy">
+                <div class="eyebrow light-eyebrow"><span class="eyebrow-dot"></span> SUA EMPRESA TAMBÉM FAZ PARTE</div>
+                <h2 id="businessTitle">Encontrar talentos pode ser <span>mais simples.</span></h2>
+                <p>Cadastre sua empresa gratuitamente, publique oportunidades e conheça profissionais da região. Você escolhe quem deseja entrevistar.</p>
+                <a href="{{ url_for('cadastro_empresa') }}" class="btn btn-light">Cadastrar minha empresa <span>→</span></a>
+            </div>
+            <div class="business-art">
+                <div class="art-circle circle-one"></div><div class="art-circle circle-two"></div>
+                <div class="art-window">
+                    <div class="window-dots"><i></i><i></i><i></i></div>
+                    <div class="art-line line-wide"></div><div class="art-line"></div>
+                    <div class="art-profile"><span></span><div><b></b><i></i></div><em>✓</em></div>
+                    <div class="art-profile"><span></span><div><b></b><i></i></div><em>✓</em></div>
+                    <div class="art-profile"><span></span><div><b></b><i></i></div><em>✓</em></div>
+                </div>
+                <div class="art-label">Talentos que movem a região <span>✦</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-section section-padding" id="sobre" aria-labelledby="howTitle">
+        <div class="container">
+            <div class="section-heading centered-heading">
+                <div class="eyebrow"><span class="eyebrow-dot"></span> SIMPLES ASSIM</div>
+                <h2 id="howTitle">Como funciona o <span>Emprega Serra?</span></h2>
+                <p>Um caminho mais direto entre quem procura e quem oferece oportunidades.</p>
+            </div>
+            <div class="steps-grid">
+                <article class="step-card"><span class="step-number">01</span><div class="step-icon">♙</div><h3>Crie seu perfil</h3><p>Cadastre suas informações profissionais ou os dados da sua empresa.</p></article>
+                <article class="step-card"><span class="step-number">02</span><div class="step-icon purple-step">⌕</div><h3>Conecte-se</h3><p>Encontre vagas ou receba candidaturas de profissionais interessados.</p></article>
+                <article class="step-card"><span class="step-number">03</span><div class="step-icon cyan-step">↗</div><h3>Dê o próximo passo</h3><p>Empresas convidam candidatos para entrevistas pela plataforma.</p></article>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="acesso">
+        <div class="container cta-panel">
+            <div><div class="eyebrow light-eyebrow"><span class="eyebrow-dot"></span> OPORTUNIDADES COMEÇAM COM UMA CONEXÃO</div><h2>Seu próximo capítulo pode começar hoje.</h2><p>Faça parte dessa conexão entre talentos e empresas da nossa região.</p></div>
+            <div class="cta-actions"><a class="btn btn-light" href="{{ url_for('cadastro_candidato') }}">Quero participar <span>→</span></a><small>Cadastro gratuito · Sem mensalidade · Sem taxas</small></div>
+        </div>
+    </section>
+</main>
+
+<footer class="hv-footer">
+    <div class="hv-wrap hv-footer-grid">
+        <div class="hv-footer-brand">
+            <a class="hv-brand" href="#inicio" aria-label="Emprega Serra - voltar ao topo"><img src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra"></a>
+            <p>Conectando pessoas e oportunidades em Serra Talhada e no Sertão.</p>
+        </div>
+        <nav class="hv-footer-col" aria-label="Links rápidos">
+            <h2>Links Rápidos</h2>
+            <a href="#vagas">Vagas</a>
+            <a href="{{ url_for('cursos') }}">Cursos</a>
+            <a href="{{ url_for('servicos') }}">Serviços</a>
+            <a href="#empresas">Empresas</a>
+            <a href="{{ url_for('mapa_regional') }}">Mapa Regional</a>
+        </nav>
+        <div class="hv-footer-col">
+            <h2>Fale Conosco</h2>
+            {% if suporte_whatsapp %}
+            <a href="https://wa.me/{{ suporte_whatsapp }}" target="_blank" rel="noopener noreferrer"><svg class="hv-ico" aria-hidden="true"><use href="#i-phone"/></svg>Atendimento pelo WhatsApp</a>
+            {% endif %}
+            <span><svg class="hv-ico" aria-hidden="true"><use href="#i-pin"/></svg>Serra Talhada - PE</span>
+        </div>
+        <div class="hv-footer-col hv-footer-ad">
+            <h2>Anuncie</h2>
+            <a class="hv-ad-btn" href="{% if suporte_whatsapp %}https://wa.me/{{ suporte_whatsapp }}{% else %}#vagas{% endif %}" {% if suporte_whatsapp %}target="_blank" rel="noopener noreferrer"{% endif %}><svg class="hv-ico" aria-hidden="true"><use href="#i-megaphone"/></svg><span><strong>Anuncie Aqui</strong><small>Divulgue sua marca</small></span></a>
+        </div>
+    </div>
+    <div class="hv-wrap hv-footer-bottom">
+        <span>© 2026 Emprega Serra. Todos os direitos reservados.</span>
+        <em>Juntos por um Sertão com mais oportunidades!</em>
+    </div>
+    <p class="hv-wrap hv-photo-credit">Fotografia: <a href="https://commons.wikimedia.org/wiki/File:Serra-Talhada-vista-da-cidade.jpg" target="_blank" rel="noopener noreferrer">Patrick-br, “Serra Talhada (Pernambuco), Brasil. Vista da serra” (2005)</a>, licenciada sob <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 3.0</a>.</p>
+</footer>
+{% endblock %}

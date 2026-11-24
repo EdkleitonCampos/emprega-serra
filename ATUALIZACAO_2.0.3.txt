@@ -1,0 +1,13 @@
+EMPrega Serra 3.0 — Atualização
+
+- Reformulação visual com identidade Sertão Tecnológico.
+- Plataforma gratuita para candidatos e empresas.
+- Cadastro, publicação de vagas, candidaturas, convites e entrevistas sem taxas.
+- O aceite do convite libera imediatamente os dados de local, data e horário.
+- Receita prevista exclusivamente por publicidade gerenciada pela administração.
+- Diretório de serviços para empresas e profissionais autônomos.
+- Vitrine de plataformas de cursos gratuitos.
+- Mapa regional com cidades que possuem vagas abertas.
+- Notificações internas para convites e respostas de entrevista.
+
+Compatibilidade: as colunas antigas relacionadas a cobranças permanecem no banco apenas para não quebrar a migração de bancos existentes. A aplicação não cria novas cobranças nem exige pagamentos.

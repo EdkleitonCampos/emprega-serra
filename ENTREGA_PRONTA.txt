@@ -1,0 +1,34 @@
+EMPREGA SERRA 3.0.2 — PACOTE DE ENTREGA
+
+O QUE ESTÁ INCLUÍDO
+- Aplicação web Flask + SQLite.
+- Identidade visual Sertão contemporâneo: verde mandacaru, areia, terracota e amarelo-sol.
+- Fotografia real de Serra Talhada na página inicial (com crédito no rodapé).
+- Cadastro e login de candidatos e empresas.
+- Perfil e currículo do candidato, busca e candidatura a vagas.
+- Painel empresarial para vagas, candidaturas e convites de entrevista.
+- Diretório de serviços locais.
+- Página de cursos e qualificação.
+- Mapa regional com OpenStreetMap e resumo de vagas por cidade.
+- Painel administrativo, publicidade e relatórios PDF/CSV.
+- Banco demonstrativo com dados fictícios.
+- Testes automatizados e documentação.
+- Apresentação em PowerPoint e roteiro de fala.
+
+COMO INICIAR NO WINDOWS 10/11
+1. Extraia a pasta EmpregaSerra_3.0.2.
+2. Dê duplo clique em iniciar_emprega_serra.bat.
+3. Aguarde a instalação das dependências na primeira execução (é necessária internet).
+4. Abra http://127.0.0.1:5000 no navegador.
+5. Para encerrar, volte ao terminal e pressione CTRL+C.
+
+ACESSOS DE DEMONSTRAÇÃO
+Consulte CONTAS_DEMONSTRACAO.txt. Todos os dados e contas são fictícios.
+A conta administrativa exige troca da senha no primeiro acesso.
+Não publique o site na internet com as senhas demonstrativas.
+
+IMPORTANTE
+- O mapa e os links de cursos dependem de conexão com a internet.
+- Para acesso de outras pessoas fora da mesma rede local, é necessário publicar em hospedagem com HTTPS e armazenamento persistente.
+- Antes de qualquer publicação, siga SECURITY.md e substitua credenciais e dados demonstrativos.
+- Consulte VALIDACAO_TECNICA.md para o resultado das verificações executadas.

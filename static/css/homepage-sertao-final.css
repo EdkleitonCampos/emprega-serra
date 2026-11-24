@@ -1,0 +1,60 @@
+/* HOMEPAGE EMPREGA SERRA — composição alinhada à referência visual aprovada */
+:root { --es-green:#173f2b; --es-green-2:#24623d; --es-sand:#f2e5c9; --es-gold:#e5aa32; --es-ink:#1c3527; }
+.site-header { background:#173f2b !important; box-shadow:0 5px 22px rgba(10,35,22,.22) !important; }
+.site-header .nav-wrap { min-height:78px !important; }
+.site-header .brand-logo { max-width:230px !important; max-height:58px !important; padding:0 !important; background:transparent !important; }
+.site-header .main-nav a { color:#fff9eb !important; }
+.site-header .main-nav a:hover,.site-header .main-nav a:focus-visible { color:#f5c45d !important; background:rgba(255,255,255,.08) !important; }
+.site-header .btn-ghost { border:1px solid rgba(255,255,255,.48) !important; border-radius:12px !important; }
+.site-header #openAccountTypeDialog,.site-header .nav-actions .btn-primary { background:#e5aa32 !important; color:#173f2b !important; border-radius:12px !important; }
+.hero { min-height:590px !important; padding:68px 0 165px !important; position:relative !important; overflow:visible !important;
+ background-image:linear-gradient(90deg,rgba(14,48,31,.92) 0%,rgba(20,61,39,.78) 48%,rgba(21,62,40,.30) 100%),linear-gradient(0deg,rgba(14,44,29,.38),transparent 52%),url('../img/serra-talhada-vista.jpg') !important;
+ background-position:center 54% !important; background-size:cover !important; }
+.hero:before { content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(ellipse at 88% 18%,rgba(235,177,79,.22),transparent 36%); z-index:0; }
+.hero:after { opacity:.035 !important; }
+.hero-grid { display:block !important; position:relative !important; z-index:1 !important; }
+.hero-copy { max-width:790px !important; width:min(72%,790px) !important; }
+.hero .eyebrow { color:#f4cb70 !important; font-size:11px !important; letter-spacing:1.8px !important; }
+.hero h1 { max-width:760px !important; font-size:clamp(48px,5.5vw,76px) !important; line-height:1.02 !important; letter-spacing:-.05em !important; }
+.hero h1 span { color:#f2b632 !important; text-decoration:none !important; display:inline-block; }
+.hero-description { max-width:670px !important; font-size:clamp(17px,1.55vw,21px) !important; line-height:1.65 !important; color:#fff8e9 !important; }
+.hero .search-box { max-width:760px !important; min-height:72px !important; padding:9px 10px 9px 16px !important; display:grid !important; grid-template-columns:1.2fr .8fr auto !important; gap:10px !important; border-radius:18px !important; background:#fffdf7 !important; box-shadow:0 15px 40px rgba(0,0,0,.23) !important; }
+.hero .search-field { min-width:0 !important; }
+.hero .search-field input { min-height:50px !important; background:transparent !important; border:0 !important; box-shadow:none !important; color:#23372a !important; }
+.hero .search-button { min-height:52px !important; padding:0 24px !important; border-radius:13px !important; background:#21643e !important; color:#fff !important; }
+.hero-note { margin-top:15px !important; color:#fff8e9 !important; }
+.hero-quick-links { display:flex !important; flex-wrap:wrap !important; gap:9px 22px !important; max-width:800px !important; }
+.hero-quick-links a { color:#fff1c7 !important; font-weight:700 !important; text-decoration:underline !important; text-decoration-color:rgba(245,194,87,.65) !important; text-underline-offset:4px !important; }
+.hero-visual,.hero-bottom { display:none !important; }
+.portal-cards-section { position:relative !important; z-index:5 !important; margin-top:-142px !important; padding:0 0 36px !important; background:transparent !important; }
+.portal-cards-grid { display:grid !important; grid-template-columns:repeat(4,minmax(0,1fr)) !important; gap:16px !important; }
+.portal-card { min-height:150px !important; padding:20px 20px 18px !important; border-radius:22px !important; border:1px solid rgba(255,255,255,.6) !important; box-shadow:0 15px 34px rgba(18,44,27,.20) !important; display:grid !important; grid-template-columns:48px 1fr !important; grid-template-rows:auto auto 1fr auto !important; column-gap:13px !important; align-items:start !important; }
+.portal-card:nth-child(odd) { background:linear-gradient(145deg,#1d663d,#17442d) !important; color:#fff !important; }
+.portal-card:nth-child(even) { background:linear-gradient(145deg,#fff1d4,#ead8b5) !important; color:#193b29 !important; }
+.portal-card-icon { grid-column:1; grid-row:1/4; width:46px !important; height:46px !important; display:grid !important; place-items:center !important; border-radius:13px !important; font-size:27px !important; background:rgba(255,255,255,.16) !important; color:inherit !important; }
+.portal-card-kicker { grid-column:2; grid-row:1; margin:0 0 3px !important; color:inherit !important; opacity:.78; font-size:9px !important; letter-spacing:1px !important; }
+.portal-card h2 { grid-column:2; grid-row:2; margin:0 0 4px !important; color:inherit !important; font-size:19px !important; line-height:1.2 !important; }
+.portal-card>p:not(.portal-card-kicker) { grid-column:2; grid-row:3; margin:0 0 8px !important; color:inherit !important; opacity:.9; font-size:11px !important; line-height:1.4 !important; }
+.portal-card-link { grid-column:2; grid-row:4; color:inherit !important; font-size:11px !important; font-weight:800 !important; }
+.portal-card-link span { display:inline-grid; place-items:center; width:24px; height:24px; margin-left:5px; border-radius:50%; background:rgba(255,255,255,.18); }
+.stats-section { background:#f2e7d1 !important; border:0 !important; padding:22px 0 !important; }
+.stats-grid { grid-template-columns:repeat(3,minmax(0,1fr)) !important; }
+.stat-item { border-right:1px solid rgba(34,70,45,.25) !important; padding:6px 24px !important; }
+.stat-item:last-child { border-right:0 !important; }
+.stat-item strong { color:#173f2b !important; }
+.stat-item small { color:#5c665b !important; }
+.stat-symbol,.purple-symbol,.cyan-symbol { color:#173f2b !important; background:transparent !important; font-size:31px !important; }
+.site-footer { background:#123824 !important; border-top:4px solid #dca52e !important; }
+.site-footer .footer-content { padding-top:34px !important; padding-bottom:25px !important; }
+.site-footer .footer-brand-block p { color:#f0eadc !important; }
+.site-footer .footer-links a { color:#f4d68c !important; }
+.site-footer .photo-credit { color:#d8dfd2 !important; }
+.site-footer .copyright { color:#fff4d8 !important; font-weight:700 !important; }
+@media(max-width:1050px){ .hero-copy{width:80% !important}.portal-cards-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.portal-cards-section{margin-top:-105px !important}.hero{padding-bottom:130px !important} }
+@media(max-width:700px){
+ .site-header .nav-wrap{min-height:70px !important}.hero{min-height:0 !important;padding:52px 0 120px !important;background-position:58% center !important}
+ .hero-copy{width:100% !important;max-width:none !important}.hero h1{font-size:clamp(40px,11vw,58px) !important}
+ .hero .search-box{grid-template-columns:1fr !important;gap:5px !important;padding:12px !important}.hero .search-field input{width:100% !important}.hero .search-button{width:100% !important}
+ .hero-quick-links{gap:9px 15px !important}.portal-cards-section{margin-top:-90px !important;padding-bottom:25px !important}.portal-cards-grid{grid-template-columns:1fr !important;gap:11px !important}
+ .portal-card{min-height:126px !important}.stats-grid{grid-template-columns:1fr !important}.stat-item{border-right:0 !important;border-bottom:1px solid rgba(34,70,45,.18) !important;padding:12px 8px !important}.stat-item:last-child{border-bottom:0 !important}
+}

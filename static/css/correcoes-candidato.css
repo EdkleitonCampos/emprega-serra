@@ -1,0 +1,58 @@
+/* =====================================================
+   CORREÇÕES — PAINEL DO CANDIDATO (Emprega Serra)
+   Carregar DEPOIS de candidato.css e sertao.css
+   ===================================================== */
+
+/* 1) LOGO: remove o degradê branco/verde/branco que "remendava" a imagem.
+      A nova logo (logo-header) já traz o ícone num selo creme e o texto
+      transparente, então o fundo do <img> passa a ser transparente. */
+.candidate-header .brand-logo {
+  background: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  width: auto !important;
+  height: 52px !important;
+  max-width: min(240px, 52vw) !important;
+  max-height: none !important;
+  object-fit: contain;
+}
+.candidate-header .brand { align-items: center; }
+
+/* 2) CARDS Notificações / Minhas candidaturas: o texto encostava na borda
+      porque .candidate-content virou "card" sem ter padding. */
+.candidate-content {
+  padding: 30px 34px !important;
+}
+.candidate-content .content-heading { margin-bottom: 22px; }
+.candidate-content .content-heading h2 { margin: 8px 0 6px; }
+.candidate-content .candidate-eyebrow { display: block; }
+.candidate-content > p { margin: 0; color: var(--muted); }
+
+/* o card interno de candidaturas não precisa de segunda moldura */
+.candidate-content .applications-card {
+  box-shadow: none !important;
+}
+
+/* 3) BOTÃO "SAIR": rosa claro sobre rosa claro quase não aparecia */
+.candidate-nav .logout-link {
+  color: #fff !important;
+  background: transparent !important;
+  border: 1.5px solid rgba(255, 255, 255, .6) !important;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font: 700 12px var(--body);
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+.candidate-nav .logout-link:hover {
+  background: rgba(255, 255, 255, .14) !important;
+  border-color: #f2c66e !important;
+  color: #f2c66e !important;
+}
+
+/* 4) Respiro entre blocos e responsividade */
+.candidate-stats { margin-top: 28px; }
+@media (max-width: 760px) {
+  .candidate-header .brand-logo { height: 44px !important; }
+  .candidate-content { padding: 22px 20px !important; margin-top: 30px; }
+}

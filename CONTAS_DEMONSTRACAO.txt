@@ -1,0 +1,70 @@
+EMPREGA SERRA 2.0.2 - CONTAS DE DEMONSTRACAO
+================================================
+
+IMPORTANTE
+Todas as empresas, pessoas, vagas, candidaturas e anunciantes abaixo sao
+DADOS FICTICIOS criados exclusivamente para testar e apresentar o sistema.
+Nao representam cadastros ou contratacoes reais.
+
+SENHA DE TODAS AS CONTAS DE EMPRESAS E CANDIDATOS:
+1234567890
+
+CONTAS DE EMPRESAS (10)
+-----------------------
+Sertão Atacarejo: sertaoatacarejo@gmail.com
+Clínica Vida Plena: clinicavidaplena@gmail.com
+Grupo São Miguel: gruposaomiguel@gmail.com
+Construtora Horizonte: construtorahorizonte@gmail.com
+Supermercado Bom Preço: supermercadobompreco@gmail.com
+Auto Peças Nordeste: autopecasnordeste@gmail.com
+Hotel Pajeú: hotelpajeu@gmail.com
+Farmácia Central: farmaciacentral@gmail.com
+Tech Sertão Soluções: techsertaosolucoes@gmail.com
+Padaria Sabor da Serra: padariasabordaserra@gmail.com
+
+CONTAS DE CANDIDATOS (25)
+-------------------------
+Carlos Alberto: carlosalberto@gmail.com
+Ana Beatriz: anabeatriz@gmail.com
+João Pedro: joaopedro@gmail.com
+Maria Eduarda: mariaeduarda@gmail.com
+Lucas Gabriel: lucasgabriel@gmail.com
+Juliana Alves: julianaalves@gmail.com
+Pedro Henrique: pedrohenrique@gmail.com
+Beatriz Costa: beatrizcosta@gmail.com
+Rafael Oliveira: rafaeloliveira@gmail.com
+Gabriela Souza: gabrielasouza@gmail.com
+Matheus Ferreira: matheusferreira@gmail.com
+Larissa Rodrigues: larissarodrigues@gmail.com
+Bruno Martins: brunomartins@gmail.com
+Camila Ribeiro: camilaribeiro@gmail.com
+Felipe Santos: felipesantos@gmail.com
+Isabela Lima: isabelalima@gmail.com
+André Carvalho: andrecarvalho@gmail.com
+Vitória Almeida: vitoriaalmeida@gmail.com
+Gustavo Nunes: gustavonunes@gmail.com
+Letícia Barbosa: leticiabarbosa@gmail.com
+Thiago Mendes: thiagomendes@gmail.com
+Amanda Rocha: amandarocha@gmail.com
+Daniel Costa: danielcosta@gmail.com
+Nicole Pereira: nicolepereira@gmail.com
+Samuel Araujo: samuelaraujo@gmail.com
+
+ADMINISTRADOR
+-------------
+E-mail: admin@empregaserra.com
+Senha temporaria: Admin@1234567890
+No primeiro acesso, o sistema exige que voce defina uma nova senha com pelo menos 12 caracteres.
+
+PUBLICIDADE FICTICIA
+-------------------
+Foram cadastrados 4 anunciantes e 4 campanhas ativas no painel administrativo.
+Os links usam o dominio example.com, reservado para exemplos, e nao representam
+empresas ou ofertas reais. As campanhas aparecem na pagina inicial.
+
+OBSERVACAO DE SEGURANCA
+-----------------------
+Estas credenciais sao publicas e servem apenas para demonstracao local ou em
+rede privada controlada. Nao publique a plataforma na internet com as senhas
+demonstrativas. Antes de qualquer publicacao, troque as senhas e revise os
+dados de exemplo, as configuracoes e a politica de privacidade.
