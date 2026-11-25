@@ -149,6 +149,26 @@ def criar_banco():
     """)
 
     cursor.execute("""
+        CREATE TABLE IF NOT EXISTS solicitacoes_publicidade (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            empresa TEXT NOT NULL,
+            responsavel TEXT NOT NULL,
+            segmento TEXT,
+            cidade TEXT NOT NULL,
+            telefone TEXT NOT NULL,
+            email TEXT NOT NULL,
+            instagram TEXT,
+            formato TEXT,
+            periodo TEXT,
+            mensagem TEXT,
+            logo_arquivo TEXT,
+            banner_arquivo TEXT,
+            status TEXT NOT NULL DEFAULT 'pendente',
+            criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS anuncios (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             anunciante_id INTEGER,

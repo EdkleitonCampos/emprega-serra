@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Mapa de oportunidades | Emprega Serra{% endblock %}
 {% block content %}
-<header class="simple-topbar"><a href="{{ url_for('home') }}" class="simple-brand" aria-label="Emprega Serra - página inicial"><img class="brand-logo" src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra"></a><nav><a href="{{ url_for('home') }}">Início</a><a href="{{ url_for('servicos') }}">Serviços</a><a href="{{ url_for('cursos') }}">Cursos</a></nav></header>
+{% include "_cabecalho.html" %}
 <main class="feature-page"><section class="feature-hero"><span class="feature-kicker">NOSSO TERRITÓRIO • NOSSAS OPORTUNIDADES</span><h1>Oportunidades pelo <em>Sertão.</em></h1><p>Explore Serra Talhada e as cidades da região. Veja onde existem vagas abertas e consulte o mapa para planejar seu deslocamento.</p></section><section class="map-panel"><div class="feature-section-heading"><div><span class="feature-kicker">MAPA REGIONAL</span><h2>Serra Talhada e entorno</h2></div><a class="btn btn-primary" href="https://www.openstreetmap.org/?mlat=-7.991&mlon=-38.298#map=10/-7.991/-38.298" target="_blank" rel="noopener noreferrer">Abrir mapa completo ↗</a></div><div class="map-frame-wrap" aria-describedby="mapHelp">
 <iframe title="Mapa interativo de Serra Talhada e região" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen src="https://www.openstreetmap.org/export/embed.html?bbox=-38.75%2C-8.35%2C-37.85%2C-7.60&amp;layer=mapnik&amp;marker=-7.991%2C-38.298"></iframe>
 </div>

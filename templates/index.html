@@ -7,76 +7,7 @@
 {% block body_class %}home-v4{% endblock %}
 
 {% block content %}
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <defs>
-    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></symbol>
-    <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/></symbol>
-    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3 17.8V21h3.2l6.3-6.3a4 4 0 0 0 5.2-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></symbol>
-    <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2 9l10-5 10 5-10 5zM6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5M22 9v6"/></symbol>
-    <symbol id="i-building" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2M10 21v-3h4v3"/></symbol>
-    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
-    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></symbol>
-    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
-    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 .3 1.3 1 2 2 2-.5-3 .5-5 1-8z"/></symbol>
-    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
-    <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-5 6-5s6 1.7 6 5M16 15c3 0 5 1.5 5 4"/></symbol>
-    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></symbol>
-    <symbol id="i-growth" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol>
-    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></symbol>
-    <symbol id="i-megaphone" viewBox="0 0 24 24"><path d="M3 10v4h3l8 5V5L6 10zM18 9a4 4 0 0 1 0 6"/></symbol>
-  </defs>
-</svg>
-
-<header class="hv-header">
-    <div class="hv-wrap hv-header-row">
-        <a class="hv-brand" href="{{ url_for('home') }}" aria-label="Emprega Serra - página inicial">
-            <img src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra">
-        </a>
-
-        <button class="hv-menu-toggle menu-toggle" id="menuToggle" type="button" aria-label="Abrir menu" aria-controls="mainNav" aria-expanded="false">
-            <span></span><span></span><span></span>
-        </button>
-
-        <nav class="hv-nav" id="mainNav" aria-label="Navegação principal">
-            <a href="#inicio" class="is-active" aria-current="page"><svg class="hv-ico"><use href="#i-home"/></svg>Início</a>
-            <a href="#vagas"><svg class="hv-ico"><use href="#i-briefcase"/></svg>Vagas</a>
-            <a href="{{ url_for('servicos') }}"><svg class="hv-ico"><use href="#i-wrench"/></svg>Serviços</a>
-            <a href="{{ url_for('cursos') }}"><svg class="hv-ico"><use href="#i-cap"/></svg>Cursos</a>
-            <a href="#empresas"><svg class="hv-ico"><use href="#i-building"/></svg>Empresas</a>
-            <a href="{{ url_for('mapa_regional') }}"><svg class="hv-ico"><use href="#i-pin"/></svg>Mapa Regional</a>
-            <a href="#sobre"><svg class="hv-ico"><use href="#i-info"/></svg>Sobre</a>
-            <div class="hv-nav-actions-mobile">
-                {% if session.get('usuario_id') %}
-                    <a href="{{ url_for('admin.dashboard') if session.get('tipo') == 'admin' else url_for('painel_empresarial') }}">Meu painel</a>
-                {% else %}
-                    <a href="{{ url_for('login') }}">Entrar</a>
-                    <a href="{{ url_for('cadastro_candidato') }}">Cadastrar</a>
-                {% endif %}
-            </div>
-        </nav>
-
-        <div class="hv-actions">
-            {% if session.get('usuario_id') %}
-                <a class="hv-btn hv-btn-outline" href="{{ url_for('admin.dashboard') if session.get('tipo') == 'admin' else url_for('painel_empresarial') }}"><svg class="hv-ico"><use href="#i-user"/></svg>Meu painel</a>
-                <form method="post" action="{{ url_for('sair') }}" class="inline-form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="hv-btn hv-btn-green" type="submit">Sair</button></form>
-            {% else %}
-                <a class="hv-btn hv-btn-outline" href="{{ url_for('login') }}"><svg class="hv-ico"><use href="#i-user"/></svg>Entrar</a>
-                <button class="hv-btn hv-btn-green" id="openAccountTypeDialog" type="button" aria-haspopup="dialog">Cadastrar</button>
-            {% endif %}
-        </div>
-    </div>
-</header>
-
-<dialog class="account-type-dialog" id="accountTypeDialog" aria-labelledby="accountTypeTitle">
-    <button class="account-type-close" type="button" aria-label="Fechar">×</button>
-    <h2 id="accountTypeTitle">Como você quer participar?</h2>
-    <p>Escolha o tipo de cadastro para continuar.</p>
-    <div class="account-type-options">
-        <a class="hv-btn hv-btn-green" href="{{ url_for('cadastro_empresa') }}">Empregador</a>
-        <a class="hv-btn hv-btn-green" href="{{ url_for('cadastro_candidato') }}">Colaborador</a>
-    </div>
-</dialog>
+{% include "_cabecalho.html" %}
 
 <main>
     <section class="hv-hero" id="inicio">
@@ -261,6 +192,7 @@
             <a href="{{ url_for('cursos') }}">Cursos</a>
             <a href="{{ url_for('servicos') }}">Serviços</a>
             <a href="#empresas">Empresas</a>
+            <a href="{{ url_for('anuncie') }}">Anunciantes</a>
             <a href="{{ url_for('mapa_regional') }}">Mapa Regional</a>
         </nav>
         <div class="hv-footer-col">
@@ -272,7 +204,7 @@
         </div>
         <div class="hv-footer-col hv-footer-ad">
             <h2>Anuncie</h2>
-            <a class="hv-ad-btn" href="{% if suporte_whatsapp %}https://wa.me/{{ suporte_whatsapp }}{% else %}#vagas{% endif %}" {% if suporte_whatsapp %}target="_blank" rel="noopener noreferrer"{% endif %}><svg class="hv-ico" aria-hidden="true"><use href="#i-megaphone"/></svg><span><strong>Anuncie Aqui</strong><small>Divulgue sua marca</small></span></a>
+            <a class="hv-ad-btn" href="{{ url_for('anuncie') }}"><svg class="hv-ico" aria-hidden="true"><use href="#i-megaphone"/></svg><span><strong>Anuncie Aqui</strong><small>Divulgue sua marca</small></span></a>
         </div>
     </div>
     <div class="hv-wrap hv-footer-bottom">

@@ -3,13 +3,11 @@
 {% block title %}Entrar | Emprega Serra{% endblock %}
 
 {% block content %}
+{% include "_cabecalho.html" %}
+
 
 <section class="auth-section">
     <div class="auth-card">
-
-        <a class="registration-brand" href="{{ url_for('home') }}" aria-label="Voltar para a página inicial do Emprega Serra">
-            <img class="brand-logo" src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra">
-        </a>
         <h1>Bem-vindo de volta!</h1>
 
         <p>

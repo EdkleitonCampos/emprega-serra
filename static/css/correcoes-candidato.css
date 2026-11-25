@@ -56,3 +56,15 @@
   .candidate-header .brand-logo { height: 44px !important; }
   .candidate-content { padding: 22px 20px !important; margin-top: 30px; }
 }
+
+/* CORREÇÃO DEFINITIVA DO ÍCONE SEU CADASTRO */
+.profile-card .profile-icon {
+    color: #ffffff !important;
+}
+
+.profile-card .profile-icon svg,
+.profile-card .profile-icon svg * {
+    color: #ffffff !important;
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+}

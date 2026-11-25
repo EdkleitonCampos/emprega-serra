@@ -431,3 +431,14 @@
     object-fit: contain !important;
 }
 
+
+/* CONTRASTE — painel empresarial: textos da tabela sobre fundo claro */
+.company-dashboard .dashboard-vacancy-table td,
+.company-dashboard .dashboard-vacancy-table td strong,
+.company-dashboard .dashboard-vacancy-table td small,
+.company-dashboard .dashboard-vacancy-table td a {
+    color: #173f2b !important;
+}
+.company-dashboard .dashboard-vacancy-table .dashboard-pause-date {
+    color: #466451 !important;
+}

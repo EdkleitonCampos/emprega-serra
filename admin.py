@@ -1,7 +1,8 @@
+import re
 from datetime import datetime
 import csv
 from io import StringIO
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 from functools import wraps
 from io import BytesIO
 from xml.sax.saxutils import escape
@@ -427,8 +428,60 @@ def anunciantes():
             return redirect(url_for("admin.anunciantes"))
     cursor.execute("SELECT * FROM anunciantes ORDER BY id DESC")
     lista = cursor.fetchall()
+    cursor.execute("SELECT * FROM solicitacoes_publicidade ORDER BY id DESC")
+    solicitacoes = cursor.fetchall()
     conexao.close()
-    return render_template("admin/anunciantes.html", anunciantes=lista)
+    return render_template("admin/anunciantes.html", anunciantes=lista, solicitacoes=solicitacoes)
+
+
+STATUS_SOLICITACAO = {
+    "pendente": "Pendente",
+    "em_analise": "Em análise",
+    "respondido": "Respondido",
+    "arquivado": "Arquivado",
+}
+
+
+@admin_bp.app_template_filter("whatsapp_link")
+def whatsapp_link(telefone, texto=""):
+    """Monta o link wa.me (Brasil) a partir do telefone digitado no formulário."""
+    numeros = re.sub(r"\D", "", telefone or "")
+    if len(numeros) in {10, 11}:
+        numeros = "55" + numeros
+    if not numeros.startswith("55") or len(numeros) not in {12, 13}:
+        return ""
+    return f"https://wa.me/{numeros}" + (f"?text={quote(texto)}" if texto else "")
+
+
+@admin_bp.app_context_processor
+def contar_solicitacoes_pendentes():
+    if not session.get("admin_id"):
+        return {}
+    conexao = conectar()
+    try:
+        total = conexao.execute(
+            "SELECT COUNT(*) FROM solicitacoes_publicidade WHERE status = 'pendente'"
+        ).fetchone()[0]
+    finally:
+        conexao.close()
+    return {"solicitacoes_pendentes": total, "status_solicitacao": STATUS_SOLICITACAO}
+
+
+@admin_bp.route("/anunciantes/solicitacoes/<int:solicitacao_id>/status", methods=["POST"])
+@admin_required
+def status_solicitacao(solicitacao_id):
+    status = request.form.get("status", "")
+    if status not in STATUS_SOLICITACAO:
+        flash("Status inválido.")
+        return redirect(url_for("admin.anunciantes"))
+    conexao = conectar()
+    try:
+        conexao.execute("UPDATE solicitacoes_publicidade SET status = ? WHERE id = ?", (status, solicitacao_id))
+        conexao.commit()
+    finally:
+        conexao.close()
+    flash("Status da solicitação atualizado.")
+    return redirect(url_for("admin.anunciantes") + "#solicitacoes")
 
 
 @admin_bp.route("/anuncios", methods=["GET", "POST"])

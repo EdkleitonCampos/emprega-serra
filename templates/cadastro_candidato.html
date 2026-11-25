@@ -3,13 +3,11 @@
 {% block title %}Cadastro de Candidato | Emprega Serra{% endblock %}
 
 {% block content %}
+{% include "_cabecalho.html" %}
+
 
 <section class="auth-section auth-section--registration">
     <div class="auth-card auth-card--registration">
-
-        <a class="registration-brand" href="{{ url_for('home') }}" aria-label="Voltar para a página inicial do Emprega Serra">
-            <img class="brand-logo" src="{{ url_for('static', filename='images/emprega-serra-logo.png') }}" alt="Emprega Serra">
-        </a>
         <div class="registration-kicker">CADASTRO DE CANDIDATO</div>
         <h1>Crie sua conta</h1>
 

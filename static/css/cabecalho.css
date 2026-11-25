@@ -1,0 +1,46 @@
+/* EMPREGA SERRA — cabeçalho padrão (o mesmo em todas as páginas).
+   Carregado por base.html. Classes "hv-". */
+.hv-header, .account-type-dialog {
+  --hv-orange: #f5a21a;
+  --hv-display: 'Poppins', 'Manrope', 'DM Sans', system-ui, sans-serif;
+  --header-height: 76px;
+}
+.hv-wrap { width: min(1240px, calc(100% - 48px)); margin-inline: auto; }
+.hv-ico { width: 1.15em; height: 1.15em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.hv-header { position: sticky; top: 0; z-index: 1100; background: linear-gradient(180deg, #0f3a25, #12432b); box-shadow: 0 6px 24px rgba(8, 30, 18, .35); }
+.hv-header .hv-wrap { width: min(1360px, calc(100% - 40px)); }
+.hv-header-row { display: flex; align-items: center; gap: 14px; min-height: var(--header-height); }
+.hv-brand { display: inline-flex; align-items: center; }
+.hv-brand img { display: block; height: 60px; width: auto; max-width: 200px; object-fit: contain; }
+.hv-nav { display: flex; align-items: center; gap: 0; margin-left: auto; min-width: 0; }
+.hv-nav a { display: inline-flex; align-items: center; gap: 7px; padding: 9px 8px; border-radius: 10px; color: #fff8e6; font: 600 13px/1 var(--hv-display); white-space: nowrap; transition: background-color .18s, color .18s; }
+.hv-nav a:hover { background: rgba(255, 255, 255, .1); color: #ffd36e; }
+.hv-nav a.is-active { background: var(--hv-orange); color: #1b2a14; }
+.hv-nav .hv-ico { width: 17px; height: 17px; }
+.hv-nav-actions-mobile { display: none; }
+.hv-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+.hv-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 0 18px; border-radius: 10px; border: 1.5px solid transparent; font: 700 14px/1 var(--hv-display); cursor: pointer; transition: filter .18s, background-color .18s, transform .18s; }
+.hv-btn-outline { border-color: rgba(255, 255, 255, .85); color: #fff !important; background: transparent; }
+.hv-btn-outline:hover { background: rgba(255, 255, 255, .12); }
+.hv-btn-green { background: #1f8a3f; color: #fff !important; border-color: #1f8a3f; }
+.hv-btn-green:hover { filter: brightness(1.1); }
+.hv-menu-toggle { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; width: 46px; height: 46px; padding: 0; border: 1.5px solid rgba(255, 255, 255, .5); border-radius: 10px; background: transparent; }
+.hv-menu-toggle span { display: block; width: 22px; height: 2.5px; border-radius: 2px; background: #fff !important; }
+.hv-menu-toggle:focus-visible { outline: 3px solid #ffd36e; outline-offset: 3px; }
+
+/* o menu completo só cabe em telas largas; abaixo disso vira botão sanduíche */
+@media (max-width: 1279px) {
+  .hv-menu-toggle { display: flex; margin-left: auto; }
+  .hv-actions { display: none; }
+  .hv-nav { position: absolute; left: 0; right: 0; top: var(--header-height); display: none; flex-direction: column; align-items: stretch; gap: 2px; margin: 0; padding: 12px 24px 18px; background: #0f3a25; box-shadow: 0 18px 30px rgba(0, 0, 0, .3); }
+  .hv-nav.open { display: flex; }
+  .hv-nav a { padding: 13px 12px; font-size: 16px; }
+  .hv-nav-actions-mobile { display: flex; gap: 10px; margin-top: 8px; }
+  .hv-nav-actions-mobile a { flex: 1; justify-content: center; border: 1.5px solid rgba(255, 255, 255, .8); }
+  .hv-nav-actions-mobile a:last-child { background: #1f8a3f; border-color: #1f8a3f; }
+}
+@media (max-width: 680px) {
+  .hv-wrap { width: calc(100% - 32px); }
+  .hv-header { --header-height: 68px; }
+  .hv-brand img { height: 46px; }
+}

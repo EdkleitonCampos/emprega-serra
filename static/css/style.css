@@ -433,14 +433,14 @@ h2 span {
 
 .visual-job strong {
     display: block;
-    color: #f1f3ff;
+    color: #173f2b;
     font-size: 12px;
 }
 
 .visual-job small {
     display: block;
     margin-top: 3px;
-    color: #9ba9c5;
+    color: #173f2b;
     font-size: 10px;
 }
 
@@ -2954,3 +2954,21 @@ body {
 .sponsored-section .job-card h3 { padding-right: 45px; }
 .sponsored-section .job-status { background: rgba(98, 75, 194, .28); color: #d9d0ff; }
 @media (max-width: 640px) { .sponsored-section { padding-top: 28px; padding-bottom: 24px; } }
+
+/* CORREÇÃO DA LOGO DO PAINEL EMPRESARIAL */
+.company-dashboard .dashboard-brand {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.company-dashboard .dashboard-brand-logo {
+    background: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    filter: none !important;
+    padding: 0 !important;
+    object-fit: contain !important;
+}

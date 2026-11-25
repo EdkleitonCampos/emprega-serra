@@ -4,8 +4,10 @@ import secrets
 import hmac
 import re
 import smtplib
+import uuid
 from email.message import EmailMessage
 from pathlib import Path
+from werkzeug.utils import secure_filename
 from urllib.parse import urlparse
 from datetime import date, datetime, timedelta
 
@@ -200,6 +202,91 @@ def home():
         anuncios=anuncios,
         suporte_whatsapp=numero_whatsapp_suporte(),
     )
+
+
+def _imagem_valida(arquivo):
+    """Confere pelo conteúdo (e não só pela extensão) se o arquivo é PNG, JPG ou WEBP."""
+    cabecalho = arquivo.stream.read(12)
+    arquivo.stream.seek(0)
+    return (
+        cabecalho.startswith(b"\x89PNG\r\n\x1a\n")
+        or cabecalho.startswith(b"\xff\xd8\xff")
+        or (cabecalho[:4] == b"RIFF" and cabecalho[8:12] == b"WEBP")
+    )
+
+
+def _telefone_whatsapp_valido(texto):
+    numeros = re.sub(r"\D", "", texto or "")
+    if len(numeros) in {12, 13} and numeros.startswith("55"):
+        numeros = numeros[2:]
+    return len(numeros) in {10, 11}
+
+
+@app.errorhandler(413)
+def arquivo_muito_grande(_erro):
+    flash("Os arquivos enviados passam de 2 MB no total. Reduza o tamanho das imagens e tente novamente.", "error")
+    return redirect(url_for("anuncie"))
+
+
+@app.route("/anuncie", methods=["GET", "POST"])
+@limiter.limit("8 per hour", methods=["POST"])
+def anuncie():
+    if request.method == "POST":
+        dados = request.form
+        empresa = dados.get("empresa", "").strip()[:140]
+        responsavel = dados.get("responsavel", "").strip()[:120]
+        cidade = dados.get("cidade", "").strip()[:100]
+        telefone = dados.get("telefone", "").strip()[:40]
+        email = dados.get("email", "").strip().lower()[:160]
+        if not all([empresa, responsavel, cidade, telefone, email_valido(email)]):
+            flash("Confira os campos obrigatórios e informe um e-mail válido.", "error")
+            return render_template("anuncie.html", dados=dados)
+        if not _telefone_whatsapp_valido(telefone):
+            flash("Informe um WhatsApp válido com DDD. Ex.: (87) 99999-9999.", "error")
+            return render_template("anuncie.html", dados=dados)
+
+        # Valida todos os arquivos ANTES de salvar qualquer um.
+        permitidas = {"png", "jpg", "jpeg", "webp"}
+        pendentes = {}
+        for campo in ("logo", "banner"):
+            arquivo = request.files.get(campo)
+            if arquivo and arquivo.filename:
+                nome_seguro = secure_filename(arquivo.filename)
+                extensao = nome_seguro.rsplit(".", 1)[-1].lower() if "." in nome_seguro else ""
+                if extensao not in permitidas or not _imagem_valida(arquivo):
+                    flash("Envie imagens reais nos formatos PNG, JPG, JPEG ou WEBP.", "error")
+                    return render_template("anuncie.html", dados=dados)
+                pendentes[campo] = (arquivo, extensao)
+        if "logo" not in pendentes:
+            flash("Anexe a logo da sua empresa para enviar a solicitação.", "error")
+            return render_template("anuncie.html", dados=dados)
+
+        pasta = Path(app.root_path) / "static" / "uploads" / "anunciantes"
+        pasta.mkdir(parents=True, exist_ok=True)
+        arquivos_salvos = {}
+        for campo, (arquivo, extensao) in pendentes.items():
+            nome_final = f"{uuid.uuid4().hex}_{campo}.{extensao}"
+            arquivo.save(pasta / nome_final)
+            arquivos_salvos[campo] = nome_final
+
+        conexao = conectar()
+        try:
+            conexao.execute("""
+                INSERT INTO solicitacoes_publicidade
+                (empresa, responsavel, segmento, cidade, telefone, email, instagram, formato, periodo, mensagem, logo_arquivo, banner_arquivo)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                empresa, responsavel, dados.get("segmento", "").strip()[:100], cidade, telefone, email,
+                dados.get("instagram", "").strip()[:160], dados.get("formato", "").strip()[:100],
+                dados.get("periodo", "").strip()[:80], dados.get("mensagem", "").strip()[:2000],
+                arquivos_salvos.get("logo"), arquivos_salvos.get("banner")
+            ))
+            conexao.commit()
+        finally:
+            conexao.close()
+        flash("Solicitação enviada com sucesso! Nossa equipe vai analisar os dados e responder com o orçamento pelo WhatsApp informado.", "success")
+        return redirect(url_for("anuncie"))
+    return render_template("anuncie.html", dados={})
 
 
 def _url_http_segura(valor):
@@ -690,7 +777,69 @@ def meu_perfil():
         candidato=candidato
     )
 
+# CONFIGURAÇÕES DA CONTA — ALTERAR SENHA
+@app.route("/configuracoes", methods=["GET", "POST"])
+@limiter.limit("5 per minute", methods=["POST"])
+def configuracoes():
 
+    if "usuario_id" not in session:
+        return redirect(url_for("login"))
+
+    if session.get("tipo") not in {"candidato", "empresa"}:
+        session.clear()
+        return redirect(url_for("login"))
+
+    if request.method == "POST":
+
+        senha_atual = request.form.get("senha_atual", "")
+        nova_senha = request.form.get("nova_senha", "")
+        confirmar_senha = request.form.get("confirmar_senha", "")
+
+        conexao = conectar()
+
+        try:
+            cursor = conexao.cursor()
+
+            cursor.execute(
+                "SELECT senha FROM usuarios WHERE id = ? AND tipo = ?",
+                (session["usuario_id"], session["tipo"])
+            )
+
+            usuario = cursor.fetchone()
+
+            if not usuario or not check_password_hash(usuario["senha"], senha_atual):
+                flash("A senha atual está incorreta.", "error")
+
+            elif len(nova_senha) < 8:
+                flash("A nova senha deve ter pelo menos 8 caracteres.", "error")
+
+            elif nova_senha != confirmar_senha:
+                flash("A confirmação da nova senha não confere.", "error")
+
+            elif nova_senha == senha_atual:
+                flash("A nova senha deve ser diferente da senha atual.", "error")
+
+            else:
+                senha_hash = generate_password_hash(nova_senha)
+
+                cursor.execute(
+                    "UPDATE usuarios SET senha = ? WHERE id = ? AND tipo = ?",
+                    (senha_hash, session["usuario_id"], session["tipo"])
+                )
+
+                conexao.commit()
+
+                flash("Sua senha foi alterada com sucesso!", "success")
+                return redirect(url_for("configuracoes"))
+
+        finally:
+            conexao.close()
+
+    return render_template(
+        "configuracoes.html",
+        nome=session["nome"],
+        tipo=session["tipo"]
+    )
 
 
 # CURRÍCULO DO CANDIDATO
